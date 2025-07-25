@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oreh - Gestão de Atendimentos com IA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <div class="logo-text">OREH</div>
+            <div class="input-group">
+                <label for="username">Usuário</label>
+                <input type="text" id="username" placeholder="Digite seu usuário">
+            </div>
+            <div class="input-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="Digite sua senha">
+            </div>
+            <button id="loginBtn" class="btn btn-primary">Entrar</button>
+        </div>
+    </div>
+
+    <div id="appContainer" class="app-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1><i class="fas fa-robot"></i> <span>OREH</span></h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active" data-page="home"><i class="fas fa-home"></i> <span>Home</span></a></li>
+                <li><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i> <span>Status de Conexão</span></a></li>
+                <li><a href="#" class="nav-link" data-page="agenda"><i class="fas fa-calendar"></i> <span>Agenda</span></a></li>
+                <li><a href="#" class="nav-link" data-page="atendimentos"><i class="fas fa-comments"></i> <span>Atendimentos</span></a></li>
+                <li><a href="#" class="nav-link" data-page="drive"><i class="fab fa-google-drive"></i> <span>Drive</span></a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <div class="topbar">
+                <h2 id="pageTitle">Dashboard</h2>
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <span>Admin</span>
+                    <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+
+            <div id="homePage" class="page-content active">
+                </div>
+
+            <div id="statusPage" class="page-content">
+                <div class="status-container">
+                    <div class="status-card">
+                        <h3>Minha Instância</h3>
+                        <div class="status" id="connectionStatus"></div>
+                    </div>
+                    <div class="qrcode-container">
+                        <div class="qrcode-placeholder" id="qrcode-output">
+                            </div>
+                        <p>Escaneie o QR Code para conectar</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="agendaPage" class="page-content">
+                </div>
+
+            <div id="atendimentosPage" class="page-content">
+                </div>
+
+            <div id="drivePage" class="page-content">
+                <div class="drive-header">
+                    <h2>Documentos Compartilhados</h2>
+                    <button class="btn btn-primary" id="openUploadModalBtn">
+                        <i class="fas fa-plus"></i> Adicionar Arquivo
+                    </button>
+                </div>
+                <div id="fileGrid" class="file-grid">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeUploadModalBtn">&times;</button>
+            <div class="modal-header">
+                <h3>Adicionar Novo Arquivo</h3>
+            </div>
+            <form id="uploadFileForm">
+                <div class="form-group">
+                    <label for="fileNameInput">Nome do Arquivo</label>
+                    <input type="text" id="fileNameInput" placeholder="Ex: Relatório Mensal" required>
+                </div>
+                <div class="form-group">
+                    <label for="fileUploadInput">Arquivo</label>
+                    <input type="file" id="fileUploadInput" required>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" id="cancelUploadBtn">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
