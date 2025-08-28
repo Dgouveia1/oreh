@@ -1,0 +1,82 @@
+/* ESTILOS DA PÁGINA DE STATUS */
+.status-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 0;
+    animation: fadeIn 0.6s ease;
+}
+
+.status-card {
+    width: 100%;
+    max-width: 500px;
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    color: white;
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow);
+    animation: pulse 4s infinite ease-in-out;
+}
+
+.status-card h3 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.status {
+    font-size: 28px;
+    font-weight: 800;
+    padding: 15px;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.15);
+    margin-top: 15px;
+    min-height: 60px;
+    letter-spacing: 1px;
+}
+
+.qrcode-container {
+    background-color: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: var(--shadow);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    animation: fadeIn 0.8s ease;
+}
+
+.qrcode-placeholder {
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    border: 2px dashed #dee2e6;
+    font-size: 14px;
+    color: #6c757d;
+    padding: 20px;
+    transition: var(--transition);
+}
+
+.qrcode-placeholder:hover {
+    border-color: var(--primary);
+}
+
+.qrcode-container p {
+    margin-top: 20px;
+    font-size: 16px;
+    color: var(--dark);
+    font-weight: 500;
+}
+
+.qrcode-placeholder img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}

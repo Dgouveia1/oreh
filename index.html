@@ -5,28 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oreh - Gestão de Atendimentos com IA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Elementos Globais (Toast e Login) -->
+    <div id="toast" class="toast hidden" role="alert" aria-live="assertive"></div>
     <div id="loginPage" class="login-container">
         <div class="login-card">
             <div class="logo-text">OREH</div>
             <div class="input-group">
                 <label for="username">Usuário</label>
-                <input type="text" id="username" placeholder="Digite seu usuário">
+                <input type="text" id="username" placeholder="Digite seu usuário" autocomplete="username" aria-label="Usuário">
             </div>
             <div class="input-group">
                 <label for="password">Senha</label>
-                <input type="password" id="password" placeholder="Digite sua senha">
+                <input type="password" id="password" placeholder="Digite sua senha" autocomplete="current-password" aria-label="Senha">
             </div>
-            <button id="loginBtn" class="btn btn-primary">Entrar</button>
+            <button id="loginBtn" class="btn btn-primary" aria-label="Entrar no sistema">Entrar</button>
         </div>
     </div>
 
+    <!-- Container Principal da Aplicação -->
     <div id="appContainer" class="app-container">
         <div class="sidebar">
             <div class="sidebar-header">
-                <h1><i class="fas fa-robot"></i> <span>OREH</span></h1>
+                <h1><i class="fas fa-cloud"></i> <span>OREH</span></h1>  
             </div>
             <ul class="nav-links">
                 <li><a href="#" class="nav-link active" data-page="home"><i class="fas fa-home"></i> <span>Home</span></a></li>
@@ -34,6 +39,7 @@
                 <li><a href="#" class="nav-link" data-page="agenda"><i class="fas fa-calendar"></i> <span>Agenda</span></a></li>
                 <li><a href="#" class="nav-link" data-page="atendimentos"><i class="fas fa-comments"></i> <span>Atendimentos</span></a></li>
                 <li><a href="#" class="nav-link" data-page="drive"><i class="fab fa-google-drive"></i> <span>Drive</span></a></li>
+                <li><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de IA</span></a></li> 
             </ul>
         </div>
 
@@ -42,11 +48,12 @@
                 <h2 id="pageTitle">Dashboard</h2>
                 <div class="user-info">
                     <div class="user-avatar">A</div>
-                    <span>Admin</span>
+                    <span id="userNameDisplay">Admin</span>
                     <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
 
+            <!-- Páginas da Aplicação -->
             <div id="homePage" class="page-content active"></div>
 
             <div id="statusPage" class="page-content">
@@ -63,41 +70,221 @@
                 </div>
             </div>
 
+            <!-- ✅ PÁGINA DA AGENDA COM O SEU MODAL DENTRO -->
             <div id="agendaPage" class="page-content">
+                <div class="agenda-controls">
+                    <div class="date-navigation">
+                        <button class="btn btn-secondary btn-small" id="prevDayBtn"><i class="fas fa-chevron-left"></i></button>
+                        <h3 id="currentDateDisplay"></h3>
+                        <button class="btn btn-secondary btn-small" id="nextDayBtn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                    <button class="btn btn-primary" id="openEventModalBtn"><i class="fas fa-plus"></i> Criar Evento</button>
+                </div>
                 <div class="agenda-wrapper">
-                    <div class="agenda-timeline" id="agendaTimeline">
+                    <div class="agenda-timeline" id="agendaTimeline"></div>
+                    <div class="agenda-grid-container" id="agendaGridContainer">
+                        <div class="agenda-header" id="agendaHeader"></div>
+                        <div class="agenda-body" id="agendaBody"></div>
+                    </div>
+                </div>
+                <!-- Modal de Criar Evento movido para aqui -->
+                <div class="modal" id="eventFormModal">
+                    <div class="modal-content">
+                        <button class="close-modal">&times;</button>
+                        <div class="modal-header">
+                            <h3>Criar Novo Evento</h3>
                         </div>
-                    <div class="agenda-grid-container">
-                        <div class="agenda-header" id="agendaHeader">
+                        <form id="eventForm">
+                            <div class="input-group">
+                                <label for="eventAssunto">Assunto</label>
+                                <input type="text" id="eventAssunto" required>
                             </div>
-                        <div class="agenda-body" id="agendaBody">
+                            <div class="input-group">
+                                <label for="eventCliente">Cliente</label>
+                                <input type="text" id="eventCliente">
                             </div>
+                            <div class="input-group">
+                                <label for="eventTelefone">Telefone</label>
+                                <input type="tel" id="eventTelefone" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="eventLocal">Local</label>
+                                <input type="text" id="eventLocal">
+                            </div>
+                            <div class="form-grid">
+                                <div class="input-group">
+                                    <label for="eventData">Data</label>
+                                    <input type="date" id="eventData" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="eventHoraInicio">Hora de Início</label>
+                                    <input type="time" id="eventHoraInicio" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="eventHoraFim">Hora de Fim</label>
+                                    <input type="time" id="eventHoraFim" required>
+                                </div>
+                            </div>
+                            <div class="ia-card-footer">
+                                <button type="submit" class="btn btn-primary">Salvar Evento</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
 
-            <div id="atendimentosPage" class="page-content"></div>
+            <div id="atendimentosPage" class="page-content">
+                <div class="page-header">
+                    <h2>Funil de Atendimentos</h2>
+                </div>
+                <div id="kanbanBoard" class="kanban-board">
+                    <div class="kanban-column" data-temperatura="TOPO DO FUNIL">
+                        <h3 class="kanban-column-title">Topo do Funil</h3>
+                        <div class="kanban-cards-container"></div>
+                    </div>
+                    <div class="kanban-column" data-temperatura="MEIO DO FUNIL">
+                        <h3 class="kanban-column-title">Meio do Funil</h3>
+                        <div class="kanban-cards-container"></div>
+                    </div>
+                    <div class="kanban-column" data-temperatura="FUNDO DO FUNIL">
+                        <h3 class="kanban-column-title">Fundo do Funil</h3>
+                        <div class="kanban-cards-container"></div>
+                    </div>
+                    <div class="kanban-column" data-temperatura="PÓS-VENDA">
+                        <h3 class="kanban-column-title">Pós-venda</h3>
+                        <div class="kanban-cards-container"></div>
+                    </div>
+                </div>
+            </div>
 
+            <!-- ✅ PÁGINA DO DRIVE COM O SEU MODAL DENTRO -->
             <div id="drivePage" class="page-content">
                 <div class="drive-header">
                     <h2>Documentos Compartilhados</h2>
                     <button class="btn btn-primary" id="openUploadModalBtn"><i class="fas fa-plus"></i> Adicionar Arquivo</button>
                 </div>
                 <div id="fileGrid" class="file-grid"></div>
+                <!-- Modal de Upload movido para aqui -->
+                <div class="modal" id="uploadModal">
+                    <div class="modal-content">
+                        <button class="close-modal">&times;</button>
+                        <div class="modal-header">
+                            <h3>Adicionar Novo Arquivo</h3>
+                        </div>
+                        <form id="uploadForm">
+                            <div class="input-group">
+                                <label for="fileInput">Selecione o arquivo</label>
+                                <input type="file" id="fileInput" required>
+                            </div>
+                            <div class="ia-card-footer">
+                                <button type="submit" class="btn btn-primary">Enviar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="iaPage" class="page-content">
+                <div class="ia-management-container">
+                    <div class="ia-card">
+                        <h3>Controle Geral</h3>
+                        <div class="form-group form-group-toggle">
+                            <label for="aiActiveToggle">IA Ativada</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="aiActiveToggle" class="toggle-input">
+                                <label for="aiActiveToggle" class="toggle-label"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ia-card">
+                        <h3>Prompt Base</h3>
+                        <p class="description">Este é o prompt principal que define o comportamento geral do seu agente. As configurações abaixo ajudarão a refinar este comportamento.</p>
+                        <div class="form-group">
+                            <label for="basePrompt">Edite o prompt base:</label>
+                            <textarea id="basePrompt" rows="8" placeholder="Ex: Você é um assistente virtual da empresa X..."></textarea>
+                        </div>
+                    </div>
+                    <div class="ia-grid">
+                        <div class="ia-card">
+                            <h3>1. Personalidade</h3>
+                            <div class="form-group">
+                                <label for="personalityStyle">Estilo de Comportamento</label>
+                                <select id="personalityStyle">
+                                    <option value="amigavel">Amigável</option>
+                                    <option value="profissional">Profissional</option>
+                                    <option value="ludico">Lúdico</option>
+                                    <option value="sarcastico">Sarcástico</option>
+                                    <option value="sabio">Sábio</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dominantTraits">Traços Dominantes</label>
+                                <select id="dominantTraits">
+                                    <option value="curioso">Curioso</option>
+                                    <option value="empatico">Empático</option>
+                                    <option value="neutro">Neutro</option>
+                                    <option value="entusiasta">Entusiasta</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ia-card">
+                            <h3>2. Tom de Voz</h3>
+                            <div class="form-group">
+                                <label for="toneFormality">Formalidade</label>
+                                <select id="toneFormality">
+                                    <option value="casual">Casual</option>
+                                    <option value="tecnico">Técnico</option>
+                                    <option value="academico">Acadêmico</option>
+                                    <option value="coloquial">Coloquial</option>
+                                </select>
+                            </div>
+                             <div class="form-group form-group-toggle">
+                                <label for="toneAdaptability">Adaptabilidade de Tom</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="toneAdaptability" class="toggle-input">
+                                    <label for="toneAdaptability" class="toggle-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ia-card">
+                            <h3>3. Linguagem e Estilo</h3>
+                             <div class="form-group">
+                                <label for="languageComplexity">Nível de Complexidade</label>
+                                <select id="languageComplexity">
+                                    <option value="simples">Simples</option>
+                                    <option value="tecnico">Técnico</option>
+                                    <option value="poetico">Poético</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ia-card">
+                            <h3>4. Função Principal do Agente</h3>
+                             <div class="form-group">
+                                <label for="agentFunction">Função</label>
+                                <select id="agentFunction">
+                                    <option value="vendedor">Vendedor</option>
+                                    <option value="suporte">Suporte</option>
+                                    <option value="secretaria">Secretária</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ia-card-footer">
+                        <button id="saveAiSettingsBtn" class="btn btn-primary">Salvar Alterações</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="modal" id="uploadModal">
-        </div>
-
+    <!-- Modais Globais (que podem ser abertos de qualquer página) -->
     <div class="modal" id="eventDetailModal">
         <div class="modal-content">
-            <button class="close-modal" id="closeEventDetailModalBtn">&times;</button>
+            <button class="close-modal">&times;</button>
             <div class="modal-header">
                 <h3 id="eventDetailAssunto"></h3>
             </div>
-            <div id="eventDetailBody" class="event-details">
+            <div class="event-details">
                 <p><i class="fas fa-calendar-alt"></i> <strong id="eventDetailData"></strong></p>
                 <p><i class="fas fa-clock"></i> <strong id="eventDetailHorario"></strong></p>
                 <p><i class="fas fa-user"></i> <strong id="eventDetailCliente"></strong></p>
@@ -107,6 +294,27 @@
         </div>
     </div>
     
-    <script src="script.js"></script>
+    <div class="modal" id="chatDetailModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3>Detalhes do Atendimento</h3>
+            </div>
+            <div class="chat-details">
+                <p><i class="fas fa-user"></i> <strong>Cliente:</strong> <span id="chatDetailCustomer"></span></p>
+                <p><i class="fas fa-phone"></i> <strong>Telefone:</strong> <span id="chatDetailPhone"></span></p>
+                <p><i class="fas fa-info-circle"></i> <strong>Status:</strong> <span id="chatDetailStatus" class="status-badge"></span></p>
+                <p><i class="fas fa-calendar-alt"></i> <strong>Início:</strong> <span id="chatDetailCreated"></span></p>
+                <p><i class="fas fa-comment-dots"></i> <strong>Última Interação:</strong></p>
+                <p id="chatDetailSummary" class="summary-text"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="descartarLeadBtn" class="btn btn-danger">Descartar Lead</button>
+            </div>
+        </div>
+    </div>
+    
+    <script type="module" src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>

@@ -1,0 +1,89 @@
+/* ESTILOS DA PÁGINA DO DRIVE */
+.drive-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0 20px;
+}
+
+.drive-header h2 {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 0;
+}
+
+#fileGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    padding: 15px 0;
+}
+
+.file-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 120px;
+    position: relative;
+    transition: transform 0.2s ease-in-out;
+}
+
+.file-card:hover {
+    transform: scale(1.05);
+}
+
+.file-card-link {
+    text-decoration: none;
+    color: var(--dark);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.file-icon {
+    font-size: 2em;
+    color: var(--accent);
+    margin-bottom: 8px;
+}
+
+.file-name {
+    font-size: 0.9em;
+    word-break: break-word;
+}
+
+.delete-file-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: var(--danger);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.file-card:hover .delete-file-btn {
+    opacity: 1;
+}
+
+.delete-file-btn:hover {
+    background: darken(var(--danger), 10%);
+}
