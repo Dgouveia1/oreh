@@ -4,6 +4,9 @@ import { loadAgenda } from './agenda.js';
 import { loadAtendimentos } from './atendimentos.js';
 import { loadAiSettings } from './ia.js';
 import { loadDriveFiles } from './drive.js';
+import { loadSettings } from './settings.js';
+
+
 
 // =================================================================================
 // FUNÇÕES DE UI GENÉRICAS
@@ -57,6 +60,9 @@ export function setupNavigation() {
                     break;
                 case 'ia':
                     loadAiSettings();
+                    break;
+                case 'settings':
+                    loadSettings();
                     break;
             }
         });

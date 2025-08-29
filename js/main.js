@@ -1,10 +1,12 @@
-import { checkLoginState, login, logout } from './auth.js';
+import { checkLoginState, login, logout, signUp } from './auth.js';
 import { setupNavigation, setupModals, setupUploadModal } from './ui.js';
 import { saveAiSettings } from './ia.js';
 import { disconnectInstance } from './status.js';
 import { saveEvent, changeDay } from './agenda.js';
 import { descartarLead } from './atendimentos.js';
 import { uploadFile, deleteFile } from './drive.js';
+// ✅ Importa as novas funções do settings.js
+import { saveUserSettings, saveCompanySettings } from './settings.js';
 
 console.log('[OREH] Módulo principal carregado.');
 
@@ -37,7 +39,7 @@ function setupEventListeners() {
         disconnectBtn.addEventListener('click', disconnectInstance);
     }
 
-    // ✅ CORREÇÃO: Listener para os cards de ATENDIMENTO no Kanban
+    // Atendimentos (Kanban)
     const kanbanBoard = document.getElementById('kanbanBoard');
     if (kanbanBoard) {
         kanbanBoard.addEventListener('click', (e) => {
@@ -46,8 +48,7 @@ function setupEventListeners() {
 
             const modal = document.getElementById('chatDetailModal');
             if (!modal) return;
-
-            // ✅ NOVO: Armazena o ID do chat no próprio botão de descarte
+            
             const descartarBtn = modal.querySelector('#descartarLeadBtn');
             if (descartarBtn) {
                 descartarBtn.dataset.chatId = card.dataset.id;
@@ -76,7 +77,6 @@ function setupEventListeners() {
         });
     }
 
-    // ✅ NOVO: Listener para o botão de descarte
     const descartarLeadBtn = document.getElementById('descartarLeadBtn');
     if (descartarLeadBtn) {
         descartarLeadBtn.addEventListener('click', (e) => {
@@ -87,28 +87,29 @@ function setupEventListeners() {
         });
     }
 
-    // Listener para os cards da AGENDA
+    // Agenda
     const agendaBody = document.getElementById('agendaBody');
     if (agendaBody) {
         agendaBody.addEventListener('click', (e) => {
             const card = e.target.closest('.event-card');
             if (!card) return;
 
-            const assuntoEl = document.getElementById('eventDetailAssunto');
-            const dataEl = document.getElementById('eventDetailData');
-            const horarioEl = document.getElementById('eventDetailHorario');
-            const clienteEl = document.getElementById('eventDetailCliente');
-            const telefoneEl = document.getElementById('eventDetailTelefone');
-            const localEl = document.getElementById('eventDetailLocal');
-            const modalEl = document.getElementById('eventDetailModal');
+            const modal = document.getElementById('eventDetailModal');
+            if (!modal) return;
+            
+            const setText = (id, text) => {
+                const el = modal.querySelector(id);
+                if (el) el.textContent = text || 'N/A';
+            }
 
-            if (assuntoEl) assuntoEl.textContent = card.dataset.assunto || 'Evento sem título';
-            if (dataEl) dataEl.textContent = card.dataset.formatted_date || new Date(card.dataset.data).toLocaleDateString('pt-BR');
-            if (horarioEl) horarioEl.textContent = `${card.dataset.hora_inicio} - ${card.dataset.hora_fim}`;
-            if (clienteEl) clienteEl.textContent = card.dataset.cliente || 'N/A';
-            if (telefoneEl) telefoneEl.textContent = card.dataset.telefone || 'N/A';
-            if (localEl) localEl.textContent = card.dataset.local || 'N/A';
-            if (modalEl) modalEl.style.display = 'flex';
+            setText('#eventDetailAssunto', card.dataset.assunto);
+            setText('#eventDetailData', card.dataset.formatted_date);
+            setText('#eventDetailHorario', `${card.dataset.hora_inicio} - ${card.dataset.hora_fim}`);
+            setText('#eventDetailCliente', card.dataset.cliente);
+            setText('#eventDetailTelefone', card.dataset.telefone);
+            setText('#eventDetailLocal', card.dataset.local);
+            
+            modal.style.display = 'flex';
         });
     }
 
@@ -125,11 +126,12 @@ function setupEventListeners() {
     }
 
     const prevDayBtn = document.getElementById('prevDayBtn');
-    if (prevDayBtn) prevDayBtn.addEventListener('click', () => changeDay(-7)); // Volta 7 dias
+    if (prevDayBtn) prevDayBtn.addEventListener('click', () => changeDay(-7));
 
     const nextDayBtn = document.getElementById('nextDayBtn');
-    if (nextDayBtn) nextDayBtn.addEventListener('click', () => changeDay(7)); // Avança 7 dias
+    if (nextDayBtn) nextDayBtn.addEventListener('click', () => changeDay(7));
 
+    // Drive
     const uploadForm = document.getElementById('uploadForm');
     if (uploadForm) {
         uploadForm.addEventListener('submit', uploadFile);
@@ -147,6 +149,35 @@ function setupEventListeners() {
             }
         });
     }
+
+    // ✅ NOVO: Listeners para os formulários de Configurações
+    const userSettingsForm = document.getElementById('userSettingsForm');
+    if (userSettingsForm) {
+        userSettingsForm.addEventListener('submit', saveUserSettings);
+    }
+
+    const companySettingsForm = document.getElementById('companySettingsForm');
+    if (companySettingsForm) {
+        companySettingsForm.addEventListener('submit', saveCompanySettings);
+    }
+
+    // Cadastro (SignUp)
+    const openSignUpModalBtn = document.getElementById('openSignUpModalBtn');
+    if (openSignUpModalBtn) {
+        openSignUpModalBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('signUpModal').style.display = 'flex';
+        });
+    }
+
+    const signUpForm = document.getElementById('signUpForm');
+    if (signUpForm) {
+        signUpForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            signUp();
+        });
+    }
+
     console.log('[OREH] Listeners configurados.');
 }
 

@@ -1,12 +1,76 @@
 import { supabaseClient } from './api.js';
 import { showToast } from './ui.js';
 
-// Variável para controlar o nosso loop de verificação (polling)
+// Variáveis de controle
 let statusInterval = null;
-// Variável para evitar que múltiplas verificações ocorram ao mesmo tempo
 let isCheckingStatus = false;
 
-// Função para PARAR o loop de verificação. Será chamada quando o utilizador sair da página.
+// --- FUNÇÕES DO MODAL DE PRIMEIRA CONEXÃO ---
+
+// Mostra o modal e anexa o evento ao formulário
+function showFirstConnectionModal(companyId) {
+    const modal = document.getElementById('firstConnectionModal');
+    const form = document.getElementById('firstConnectionForm');
+    
+    // Armazena o company_id no formulário para uso posterior
+    form.dataset.companyId = companyId;
+    
+    modal.style.display = 'flex';
+
+    // Garante que o evento de submit seja adicionado apenas uma vez
+    if (!form.dataset.listenerAttached) {
+        form.addEventListener('submit', handleFirstConnection);
+        form.dataset.listenerAttached = 'true';
+    }
+}
+
+// Lida com o envio do formulário do modal
+async function handleFirstConnection(event) {
+    event.preventDefault();
+    const btn = document.getElementById('createConnectionBtn');
+    btn.disabled = true;
+    btn.textContent = 'A criar...';
+
+    const companyId = event.target.dataset.companyId;
+    const countryCode = document.getElementById('countryCode').value;
+    const phoneNumber = document.getElementById('phoneNumber').value;
+    const fullPhoneNumber = countryCode + phoneNumber.replace(/\D/g, ''); // Limpa o número
+
+    try {
+        const webhookUrl = 'https://oreh-n8n.p7rc7g.easypanel.host/webhook/oreh-onboarding';
+        const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                telefone: fullPhoneNumber,
+                company_id: companyId
+            })
+        });
+
+        if (response.status !== 200) {
+            throw new Error(`Ocorreu um erro ao criar a conexão (${response.statusText})`);
+        }
+        
+        showToast('Conexão solicitada com sucesso! A obter status...', 'success');
+        document.getElementById('firstConnectionModal').style.display = 'none';
+        
+        // Adiciona uma pequena pausa para dar tempo ao webhook de atualizar a base de dados
+        await new Promise(resolve => setTimeout(resolve, 2000)); 
+        
+        await updateConnectionStatus();
+
+    } catch (error) {
+        console.error('[OREH] Erro ao criar primeira conexão:', error);
+        showToast(error.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Criar Conexão';
+    }
+}
+
+
+// --- FUNÇÕES DE VERIFICAÇÃO DE STATUS ---
+
 export function stopStatusPolling() {
   if (statusInterval) {
     clearInterval(statusInterval);
@@ -16,7 +80,6 @@ export function stopStatusPolling() {
   }
 }
 
-// Função principal que inicia a verificação de status
 export async function updateConnectionStatus() {
   if (isCheckingStatus) return;
   isCheckingStatus = true;
@@ -33,48 +96,43 @@ export async function updateConnectionStatus() {
   if (disconnectBtn) disconnectBtn.style.display = 'none';
 
   try {
-    // Passo 1: Obter utilizador e perfil
     const { data: { user } } = await supabaseClient.auth.getUser();
     if (!user) throw new Error("Utilizador não autenticado.");
 
-    const { data: profile, error: profileError } = await supabaseClient
-        .from('users')
-        .select('company_id')
-        .eq('id', user.id)
-        .single();
+    const { data: profile } = await supabaseClient.from('users').select('company_id').eq('id', user.id).single();
+    if (!profile || !profile.company_id) throw new Error("O seu utilizador não está associado a nenhuma empresa.");
 
-    if (profileError) throw profileError;
-    if (!profile || !profile.company_id) {
-        throw new Error("O seu utilizador não está associado a nenhuma empresa.");
-    }
-
-    // Passo 2: ✅ CORREÇÃO: Carregar as credenciais (secrets) ANTES de qualquer outra coisa.
     const { data: secrets, error: secretsError } = await supabaseClient
       .from('company_secrets')
       .select('evolution_api_url, evolution_api_key, evolution_instance_name')
       .eq('company_id', profile.company_id)
       .single();
 
-    if (secretsError) throw secretsError;
-    if (!secrets || !secrets.evolution_api_url || !secrets.evolution_api_key || !secrets.evolution_instance_name) {
-      throw new Error('As configurações da Evolution API não foram encontradas na base de dados.');
+    if (secretsError && secretsError.code !== 'PGRST116') {
+        throw secretsError;
     }
 
-    // Passo 3: Definir a função que fará a verificação
+    // ✅ LÓGICA ATUALIZADA: Mostra o modal se não houver segredos OU se o nome da instância estiver em falta.
+    if (!secrets || !secrets.evolution_instance_name) {
+      console.log('[OREH] Instância não configurada. A solicitar primeira conexão.');
+      statusElement.textContent = 'PRIMEIRA CONEXÃO NECESSÁRIA';
+      qrCodeOutput.innerHTML = '<p>Configure sua instância para começar.</p>';
+      showFirstConnectionModal(profile.company_id);
+      isCheckingStatus = false;
+      return; 
+    }
+
     const checkStatus = async () => {
       console.log('[OREH] A verificar status na Evolution API...');
       statusElement.textContent = 'A VERIFICAR CONEXÃO...';
 
       try {
-        // Agora a variável 'secrets' está disponível e pode ser usada aqui
         const evolutionUrl = `${secrets.evolution_api_url}/instance/connect/${secrets.evolution_instance_name}`;
         const evolutionResponse = await fetch(evolutionUrl, {
           headers: { 'apikey': secrets.evolution_api_key }
         });
         
-        if (!evolutionResponse.ok) {
-            throw new Error(`Erro na API (${evolutionResponse.status})`);
-        }
+        if (!evolutionResponse.ok) throw new Error(`Erro na API (${evolutionResponse.status})`);
         
         const evolutionData = await evolutionResponse.json();
 
@@ -83,12 +141,10 @@ export async function updateConnectionStatus() {
           if (disconnectBtn) disconnectBtn.style.display = 'block';
           qrCodeOutput.innerHTML = '<p>Telefone conectado.</p>';
           stopStatusPolling();
-        } 
-        else if (evolutionData?.base64) {
+        } else if (evolutionData?.base64) {
           statusElement.textContent = 'A AGUARDAR CONEXÃO';
           qrCodeOutput.innerHTML = `<img src="${evolutionData.base64}" alt="QR Code para conexão">`;
-        }
-        else {
+        } else {
           statusElement.textContent = 'DESCONECTADO';
           qrCodeOutput.innerHTML = '<p>Telefone desconectado. A tentar obter novo QR Code...</p>';
         }
@@ -100,10 +156,8 @@ export async function updateConnectionStatus() {
       }
     };
 
-    // Passo 4: Executar a verificação pela primeira vez
     await checkStatus();
 
-    // Passo 5: Se não estiver conectado, iniciar o loop
     if (statusElement.textContent !== 'CONECTADO') {
       statusInterval = setInterval(checkStatus, 13000);
     }
@@ -119,7 +173,6 @@ export async function updateConnectionStatus() {
 }
 
 export async function disconnectInstance() {
-    // Pede confirmação ao utilizador para evitar cliques acidentais
     if (!confirm('Tem a certeza de que deseja desconectar a sua instância?')) {
       return;
     }
@@ -130,28 +183,20 @@ export async function disconnectInstance() {
     showToast('A desconectar a instância...', 'info');
   
     try {
-      // 1. Obtém as credenciais da API, tal como na função de verificação de status
       const { data: { user } } = await supabaseClient.auth.getUser();
       if (!user) throw new Error("Utilizador não autenticado.");
   
       const { data: profile } = await supabaseClient.from('users').select('company_id').eq('id', user.id).single();
-      if (!profile || !profile.company_id) {
-        throw new Error("O seu utilizador não está associado a nenhuma empresa.");
-      }
+      if (!profile || !profile.company_id) throw new Error("O seu utilizador não está associado a nenhuma empresa.");
   
       const { data: secrets } = await supabaseClient.from('company_secrets').select('evolution_api_url, evolution_api_key, evolution_instance_name').eq('company_id', profile.company_id).single();
-      if (!secrets) {
-        throw new Error('Não foi possível encontrar as configurações da API.');
-      }
+      if (!secrets) throw new Error('Não foi possível encontrar as configurações da API.');
   
-      // 2. Monta o URL e os parâmetros para a chamada DELETE
       const evolutionUrl = `${secrets.evolution_api_url}/instance/logout/${secrets.evolution_instance_name}`;
       
       const response = await fetch(evolutionUrl, {
         method: 'DELETE',
-        headers: {
-          'apikey': secrets.evolution_api_key
-        }
+        headers: { 'apikey': secrets.evolution_api_key }
       });
   
       if (!response.ok) {
@@ -159,11 +204,8 @@ export async function disconnectInstance() {
         throw new Error(errorData.message || `Erro na API (${response.status})`);
       }
   
-      const result = await response.json();
-      console.log('[OREH] Resultado da desconexão:', result);
       showToast('Instância desconectada com sucesso!', 'success');
   
-      // 3. Atualiza a interface para refletir o novo status (DESCONECTADO)
       await updateConnectionStatus();
   
     } catch (error) {

@@ -1,5 +1,4 @@
 import { showToast, updateUserInfo } from './ui.js';
-// ✅ ALTERADO AQUI: importamos 'supabaseClient'
 import { initializeApp, fetchUserProfile, supabaseClient } from './api.js';
 
 async function checkLoginState() {
@@ -52,7 +51,7 @@ async function login() {
     loginBtn.textContent = 'A entrar...';
 
     try {
-        // ✅ ALTERADO AQUI
+
         const { data, error } = await supabaseClient.auth.signInWithPassword({
             email: emailInput.value,
             password: passwordInput.value,
@@ -91,4 +90,49 @@ async function logout() {
     await checkLoginState();
 }
 
-export { checkLoginState, login, logout };
+ async function signUp() {
+    console.log('[OREH] A tentar criar nova conta...');
+    const emailInput = document.getElementById('signUpEmail');
+    const passwordInput = document.getElementById('signUpPassword');
+    const passwordConfirmInput = document.getElementById('signUpPasswordConfirm');
+    const signUpBtn = document.getElementById('signUpBtn');
+
+    if (passwordInput.value !== passwordConfirmInput.value) {
+        showToast('As senhas não coincidem.', 'error');
+        return;
+    }
+
+    signUpBtn.disabled = true;
+    signUpBtn.textContent = 'A registar...';
+
+    try {
+        const { data, error } = await supabaseClient.auth.signUp({
+            email: emailInput.value,
+            password: passwordInput.value,
+        });
+
+        if (error) throw error;
+
+        // No Supabase, o cadastro pode exigir confirmação por e-mail.
+        // Verifique suas configurações de Auth no painel do Supabase.
+        // Se a confirmação estiver ativa, o usuário não será logado imediatamente.
+        if (data.user && data.user.identities && data.user.identities.length > 0) {
+             showToast('Registo concluído! Faça o login para continuar.', 'success');
+             document.getElementById('signUpModal').style.display = 'none';
+             document.getElementById('signUpForm').reset();
+        } else {
+             showToast('Registo concluído! Por favor, verifique o seu e-mail para confirmar a conta.', 'success');
+             document.getElementById('signUpModal').style.display = 'none';
+             document.getElementById('signUpForm').reset();
+        }
+
+    } catch (error) {
+        console.error('[OREH] Falha no registo:', error);
+        showToast(error.message, 'error');
+    } finally {
+        signUpBtn.disabled = false;
+        signUpBtn.textContent = 'Cadastrar';
+    }
+}
+
+export { checkLoginState, login, logout, signUp };

@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Elementos Globais (Toast e Login) -->
     <div id="toast" class="toast hidden" role="alert" aria-live="assertive"></div>
     <div id="loginPage" class="login-container">
         <div class="login-card">
@@ -24,10 +23,13 @@
                 <input type="password" id="password" placeholder="Digite sua senha" autocomplete="current-password" aria-label="Senha">
             </div>
             <button id="loginBtn" class="btn btn-primary" aria-label="Entrar no sistema">Entrar</button>
+            <p class="signup-link">
+                Não tem uma conta? <a href="#" id="openSignUpModalBtn">Cadastre-se</a>
+            </p>
         </div>
     </div>
 
-    <!-- Container Principal da Aplicação -->
+
     <div id="appContainer" class="app-container">
         <div class="sidebar">
             <div class="sidebar-header">
@@ -39,7 +41,8 @@
                 <li><a href="#" class="nav-link" data-page="agenda"><i class="fas fa-calendar"></i> <span>Agenda</span></a></li>
                 <li><a href="#" class="nav-link" data-page="atendimentos"><i class="fas fa-comments"></i> <span>Atendimentos</span></a></li>
                 <li><a href="#" class="nav-link" data-page="drive"><i class="fab fa-google-drive"></i> <span>Drive</span></a></li>
-                <li><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de IA</span></a></li> 
+                <li><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de IA</span></a></li>
+                <li><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> <span>Configurações</span></a></li>  
             </ul>
         </div>
 
@@ -53,9 +56,9 @@
                 </div>
             </div>
 
-            <!-- Páginas da Aplicação -->
-            <div id="homePage" class="page-content active"></div>
-
+            <div id="homePage" class="page-content active">
+            </div>
+            
             <div id="statusPage" class="page-content">
                 <div class="status-container">
                     <div class="status-card">
@@ -68,9 +71,39 @@
                         <p>Escaneie o QR Code para conectar</p>
                     </div>
                 </div>
+
+                <div class="modal" id="firstConnectionModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Primeira Conexão</h3>
+                        </div>
+                        <p style="margin-bottom: 20px; text-align: left; color: var(--gray);">Para começar, precisamos configurar sua instância. Por favor, informe o número de telefone que será conectado.</p>
+                        <form id="firstConnectionForm">
+                            <div class="form-grid-columns">
+                                <div class="input-group">
+                                    <label for="countryCode">País (DDI)</label>
+                                    <select id="countryCode" required>
+                                        <option value="55" selected>Brasil (+55)</option>
+                                        <option value="1">EUA (+1)</option>
+                                        <option value="351">Portugal (+351)</option>
+                                        <option value="44">Reino Unido (+44)</option>
+                                        <option value="49">Alemanha (+49)</option>
+                                        <option value="54">Argentina (+54)</option>
+                                    </select>
+                                </div>
+                                <div class="input-group" style="grid-column: 2 / 4;">
+                                    <label for="phoneNumber">Número de Telefone</label>
+                                    <input type="tel" id="phoneNumber" placeholder="Ex: 18999999999" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" id="createConnectionBtn" class="btn btn-primary">Criar Conexão</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
 
-            <!-- ✅ PÁGINA DA AGENDA COM O SEU MODAL DENTRO -->
             <div id="agendaPage" class="page-content">
                 <div class="agenda-controls">
                     <div class="date-navigation">
@@ -87,7 +120,6 @@
                         <div class="agenda-body" id="agendaBody"></div>
                     </div>
                 </div>
-                <!-- Modal de Criar Evento movido para aqui -->
                 <div class="modal" id="eventFormModal">
                     <div class="modal-content">
                         <button class="close-modal">&times;</button>
@@ -157,14 +189,12 @@
                 </div>
             </div>
 
-            <!-- ✅ PÁGINA DO DRIVE COM O SEU MODAL DENTRO -->
             <div id="drivePage" class="page-content">
                 <div class="drive-header">
                     <h2>Documentos Compartilhados</h2>
                     <button class="btn btn-primary" id="openUploadModalBtn"><i class="fas fa-plus"></i> Adicionar Arquivo</button>
                 </div>
                 <div id="fileGrid" class="file-grid"></div>
-                <!-- Modal de Upload movido para aqui -->
                 <div class="modal" id="uploadModal">
                     <div class="modal-content">
                         <button class="close-modal">&times;</button>
@@ -174,7 +204,7 @@
                         <form id="uploadForm">
                             <div class="input-group">
                                 <label for="fileInput">Selecione o arquivo</label>
-                                <input type="file" id="fileInput" required>
+                                <input type="file" id="fileInput" required accept=".pdf,.txt,.md,.csv">
                             </div>
                             <div class="ia-card-footer">
                                 <button type="submit" class="btn btn-primary">Enviar</button>
@@ -274,10 +304,79 @@
                     </div>
                 </div>
             </div>
+
+            <div id="settingsPage" class="page-content">
+                <div class="settings-container">
+                    <form id="userSettingsForm">
+                        <div class="settings-card">
+                            <h3>Minhas Informações</h3>
+                            <div class="settings-grid">
+                                <div class="form-group">
+                                    <label for="fullName">Nome Completo</label>
+                                    <input type="text" id="fullName" placeholder="Seu nome completo">
+                                </div>
+                                <div class="form-group">
+                                    <label for="userInitial">Iniciais</label>
+                                    <input type="text" id="userInitial" placeholder="Suas iniciais" maxlength="2">
+                                </div>
+                                <div class="form-group">
+                                    <label for="jobTitle">Cargo</label>
+                                    <input type="text" id="jobTitle" placeholder="Seu cargo na empresa">
+                                </div>
+                            </div>
+                            <div class="settings-card-footer">
+                                <button id="saveUserSettingsBtn" type="submit" class="btn btn-primary">Guardar Alterações</button>
+                            </div>
+                        </div>
+                    </form>
+                    <form id="companySettingsForm">
+                        <div class="settings-card">
+                            <h3>Informações da Empresa</h3>
+                            <div class="settings-grid">
+                                <div class="form-group">
+                                    <label for="companyName">Nome da Empresa</label>
+                                    <input type="text" id="companyName" placeholder="Nome da sua empresa">
+                                </div>
+                                <div class="form-group">
+                                    <label for="officialName">Razão Social</label>
+                                    <input type="text" id="officialName" placeholder="Razão social da empresa">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cnpj">CNPJ</label>
+                                    <input type="text" id="cnpj" placeholder="CNPJ da empresa">
+                                </div>
+                                <div class="form-group">
+                                    <label for="industry">Setor</label>
+                                    <input type="text" id="industry" placeholder="Setor de atuação">
+                                </div>
+                                <div class="form-group">
+                                    <label for="corporateEmail">E-mail Corporativo</label>
+                                    <input type="email" id="corporateEmail" placeholder="E-mail de contato">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Telefone</label>
+                                    <input type="tel" id="phone" placeholder="Telefone da empresa">
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">Endereço</label>
+                                    <input type="text" id="address" placeholder="Endereço da empresa">
+                                </div>
+                            </div>
+                            <div class="settings-card-footer">
+                                <button id="saveCompanySettingsBtn" type="submit" class="btn btn-primary">Guardar Alterações</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="settings-card">
+                        <h3>Planos</h3>
+                        <div class="plans-grid" id="plansGrid">
+                            </div>
+                    </div>
+                    </div>
+            </div>
+        
         </div>
     </div>
-
-    <!-- Modais Globais (que podem ser abertos de qualquer página) -->
     <div class="modal" id="eventDetailModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -311,6 +410,32 @@
             <div class="modal-footer">
                 <button id="descartarLeadBtn" class="btn btn-danger">Descartar Lead</button>
             </div>
+        </div>
+    </div>
+
+    <div class="modal" id="signUpModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3>Criar Nova Conta</h3>
+            </div>
+            <form id="signUpForm">
+                <div class="input-group">
+                    <label for="signUpEmail">E-mail</label>
+                    <input type="email" id="signUpEmail" required>
+                </div>
+                <div class="input-group">
+                    <label for="signUpPassword">Senha</label>
+                    <input type="password" id="signUpPassword" required>
+                </div>
+                <div class="input-group">
+                    <label for="signUpPasswordConfirm">Confirme sua Senha</label>
+                    <input type="password" id="signUpPasswordConfirm" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="signUpBtn">Cadastrar</button>
+                </div>
+            </form>
         </div>
     </div>
     
