@@ -1,11 +1,10 @@
 import { checkLoginState, login, logout, signUp } from './auth.js';
-import { setupNavigation, setupModals, setupUploadModal } from './ui.js';
+import { setupNavigation, setupModals, setupUploadModal, setupThemeToggle } from './ui.js';
 import { saveAiSettings } from './ia.js';
 import { disconnectInstance } from './status.js';
 import { saveEvent, changeDay } from './agenda.js';
 import { descartarLead } from './atendimentos.js';
 import { uploadFile, deleteFile } from './drive.js';
-// ✅ Importa as novas funções do settings.js
 import { saveUserSettings, saveCompanySettings } from './settings.js';
 
 console.log('[OREH] Módulo principal carregado.');
@@ -150,7 +149,7 @@ function setupEventListeners() {
         });
     }
 
-    // ✅ NOVO: Listeners para os formulários de Configurações
+    // Listeners para os formulários de Configurações
     const userSettingsForm = document.getElementById('userSettingsForm');
     if (userSettingsForm) {
         userSettingsForm.addEventListener('submit', saveUserSettings);
@@ -187,5 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupModals();
     setupUploadModal();
     setupEventListeners();
+    setupThemeToggle();
     checkLoginState();
 });

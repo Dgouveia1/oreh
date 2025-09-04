@@ -1,4 +1,4 @@
-import { supabaseClient } from './api.js';
+import { supabaseClient, logEvent } from './api.js';
 import { showToast } from './ui.js';
 
 // Variável para guardar a nossa "subscrição" em tempo real
@@ -55,12 +55,12 @@ export async function loadAiSettings() {
         if (error && error.code !== 'PGRST116') throw error;
 
         if (settings) {
-            updateIaForm(settings); // Atualiza o formulário com os dados iniciais
+            updateIaForm(settings);
         } else {
             showToast('Nenhuma configuração de IA encontrada.', 'warning');
         }
 
-        // 2. ✅ NOVO: Inicia a subscrição em tempo real
+        // 2. Inicia a subscrição em tempo real
         companySecretsSubscription = supabaseClient
             .channel(`company-secrets-realtime:${profile.company_id}`)
             .on(
@@ -74,7 +74,7 @@ export async function loadAiSettings() {
                 (payload) => {
                     console.log('[OREH] Atualização de IA recebida em tempo real!', payload.new);
                     showToast('As configurações foram atualizadas remotamente!', 'info');
-                    updateIaForm(payload.new); // Atualiza o formulário com os novos dados
+                    updateIaForm(payload.new);
                 }
             )
             .subscribe((status) => {
@@ -86,10 +86,12 @@ export async function loadAiSettings() {
     } catch (error) {
         console.error('[OREH] Erro ao carregar ou subscrever configurações de IA:', error);
         showToast('Falha ao carregar as configurações de IA.', 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', 'Falha ao carregar configurações de IA', { errorMessage: error.message, stack: error.stack });
     }
 }
 
-// A função de salvar permanece a mesma
+// A função de salvar
 export async function saveAiSettings() {
     console.log("[OREH] A guardar configurações de IA no Supabase...");
     const saveBtn = document.getElementById('saveAiSettingsBtn');
@@ -119,10 +121,14 @@ export async function saveAiSettings() {
         if (error) throw error;
 
         showToast('Configurações guardadas com sucesso!', 'success');
+        // ✅ LOG DE SUCESSO
+        logEvent('INFO', 'Configurações de IA guardadas com sucesso.');
 
     } catch (error) {
         console.error('[OREH] Erro ao guardar configurações de IA:', error);
         showToast('Ocorreu um erro ao guardar as alterações.', 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', 'Falha ao guardar configurações de IA', { errorMessage: error.message, stack: error.stack });
     } finally {
         saveBtn.disabled = false;
         saveBtn.textContent = 'Guardar Alterações';

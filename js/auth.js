@@ -1,36 +1,27 @@
-import { showToast, updateUserInfo } from './ui.js';
-import { initializeApp, fetchUserProfile, supabaseClient } from './api.js';
+import { showToast, updateUserInfo, setupRoleBasedUI } from './ui.js'; 
+import { initializeApp, fetchUserProfile, supabaseClient, logEvent } from './api.js';
 
 async function checkLoginState() {
     console.log('[OREH] A verificar o estado da sessão com o Supabase...');
     const loginPage = document.getElementById('loginPage');
     const appContainer = document.getElementById('appContainer');
 
-    // ✅ ALTERADO AQUI
     const { data: { session } } = await supabaseClient.auth.getSession();
 
     if (session) {
         loginPage.style.display = 'none';
         appContainer.style.display = 'block';
 
-        const cachedName = localStorage.getItem('oreh_userName');
-        const cachedInitial = localStorage.getItem('oreh_userInitial');
-        if (cachedName && cachedInitial) {
-            updateUserInfo(cachedName, cachedInitial);
-        }
-
-        const userProfileResponse = await fetchUserProfile();
+        const userProfile = await fetchUserProfile();
         
-        if (userProfileResponse && userProfileResponse.length > 0) {
-            const userProfile = userProfileResponse[0];
-            const userName = userProfile.full_name;
-            const userInitial = userProfile.userinitial;
+        if (userProfile) {
+            const { full_name, userinitial, role } = userProfile;
+            
+            localStorage.setItem('oreh_userName', full_name || 'Utilizador');
+            localStorage.setItem('oreh_userInitial', userinitial || '?');
+            updateUserInfo(full_name, userinitial);
 
-            if (userName && userInitial) {
-                localStorage.setItem('oreh_userName', userName);
-                localStorage.setItem('oreh_userInitial', userInitial);
-                updateUserInfo(userName, userInitial);
-            }
+            setupRoleBasedUI(userProfile);
         }
         
         await initializeApp();
@@ -51,7 +42,6 @@ async function login() {
     loginBtn.textContent = 'A entrar...';
 
     try {
-
         const { data, error } = await supabaseClient.auth.signInWithPassword({
             email: emailInput.value,
             password: passwordInput.value,
@@ -62,11 +52,15 @@ async function login() {
         }
 
         console.log('[OREH] Início de sessão bem-sucedido!');
+        // ✅ LOG DE SUCESSO
+        logEvent('INFO', `Login bem-sucedido para: ${emailInput.value}`);
         await checkLoginState();
 
     } catch (error) {
         console.error('[OREH] Falha no início de sessão:', error);
         showToast(error.message, 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', `Falha no login para: ${emailInput.value}`, { errorMessage: error.message, stack: error.stack });
     } finally {
         loginBtn.disabled = false;
         loginBtn.textContent = 'Entrar';
@@ -76,12 +70,17 @@ async function login() {
 async function logout() {
     console.log('[OREH] A terminar sessão com o Supabase...');
     
-    // ✅ ALTERADO AQUI
+    const userName = localStorage.getItem('oreh_userName') || 'usuário desconhecido';
+    // ✅ LOG DE INFO
+    logEvent('INFO', `Logout realizado por: ${userName}`);
+    
     const { error } = await supabaseClient.auth.signOut();
 
     if (error) {
         console.error('[OREH] Erro ao terminar sessão:', error);
         showToast('Erro ao sair da conta.', 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', `Falha no logout para: ${userName}`, { errorMessage: error.message, stack: error.stack });
     }
 
     localStorage.removeItem('oreh_userName');
@@ -112,10 +111,10 @@ async function logout() {
         });
 
         if (error) throw error;
+        
+        // ✅ LOG DE SUCESSO
+        logEvent('INFO', `Nova conta criada para: ${emailInput.value}`);
 
-        // No Supabase, o cadastro pode exigir confirmação por e-mail.
-        // Verifique suas configurações de Auth no painel do Supabase.
-        // Se a confirmação estiver ativa, o usuário não será logado imediatamente.
         if (data.user && data.user.identities && data.user.identities.length > 0) {
              showToast('Registo concluído! Faça o login para continuar.', 'success');
              document.getElementById('signUpModal').style.display = 'none';
@@ -129,6 +128,8 @@ async function logout() {
     } catch (error) {
         console.error('[OREH] Falha no registo:', error);
         showToast(error.message, 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', `Falha ao criar conta para: ${emailInput.value}`, { errorMessage: error.message, stack: error.stack });
     } finally {
         signUpBtn.disabled = false;
         signUpBtn.textContent = 'Cadastrar';

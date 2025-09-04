@@ -1,4 +1,4 @@
-import { supabaseClient } from './api.js';
+import { supabaseClient, logEvent } from './api.js';
 import { showToast } from './ui.js';
 
 const agendaStartHour = 7;
@@ -57,12 +57,16 @@ export async function saveEvent(event) {
         if (error) throw error;
 
         showToast('Evento criado com sucesso!', 'success');
+        // ✅ LOG DE SUCESSO
+        logEvent('INFO', `Evento '${newEvent.assunto}' criado na agenda.`);
         document.getElementById('eventFormModal').style.display = 'none';
         document.getElementById('eventForm').reset();
         loadAgenda();
     } catch (error) {
         console.error('Erro ao salvar evento:', error);
         showToast(error.message, 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', `Falha ao criar evento '${newEvent.assunto}'`, { errorMessage: error.message, stack: error.stack });
     }
 }
 
@@ -107,6 +111,8 @@ export async function loadAgenda() {
         console.error("Erro ao carregar a agenda:", error);
         showToast("Falha ao carregar os eventos da agenda.", 'error');
         if (agendaBody) agendaBody.innerHTML = `<p class="loading-message error">${error.message}</p>`;
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', 'Falha ao carregar eventos da agenda', { errorMessage: error.message, stack: error.stack });
     }
 }
 
@@ -167,7 +173,6 @@ function renderSchedule(events) {
 
                 const startMinutesSinceStart = ((startHour - agendaStartHour) * 60) + startMinute;
                 
-                // ✅ CORREÇÃO DEFINITIVA NO CÁLCULO DA DURAÇÃO
                 const startTotalMinutes = (startHour * 60) + startMinute;
                 const endTotalMinutes = (endHour * 60) + endMinute;
                 const durationInMinutes = Math.max(30, endTotalMinutes - startTotalMinutes);

@@ -1,4 +1,4 @@
-import { supabaseClient } from './api.js';
+import { supabaseClient, logEvent } from './api.js';
 import { showToast } from './ui.js';
 
 const BUCKET_NAME = 'rag_docs';
@@ -19,10 +19,8 @@ function createFileCard(file) {
     const fileGrid = document.getElementById('fileGrid');
     if (!fileGrid) return;
 
-    // O 'file.name' agora contém o caminho completo (ex: 'company_id/arquivo.pdf')
     const { data } = supabaseClient.storage.from(BUCKET_NAME).getPublicUrl(file.name);
     
-    // Mostra apenas o nome do arquivo, sem a pasta
     const displayName = file.name.split('/').pop();
 
     const card = document.createElement('div');
@@ -47,7 +45,6 @@ function renderDrive(files) {
     }
 
     files.forEach(file => {
-        // Ignora o arquivo de placeholder que o Supabase cria em pastas vazias
         if (file.name !== '.emptyFolderPlaceholder') {
              createFileCard(file);
         }
@@ -55,7 +52,7 @@ function renderDrive(files) {
 }
 
 
-// --- LÓGICA DE DADOS (SUPABASE STORAGE) ---
+// --- LÓgica de DADOS (SUPABASE STORAGE) ---
 
 export async function loadDriveFiles() {
     console.log('[OREH] A carregar arquivos do Supabase Storage...');
@@ -68,11 +65,10 @@ export async function loadDriveFiles() {
         const { data: profile } = await supabaseClient.from('users').select('company_id').eq('id', user.id).single();
         if (!profile) throw new Error("Perfil do utilizador não encontrado.");
 
-        // ✅ CORREÇÃO PRINCIPAL: Lista os arquivos de dentro da pasta da empresa
         const { data, error } = await supabaseClient
             .storage
             .from(BUCKET_NAME)
-            .list(profile.company_id, { // <--- A MUDANÇA ESTÁ AQUI
+            .list(profile.company_id, {
                 limit: 100,
                 offset: 0,
                 sortBy: { column: 'created_at', order: 'desc' },
@@ -80,7 +76,6 @@ export async function loadDriveFiles() {
 
         if (error) throw error;
         
-        // Adiciona o caminho completo ao nome do arquivo para as funções de download/delete
         const filesWithFullPath = data.map(file => ({
             ...file,
             name: `${profile.company_id}/${file.name}`
@@ -92,6 +87,8 @@ export async function loadDriveFiles() {
         console.error('Erro ao carregar arquivos:', error);
         showToast('Não foi possível carregar os arquivos.', 'error');
         fileGrid.innerHTML = `<p class="loading-message error">${error.message}</p>`;
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', 'Falha ao carregar arquivos da Biblioteca de Conhecimento', { errorMessage: error.message, stack: error.stack });
     }
 }
 
@@ -108,6 +105,7 @@ export async function uploadFile(event) {
     const uploadBtn = event.target.querySelector('button[type="submit"]');
     uploadBtn.disabled = true;
     uploadBtn.textContent = 'Enviando...';
+    const cleanFileName = sanitizeFileName(file.name);
 
     try {
         const { data: { user } } = await supabaseClient.auth.getUser();
@@ -115,8 +113,6 @@ export async function uploadFile(event) {
         const { data: profile } = await supabaseClient.from('users').select('company_id').eq('id', user.id).single();
         if (!profile) throw new Error("Perfil do utilizador não encontrado.");
         
-        // Limpa o nome do arquivo para evitar erros de URL
-        const cleanFileName = sanitizeFileName(file.name);
         const filePath = `${profile.company_id}/${cleanFileName}`;
 
         const { error } = await supabaseClient
@@ -130,6 +126,8 @@ export async function uploadFile(event) {
         if (error) throw error;
 
         showToast('Arquivo enviado com sucesso!', 'success');
+        // ✅ LOG DE SUCESSO
+        logEvent('INFO', `Arquivo '${cleanFileName}' enviado para a Biblioteca.`);
         document.getElementById('uploadModal').style.display = 'none';
         document.getElementById('uploadForm').reset();
         loadDriveFiles();
@@ -137,6 +135,8 @@ export async function uploadFile(event) {
     } catch (error) {
         console.error('Erro no upload:', error);
         showToast(`Falha no upload: ${error.message}`, 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', `Falha ao enviar arquivo '${cleanFileName}'`, { errorMessage: error.message, stack: error.stack });
     } finally {
         uploadBtn.disabled = false;
         uploadBtn.textContent = 'Enviar';
@@ -149,7 +149,6 @@ export async function deleteFile(fullPath) {
     }
 
     try {
-        // ✅ CORREÇÃO: Usa o caminho completo recebido para deletar
         const { error } = await supabaseClient
             .storage
             .from(BUCKET_NAME)
@@ -158,10 +157,16 @@ export async function deleteFile(fullPath) {
         if (error) throw error;
 
         showToast('Arquivo excluído com sucesso!', 'success');
+        // ✅ LOG DE SUCESSO
+        const fileName = fullPath.split('/').pop();
+        logEvent('INFO', `Arquivo '${fileName}' excluído da Biblioteca.`);
         loadDriveFiles();
 
     } catch (error) {
         console.error('Erro ao excluir:', error);
         showToast(`Falha ao excluir o arquivo: ${error.message}`, 'error');
+        // ✅ LOG DE ERRO
+        const fileName = fullPath.split('/').pop();
+        logEvent('ERROR', `Falha ao excluir arquivo '${fileName}'`, { errorMessage: error.message, stack: error.stack });
     }
 }

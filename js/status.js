@@ -1,4 +1,4 @@
-import { supabaseClient } from './api.js';
+import { supabaseClient, logEvent } from './api.js';
 import { showToast } from './ui.js';
 
 // Variáveis de controle
@@ -12,12 +12,10 @@ function showFirstConnectionModal(companyId) {
     const modal = document.getElementById('firstConnectionModal');
     const form = document.getElementById('firstConnectionForm');
     
-    // Armazena o company_id no formulário para uso posterior
     form.dataset.companyId = companyId;
     
     modal.style.display = 'flex';
 
-    // Garante que o evento de submit seja adicionado apenas uma vez
     if (!form.dataset.listenerAttached) {
         form.addEventListener('submit', handleFirstConnection);
         form.dataset.listenerAttached = 'true';
@@ -34,7 +32,7 @@ async function handleFirstConnection(event) {
     const companyId = event.target.dataset.companyId;
     const countryCode = document.getElementById('countryCode').value;
     const phoneNumber = document.getElementById('phoneNumber').value;
-    const fullPhoneNumber = countryCode + phoneNumber.replace(/\D/g, ''); // Limpa o número
+    const fullPhoneNumber = countryCode + phoneNumber.replace(/\D/g, '');
 
     try {
         const webhookUrl = 'https://oreh-n8n.p7rc7g.easypanel.host/webhook/oreh-onboarding';
@@ -52,9 +50,9 @@ async function handleFirstConnection(event) {
         }
         
         showToast('Conexão solicitada com sucesso! A obter status...', 'success');
+        logEvent('INFO', `Primeira conexão solicitada para o número: ${fullPhoneNumber}`);
         document.getElementById('firstConnectionModal').style.display = 'none';
         
-        // Adiciona uma pequena pausa para dar tempo ao webhook de atualizar a base de dados
         await new Promise(resolve => setTimeout(resolve, 2000)); 
         
         await updateConnectionStatus();
@@ -62,6 +60,7 @@ async function handleFirstConnection(event) {
     } catch (error) {
         console.error('[OREH] Erro ao criar primeira conexão:', error);
         showToast(error.message, 'error');
+        logEvent('ERROR', 'Falha na primeira conexão via n8n', { errorMessage: error.message, stack: error.stack });
     } finally {
         btn.disabled = false;
         btn.textContent = 'Criar Conexão';
@@ -112,7 +111,6 @@ export async function updateConnectionStatus() {
         throw secretsError;
     }
 
-    // ✅ LÓGICA ATUALIZADA: Mostra o modal se não houver segredos OU se o nome da instância estiver em falta.
     if (!secrets || !secrets.evolution_instance_name) {
       console.log('[OREH] Instância não configurada. A solicitar primeira conexão.');
       statusElement.textContent = 'PRIMEIRA CONEXÃO NECESSÁRIA';
@@ -152,6 +150,7 @@ export async function updateConnectionStatus() {
         console.error('Erro dentro do loop de verificação:', e);
         statusElement.textContent = 'ERRO NA VERIFICAÇÃO';
         qrCodeOutput.innerHTML = `<p>${e.message}</p>`;
+        logEvent('WARN', 'Falha ao verificar status da instância (loop)', { errorMessage: e.message });
         stopStatusPolling();
       }
     };
@@ -167,6 +166,7 @@ export async function updateConnectionStatus() {
     showToast(error.message, 'error');
     statusElement.textContent = 'ERRO AO OBTER CONFIGURAÇÕES';
     qrCodeOutput.innerHTML = `<p>${error.message}</p>`;
+    logEvent('ERROR', 'Falha ao obter configurações da API para a página de Status', { errorMessage: error.message, stack: error.stack });
   } finally {
     isCheckingStatus = false;
   }
@@ -205,12 +205,14 @@ export async function disconnectInstance() {
       }
   
       showToast('Instância desconectada com sucesso!', 'success');
+      logEvent('INFO', `Instância '${secrets.evolution_instance_name}' desconectada.`);
   
       await updateConnectionStatus();
   
     } catch (error) {
       console.error('[OREH] Erro ao desconectar:', error);
       showToast(error.message, 'error');
+      logEvent('ERROR', 'Falha ao desconectar a instância', { errorMessage: error.message, stack: error.stack });
     } finally {
       disconnectBtn.disabled = false;
       disconnectBtn.textContent = 'Desconectar';

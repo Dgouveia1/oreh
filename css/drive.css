@@ -13,6 +13,12 @@
     margin-bottom: 0;
 }
 
+.drive-header p {
+    margin-top: 5px;
+    color: var(--gray);
+    font-size: 14px;
+}
+
 #fileGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));

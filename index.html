@@ -40,8 +40,9 @@
                 <li><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i> <span>Status de Conexão</span></a></li>
                 <li><a href="#" class="nav-link" data-page="agenda"><i class="fas fa-calendar"></i> <span>Agenda</span></a></li>
                 <li><a href="#" class="nav-link" data-page="atendimentos"><i class="fas fa-comments"></i> <span>Atendimentos</span></a></li>
-                <li><a href="#" class="nav-link" data-page="drive"><i class="fab fa-google-drive"></i> <span>Drive</span></a></li>
+                <li><a href="#" class="nav-link" data-page="drive"><i class="fas fa-book"></i> <span>Biblioteca de Conhecimento</span></a></li>
                 <li><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de IA</span></a></li>
+                <li><a href="#" class="nav-link" data-page="finances"><i class="fas fa-money-bill"></i> <span>Fatuas</span></a></li>  
                 <li><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> <span>Configurações</span></a></li>  
             </ul>
         </div>
@@ -49,6 +50,14 @@
         <div class="main-content">
             <div class="topbar">
                 <h2 id="pageTitle">Dashboard</h2>
+                <div class="theme-switcher-container">
+                    <i class="fas fa-sun"></i>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="themeToggle" class="toggle-input">
+                        <label for="themeToggle" class="toggle-label"></label>
+                    </div>
+                    <i class="fas fa-moon"></i>
+                </div>
                 <div class="user-info">
                     <div class="user-avatar">A</div>
                     <span id="userNameDisplay">Admin</span>
@@ -191,7 +200,10 @@
 
             <div id="drivePage" class="page-content">
                 <div class="drive-header">
-                    <h2>Documentos Compartilhados</h2>
+                    <div>
+                        <h2>Biblioteca de Conhecimento</h2>
+                        <p>Os arquivos adicionados aqui serão usados como base de conhecimento pela Inteligência Artificial.</p>
+                    </div>
                     <button class="btn btn-primary" id="openUploadModalBtn"><i class="fas fa-plus"></i> Adicionar Arquivo</button>
                 </div>
                 <div id="fileGrid" class="file-grid"></div>
@@ -303,6 +315,9 @@
                         <button id="saveAiSettingsBtn" class="btn btn-primary">Salvar Alterações</button>
                     </div>
                 </div>
+            </div>
+
+            <div id="financesPage" class="page-content active">
             </div>
 
             <div id="settingsPage" class="page-content">

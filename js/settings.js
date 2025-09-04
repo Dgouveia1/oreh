@@ -1,4 +1,4 @@
-import { supabaseClient } from './api.js';
+import { supabaseClient, logEvent } from './api.js';
 import { showToast } from './ui.js';
 
 async function loadSettings() {
@@ -37,10 +37,11 @@ async function loadSettings() {
             loadPlans(null);
         }
 
-    } catch (error)
- {
+    } catch (error) {
         console.error('[OREH] Erro ao carregar configurações:', error);
         showToast('Falha ao carregar as configurações.', 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', 'Falha ao carregar a página de configurações', { errorMessage: error.message, stack: error.stack });
     }
 }
 
@@ -68,9 +69,13 @@ async function saveUserSettings(event) {
 
         if (error) throw error;
         showToast('Dados do utilizador atualizados com sucesso!', 'success');
+        // ✅ LOG DE SUCESSO
+        logEvent('INFO', 'Configurações do utilizador guardadas com sucesso.');
     } catch (error) {
         console.error('[OREH] Erro ao guardar configurações do utilizador:', error);
         showToast('Ocorreu um erro ao guardar as alterações do utilizador.', 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', 'Falha ao guardar configurações do utilizador', { errorMessage: error.message, stack: error.stack });
     } finally {
         saveBtn.disabled = false;
         saveBtn.textContent = 'Guardar Alterações';
@@ -113,10 +118,14 @@ async function saveCompanySettings(event) {
         if (!data || data.length === 0) throw new Error("A atualização falhou. Nenhuma linha foi alterada.");
 
         showToast('Dados da empresa atualizados com sucesso!', 'success');
+        // ✅ LOG DE SUCESSO
+        logEvent('INFO', 'Configurações da empresa guardadas com sucesso.');
         
     } catch (error) {
         console.error('[OREH] Erro detalhado ao guardar configurações da empresa:', error);
         showToast(error.message || 'Ocorreu um erro ao guardar as alterações da empresa.', 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', 'Falha ao guardar configurações da empresa', { errorMessage: error.message, stack: error.stack });
     } finally {
         saveBtn.disabled = false;
         saveBtn.textContent = 'Guardar Alterações';
@@ -131,14 +140,13 @@ async function loadPlans(currentPlanId) {
     const plansGrid = document.getElementById('plansGrid');
     if (!plansGrid) return;
 
-    plansGrid.innerHTML = '<p>A carregar planos...</p>'; // Mensagem de loading
+    plansGrid.innerHTML = '<p>A carregar planos...</p>'; 
 
     try {
-        // ✅ ALTERAÇÃO PRINCIPAL: Busca os planos da tabela 'plans'
         const { data: plans, error } = await supabaseClient
             .from('plans')
             .select('*')
-            .order('price', { ascending: true }); // Ordena do mais barato para o mais caro
+            .order('price', { ascending: true });
 
         if (error) throw error;
         if (!plans || plans.length === 0) {
@@ -146,7 +154,7 @@ async function loadPlans(currentPlanId) {
             return;
         }
 
-        plansGrid.innerHTML = ''; // Limpa a mensagem de loading
+        plansGrid.innerHTML = ''; 
 
         plans.forEach(plan => {
             const isCurrentPlan = plan.id === currentPlanId;
@@ -180,6 +188,8 @@ async function loadPlans(currentPlanId) {
         console.error('[OREH] Erro ao carregar os planos:', error);
         plansGrid.innerHTML = `<p class="error">Não foi possível carregar os planos.</p>`;
         showToast('Erro ao carregar os planos.', 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', 'Falha ao carregar planos da empresa', { errorMessage: error.message, stack: error.stack });
     }
 }
 
@@ -203,11 +213,15 @@ async function selectPlan(planId, button) {
         if (error) throw error;
 
         showToast('Plano atualizado com sucesso!', 'success');
-        loadSettings(); // Recarrega todas as configurações para refletir a mudança
+        // ✅ LOG DE SUCESSO
+        logEvent('INFO', `Plano da empresa alterado para o ID: ${planId}`);
+        loadSettings();
 
     } catch (error) {
         console.error('[OREH] Erro ao selecionar o plano:', error);
         showToast('Não foi possível atualizar o plano.', 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', `Falha ao alterar o plano para o ID: ${planId}`, { errorMessage: error.message, stack: error.stack });
         button.disabled = false;
         button.textContent = 'Selecionar Plano';
     }

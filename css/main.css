@@ -14,7 +14,29 @@
     --agenda-end-hour: 22;
     --agenda-hour-height: 60px;
     --accent:  #007bff; /* Azul */
+
+    /* Variáveis de cor para o modo claro (padrão) */
+    --bg-color: #f9f9f9;
+    --sidebar-bg: linear-gradient(180deg, var(--primary), var(--secondary));
+    --card-bg: white;
+    --text-color: #333;
+    --text-color-light: #6c757d;
+    --border-color: #e0e0e0;
+    --input-bg: #fcfcfc;
 }
+
+body.dark-mode {
+    /* Variáveis de cor para o modo escuro */
+    --bg-color: #1a1a1a;
+    --sidebar-bg: #2c2c2c;
+    --card-bg: #2c2c2c;
+    --text-color: #f0f0f0;
+    --text-color-light: #a0a0a0;
+    --border-color: #444;
+    --input-bg: #3a3a3a;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
 
 * {
     margin: 0;
@@ -24,10 +46,11 @@
 }
 
 body {
-    background-color: var(--light);
-    color: #333;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     min-height: 100vh;
     overflow-x: hidden;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 /* ANIMAÇÕES */
@@ -54,12 +77,13 @@ body {
     left: 0;
     width: 250px;
     height: 100vh;
-    background: linear-gradient(180deg, var(--primary), var(--secondary));
+    background: var(--sidebar-bg);
     color: white;
     padding: 20px 0;
     z-index: 100;
     transition: var(--transition);
     box-shadow: var(--shadow);
+    border-right: 1px solid var(--border-color);
 }
 
 .sidebar-header {
@@ -119,7 +143,7 @@ body {
     margin-left: 250px;
     padding: 25px;
     transition: var(--transition);
-    background-color: #f9f9f9;
+    background-color: var(--bg-color);
     min-height: 100vh;
 }
 
@@ -137,11 +161,12 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 18px 25px;
-    background-color: white;
+    background-color: var(--card-bg);
     border-radius: 16px;
     box-shadow: var(--shadow);
     margin-bottom: 25px;
     animation: fadeIn 0.4s ease;
+    border: 1px solid var(--border-color);
 }
 
 .topbar h2 {

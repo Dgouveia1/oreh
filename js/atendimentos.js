@@ -1,4 +1,4 @@
-import { supabaseClient } from './api.js';
+import { supabaseClient, logEvent } from './api.js';
 import { showToast } from './ui.js';
 
 console.log('[OREH] A executar atendimentos.js v6 (Com função de descarte)');
@@ -25,7 +25,6 @@ export async function loadAtendimentos() {
             .from('chats')
             .select('*')
             .eq('company_id', profile.company_id)
-            // ✅ CORREÇÃO: Não seleciona chats com a temperatura 'DESCARTE'
             .neq('temperatura', 'DESCARTE') 
             .order('created_at', { ascending: false });
 
@@ -35,6 +34,8 @@ export async function loadAtendimentos() {
     } catch (error) {
         console.error("Erro ao carregar atendimentos:", error);
         showToast('Não foi possível carregar os atendimentos.', 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', 'Falha ao carregar atendimentos (Kanban)', { errorMessage: error.message, stack: error.stack });
         kanbanBoard.querySelectorAll('.kanban-cards-container').forEach(container => {
             container.innerHTML = `<p class="loading-message error">Falha ao carregar: ${error.message}</p>`;
         });
@@ -54,6 +55,8 @@ async function updateChatTemperatura(chatId, newTemperatura) {
     } catch (error) {
         console.error('Erro ao atualizar a temperatura do chat:', error);
         showToast('Falha ao mover o atendimento.', 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', `Falha ao mover lead ${chatId} para ${newTemperatura}`, { errorMessage: error.message, stack: error.stack });
         loadAtendimentos(); 
     }
 }
@@ -74,18 +77,21 @@ export async function descartarLead(chatId) {
         if (error) throw error;
 
         showToast('Lead descartado com sucesso!', 'success');
-        document.getElementById('chatDetailModal').style.display = 'none'; // Fecha o modal
-        loadAtendimentos(); // Recarrega o Kanban para remover o card
+        // ✅ LOG DE SUCESSO
+        logEvent('INFO', `Lead com ID '${chatId}' foi descartado.`);
+        document.getElementById('chatDetailModal').style.display = 'none';
+        loadAtendimentos();
 
     } catch (error) {
         console.error('Erro ao descartar o lead:', error);
         showToast('Falha ao descartar o lead.', 'error');
+        // ✅ LOG DE ERRO
+        logEvent('ERROR', `Falha ao descartar lead com ID '${chatId}'`, { errorMessage: error.message, stack: error.stack });
     }
 }
 
 
 // --- RENDERIZAÇÃO E LÓGICA DE DRAG & DROP ---
-// (O restante do arquivo permanece o mesmo)
 
 function createChatCard(chat) {
     const card = document.createElement('div');

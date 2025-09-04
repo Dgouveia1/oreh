@@ -31,7 +31,6 @@ export function setupNavigation() {
             e.preventDefault();
             const targetPage = this.getAttribute('data-page');
             
-            // ✅ ADICIONADO: Interrompe o polling se sairmos da página de status
             if (targetPage !== 'status') {
                 stopStatusPolling();
             }
@@ -108,4 +107,44 @@ export function updateUserInfo(name, initial) {
     if (userAvatar && initial) {
         userAvatar.textContent = initial;
     }
+}
+
+export function setupRoleBasedUI(userProfile) {
+    const adminLink = document.getElementById('adminNav');
+    if (!adminLink) return;
+
+    if (userProfile && userProfile.role === 'admin') {
+        adminLink.style.display = 'block';
+    } else {
+        adminLink.style.display = 'none';
+    }
+}
+
+export function setupThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    if (!themeToggle) return;
+
+    const applyTheme = (theme) => {
+        if (theme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggle.checked = true;
+        } else {
+            document.body.classList.remove('dark-mode');
+            themeToggle.checked = false;
+        }
+    };
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        applyTheme(savedTheme);
+    } else {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        applyTheme(prefersDark ? 'dark' : 'light');
+    }
+
+    themeToggle.addEventListener('change', () => {
+        const newTheme = themeToggle.checked ? 'dark' : 'light';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+    });
 }
