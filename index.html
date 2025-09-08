@@ -231,7 +231,7 @@
                     <div class="ia-card">
                         <h3>Controle Geral</h3>
                         <div class="form-group form-group-toggle">
-                            <label for="aiActiveToggle">IA Ativada</label>
+                            <label for="aiActiveToggle">Resposta de IA Ativadas</label>
                             <div class="toggle-switch">
                                 <input type="checkbox" id="aiActiveToggle" class="toggle-input">
                                 <label for="aiActiveToggle" class="toggle-label"></label>
@@ -239,10 +239,10 @@
                         </div>
                     </div>
                     <div class="ia-card">
-                        <h3>Prompt Base</h3>
-                        <p class="description">Este é o prompt principal que define o comportamento geral do seu agente. As configurações abaixo ajudarão a refinar este comportamento.</p>
+                        <h3>Orientações para o sua IA</h3>
+                        <p class="description">Estas serão as orientações principais que definem o comportamento geral do seu agente. As configurações abaixo ajudarão a refinar este comportamento.</p>
                         <div class="form-group">
-                            <label for="basePrompt">Edite o prompt base:</label>
+                            <label for="basePrompt"></label>
                             <textarea id="basePrompt" rows="8" placeholder="Ex: Você é um assistente virtual da empresa X..."></textarea>
                         </div>
                     </div>
@@ -312,7 +312,7 @@
                         </div>
                     </div>
                     <div class="ia-card-footer">
-                        <button id="saveAiSettingsBtn" class="btn btn-primary">Salvar Alterações</button>
+                        <button id="saveAiSettingsBtn" class="btn btn-primary">Salvar</button>
                     </div>
                 </div>
             </div>
@@ -340,7 +340,7 @@
                                 </div>
                             </div>
                             <div class="settings-card-footer">
-                                <button id="saveUserSettingsBtn" type="submit" class="btn btn-primary">Guardar Alterações</button>
+                                <button id="saveUserSettingsBtn" type="submit" class="btn btn-primary">Salvar</button>
                             </div>
                         </div>
                     </form>
@@ -378,7 +378,7 @@
                                 </div>
                             </div>
                             <div class="settings-card-footer">
-                                <button id="saveCompanySettingsBtn" type="submit" class="btn btn-primary">Guardar Alterações</button>
+                                <button id="saveCompanySettingsBtn" type="submit" class="btn btn-primary">Salvar</button>
                             </div>
                         </div>
                     </form>
@@ -419,7 +419,7 @@
                 <p><i class="fas fa-phone"></i> <strong>Telefone:</strong> <span id="chatDetailPhone"></span></p>
                 <p><i class="fas fa-info-circle"></i> <strong>Status:</strong> <span id="chatDetailStatus" class="status-badge"></span></p>
                 <p><i class="fas fa-calendar-alt"></i> <strong>Início:</strong> <span id="chatDetailCreated"></span></p>
-                <p><i class="fas fa-comment-dots"></i> <strong>Última Interação:</strong></p>
+                <p><i class="fas fa-comment-dots"></i> <strong>Última Mensagem:</strong></p>
                 <p id="chatDetailSummary" class="summary-text"></p>
             </div>
             <div class="modal-footer">
