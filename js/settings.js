@@ -171,7 +171,7 @@ async function loadPlans(currentPlanId) {
                 ${plan.name === 'Business' && !isCurrentPlan ? '<div class="recommended-badge">Recomendado</div>' : ''}
                 <h4>${plan.name}</h4>
                 <div class="price">R$ ${parseFloat(plan.price).toFixed(2).replace('.', ',')}<span>/mês</span></div>
-                <p>${plan.monthly_token_limit.toLocaleString('pt-BR')} conversas/mês</p>
+                <p>${plan.monthly_chat_limit.toLocaleString('pt-BR')} conversas/mês</p>
                 ${buttonHtml}
             `;
             plansGrid.appendChild(planCard);
