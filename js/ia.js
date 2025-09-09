@@ -35,7 +35,7 @@ function updateIaForm(settings) {
 }
 
 export async function loadAiSettings() {
-    console.log("[OREH] A carregar e a subscrever configurações de IA do Supabase...");
+    console.log("[OREH] Carregando e a subscrever configurações de IA do Supabase...");
     
     // Primeiro, cancelamos qualquer subscrição anterior para evitar duplicados
     unsubscribeFromAiSettings();

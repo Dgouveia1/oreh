@@ -71,11 +71,11 @@ export async function saveEvent(event) {
 }
 
 export async function loadAgenda() {
-    console.log("[OREH] A carregar a agenda do Supabase...");
+    console.log("[OREH] Carregando a agenda do Supabase...");
     
     const agendaBody = document.getElementById('agendaBody');
     if (agendaBody) {
-        agendaBody.innerHTML = '<p class="loading-message">A carregar agenda...</p>';
+        agendaBody.innerHTML = '<p class="loading-message">Carregando agenda...</p>';
     } else {
         console.error("O corpo da agenda ('agendaBody') não foi encontrado!");
         return;

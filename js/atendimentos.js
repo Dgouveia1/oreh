@@ -6,12 +6,12 @@ console.log('[OREH] A executar atendimentos.js v6 (Com função de descarte)');
 // --- LÓGICA DE DADOS (SUPABASE) ---
 
 export async function loadAtendimentos() {
-    console.log("[OREH] A carregar atendimentos do Supabase para o Kanban...");
+    console.log("[OREH] Carregando atendimentos do Supabase para o Kanban...");
     const kanbanBoard = document.getElementById('kanbanBoard');
     if (!kanbanBoard) return;
 
     kanbanBoard.querySelectorAll('.kanban-cards-container').forEach(container => {
-        container.innerHTML = '<p class="loading-message">A carregar...</p>';
+        container.innerHTML = '<p class="loading-message">Carregando...</p>';
     });
 
     try {

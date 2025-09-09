@@ -55,9 +55,9 @@ function renderDrive(files) {
 // --- LÓgica de DADOS (SUPABASE STORAGE) ---
 
 export async function loadDriveFiles() {
-    console.log('[OREH] A carregar arquivos do Supabase Storage...');
+    console.log('[OREH] Carregando arquivos do Supabase Storage...');
     const fileGrid = document.getElementById('fileGrid');
-    fileGrid.innerHTML = '<p class="loading-message">A carregar arquivos...</p>';
+    fileGrid.innerHTML = '<p class="loading-message">Carregando arquivos...</p>';
 
     try {
         const { data: { user } } = await supabaseClient.auth.getUser();

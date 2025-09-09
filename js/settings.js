@@ -2,7 +2,7 @@ import { supabaseClient, logEvent } from './api.js';
 import { showToast } from './ui.js';
 
 async function loadSettings() {
-    console.log('[OREH] A carregar configurações...');
+    console.log('[OREH] Carregando configurações...');
     
     try {
         const { data: { user } } = await supabaseClient.auth.getUser();
@@ -136,11 +136,11 @@ async function saveCompanySettings(event) {
 // --- LÓGICA DE PLANOS DINÂMICA ---
 
 async function loadPlans(currentPlanId) {
-    console.log('[OREH] A carregar planos do Supabase. Plano atual:', currentPlanId);
+    console.log('[OREH] Carregando planos do Supabase. Plano atual:', currentPlanId);
     const plansGrid = document.getElementById('plansGrid');
     if (!plansGrid) return;
 
-    plansGrid.innerHTML = '<p>A carregar planos...</p>'; 
+    plansGrid.innerHTML = '<p>Carregando planos...</p>'; 
 
     try {
         const { data: plans, error } = await supabaseClient
