@@ -6,8 +6,8 @@ import { saveEvent, changeDay } from './agenda.js';
 import { descartarLead } from './atendimentos.js';
 import { uploadFile, deleteFile } from './drive.js';
 import { saveUserSettings, saveCompanySettings } from './settings.js';
-import { handleProductFormSubmit, deleteProduct, openEditModal } from './produtos.js';
-import { handleClientFormSubmit, deleteClient, openEditClientModal } from './clientes.js'; // ✅ NOVO IMPORT
+import { handleProductFormSubmit, deleteProduct, openEditModal as openEditProductModal } from './produtos.js';
+import { handleClientFormSubmit, deleteClient, openEditModal as openEditClientModal, setupClientTableListeners } from './clientes.js'; // ✅ CORREÇÃO: Importação correta e renomeação da função openEditModal para evitar conflito
 import './finances.js'; 
 
 
@@ -61,12 +61,9 @@ function setupEventListeners() {
                 const el = modal.querySelector(id);
                 if (el) el.textContent = text || 'N/A';
             };
-            
+
             const status = (card.dataset.status || 'N/A').replace(/_/g, ' ');
             const statusEl = modal.querySelector('#chatDetailStatus');
-            
-            // ✅ EXIBE O CLIENTE VINCULADO
-            setText('#linkedClientName', card.dataset.clientName || 'N/A');
 
             setText('#chatDetailCustomer', card.dataset.customer_name);
             setText('#chatDetailPhone', card.dataset.customer_phone);
@@ -193,51 +190,32 @@ function setupEventListeners() {
             
             if (action === 'edit') {
                 const productData = { ...row.dataset }; 
-                openEditModal(productData);
+                openEditProductModal(productData); // ✅ Uso do alias corrigido
             }
         });
     }
-    
-    // ✅ NOVO: Listeners de Clientes
+
+    // ✅ NOVO: CLientes
     const openClientModalBtn = document.getElementById('openClientModalBtn');
     if (openClientModalBtn) {
         openClientModalBtn.addEventListener('click', () => {
             const form = document.getElementById('clientForm');
             form.reset();
             document.getElementById('clientId').value = '';
-            document.getElementById('clientModalTitle').innerHTML = '<i class="fas fa-user-plus"></i> Adicionar Novo Cliente';
-            document.getElementById('clientStatus').value = 'Lead'; // Default status
+            document.getElementById('clientModalTitle').textContent = 'Novo Cliente';
             document.getElementById('clientFormModal').style.display = 'flex';
+            document.getElementById('isPersonal').checked = false; // Garante que o checkbox está desmarcado por padrão
         });
     }
-
+    
     const clientForm = document.getElementById('clientForm');
     if (clientForm) {
         clientForm.addEventListener('submit', handleClientFormSubmit);
     }
 
-    const clientTableContainer = document.querySelector('#clientesPage .table-container');
-    if (clientTableContainer) {
-        clientTableContainer.addEventListener('click', (e) => {
-            const button = e.target.closest('button');
-            if (!button) return;
-            
-            const action = button.dataset.action;
-            const row = button.closest('tr');
-            if (!row) return;
+    // Inicializa o listener de eventos para os botões de editar/deletar na tabela de Clientes
+    setupClientTableListeners(); 
 
-            const clientId = row.dataset.clientId;
-
-            if (action === 'delete') {
-                deleteClient(clientId);
-            }
-            
-            if (action === 'edit') {
-                const clientData = { ...row.dataset };
-                openEditClientModal(clientData);
-            }
-        });
-    }
 
     // Listeners para os formulários de Configurações
     const userSettingsForm = document.getElementById('userSettingsForm');

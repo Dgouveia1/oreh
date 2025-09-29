@@ -57,7 +57,7 @@ export function setupNavigation() {
                 case 'dashboard':
                     loadDashboard();
                     break;
-                case 'clientes': // ✅ NOVO CASE
+                case 'clients': // ✅ CORREÇÃO: Alterado de 'clientes' para 'clients' para corresponder ao HTML
                     loadClients();
                     break;
                 case 'status':

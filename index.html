@@ -13,22 +13,6 @@
 </head>
 <body>
     <div id="toast" class="toast hidden" role="alert" aria-live="assertive"></div>
-    <!-- Modal de Notificação de Assinatura Atrasada -->
-    <div class="modal" id="overdueSubscriptionModal">
-        <div class="modal-content" style="max-width: 450px; border-top: 4px solid var(--danger);">
-            <div class="modal-header">
-                <h3 style="color: var(--danger);"><i class="fas fa-exclamation-triangle"></i> Assinatura em Atraso</h3>
-            </div>
-            <p style="margin-bottom: 20px; text-align: left; color: var(--text-color);">
-                Parece que sua assinatura está com pagamentos pendentes. Para evitar a suspensão dos serviços, regularize a situação o mais rápido possível.
-            </p>
-            <div id="asaasPortalLink" class="modal-footer" style="border: none; padding-top: 0; display: flex; justify-content: flex-end;">
-                <!-- ✅ ID CORRIGIDO: O JS irá definir a ação e o texto deste botão -->
-                <button class="btn btn-primary" id="asaasPortalBtn">Gerir Assinatura</button>
-            </div>
-        </div>
-    </div>
-    
     <div id="loginPage" class="login-container">
         <div class="login-card">
             <div class="logo-text">OREH</div>
@@ -55,11 +39,10 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
-                <!-- ✅ NOVO LINK PARA CLIENTES -->
-                <li><a href="#" class="nav-link" data-page="clientes"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
                 <li><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i> <span>Status de Conexão</span></a></li>
                 <li><a href="#" class="nav-link" data-page="agenda"><i class="fas fa-calendar"></i> <span>Agenda</span></a></li>
                 <li><a href="#" class="nav-link" data-page="atendimentos"><i class="fas fa-comments"></i> <span>Atendimentos</span></a></li>
+                <li><a href="#" class="nav-link" data-page="clients"><i class="fas fa-users"></i> <span>Clientes</span></a></li> <!-- NOVO LINK CLIENTES -->
                 <li><a href="#" class="nav-link" data-page="produtos"><i class="fas fa-box-open"></i> <span>Produtos</span></a></li>
                 <li><a href="#" class="nav-link" data-page="drive"><i class="fas fa-book"></i> <span>Biblioteca de Conhecimento</span></a></li>
                 <li><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de IA</span></a></li>
@@ -89,20 +72,32 @@
             <div id="dashboardPage" class="page-content active">
                 <div class="metrics-grid">
                     <div class="metric-card">
-                        <h3>Novos Leads (Mês)</h3>
-                        <p id="metricNovosLeads">0</p>
+                        <div class="card-icon icon-atendimentos"><i class="fas fa-comment-dots"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="totalAtendimentos">0</span>
+                            <span class="metric-label">Atendimentos no Mês</span>
+                        </div>
                     </div>
                     <div class="metric-card">
-                        <h3>Atendimentos Humanos</h3>
-                        <p id="metricAtendimentosHumanos">0</p>
+                        <div class="card-icon icon-ia"><i class="fas fa-robot"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="resolvidosIA">0%</span>
+                            <span class="metric-label">Resolvidos pela IA</span>
+                        </div>
                     </div>
                     <div class="metric-card">
-                        <h3>Leads Ganhos</h3>
-                        <p id="metricLeadsGanhos">0</p>
+                        <div class="card-icon icon-leads"><i class="fas fa-user-tie"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="leadsQualificados">0</span>
+                            <span class="metric-label">Leads Qualificados</span>
+                        </div>
                     </div>
                     <div class="metric-card">
-                        <h3>Leads Perdidos</h3>
-                        <p id="metricLeadsPerdidos">0</p>
+                         <div class="card-icon icon-valor"><i class="fas fa-dollar-sign"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="valorTotalLeads">R$ 0,00</span>
+                            <span class="metric-label">Valor Total Gerado</span>
+                        </div>
                     </div>
                 </div>
                 <div class="charts-grid">
@@ -118,77 +113,6 @@
                             <canvas id="volumeAtendimentosChart"></canvas>
                         </div>
                     </div>
-                </div>
-            </div>
-            
-            <div id="clientesPage" class="page-content">
-                <div class="page-header">
-                    <div>
-                         <h2>Clientes</h2>
-                         <p>Gerencie seus clientes e informações de contato.</p>
-                    </div>
-                    <button class="btn btn-primary" id="openClientModalBtn"><i class="fas fa-plus"></i> Novo Cliente</button>
-                </div>
-                <!-- Card de Métricas de Clientes -->
-                <div class="metrics-grid">
-                    <div class="metric-card" id="totalClientsCard">
-                        <div class="card-icon icon-leads"><i class="fas fa-users"></i></div>
-                        <div class="card-content">
-                            <div class="metric-value" id="metricTotalClients">0</div>
-                            <div class="metric-label">Total de Clientes</div>
-                        </div>
-                    </div>
-                     <div class="metric-card" id="activeClientsCard">
-                        <div class="card-icon icon-leads"><i class="fas fa-check-circle"></i></div>
-                        <div class="card-content">
-                            <div class="metric-value" id="metricActiveClients">0</div>
-                            <div class="metric-label">Clientes Ativos</div>
-                        </div>
-                    </div>
-                    <div class="metric-card" id="waClientsCard">
-                        <div class="card-icon icon-leads"><i class="fab fa-whatsapp"></i></div>
-                        <div class="card-content">
-                            <div class="metric-value" id="metricWAClients">0</div>
-                            <div class="metric-label">Via WhatsApp</div>
-                        </div>
-                    </div>
-                    <div class="metric-card" id="emailClientsCard">
-                        <div class="card-icon icon-leads"><i class="fas fa-envelope"></i></div>
-                        <div class="card-content">
-                            <div class="metric-value" id="metricEmailClients">0</div>
-                            <div class="metric-label">Com Email</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Barra de Busca -->
-                <div class="search-bar-container">
-                    <div class="input-group">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="clientSearchInput" placeholder="Buscar por nome, email ou telefone...">
-                    </div>
-                </div>
-
-                <!-- Lista de Clientes -->
-                <div class="table-container" style="margin-top: 30px;">
-                    <h3 class="list-title">Lista de Clientes</h3>
-                    <table class="client-table">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Telefone</th>
-                                <th>Email</th>
-                                <th>Localização</th>
-                                <th>Status</th>
-                                <th>Origem</th>
-                                <th>Data Cadastro</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="clientTableBody">
-                            <!-- Linhas de clientes serão inseridas aqui via JS -->
-                        </tbody>
-                    </table>
                 </div>
             </div>
             
@@ -300,32 +224,101 @@
             </div>
 
             <div id="atendimentosPage" class="page-content">
-                 <div class="page-header">
-                    <h2>Atendimento Humano Necessário</h2>
+                 <div class="human-attention-section">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Atendimento Humano Necessário</h3>
                     <div id="humanAttentionContainer" class="human-attention-container">
                         <!-- Cards de atendimento humano serão inseridos aqui -->
                     </div>
                 </div>
+                <div class="page-header">
+                    <h2>Funil de Atendimentos</h2>
+                </div>
                 <div id="kanbanBoard" class="kanban-board">
                     <div class="kanban-column" data-temperatura="TOPO DO FUNIL">
-                        <h3 class="kanban-column-title">Topo do Funil</h3>
+                        <h3 class="kanban-column-title">Novo</h3>
                         <div class="kanban-cards-container"></div>
                     </div>
                     <div class="kanban-column" data-temperatura="MEIO DO FUNIL">
-                        <h3 class="kanban-column-title">Meio do Funil</h3>
+                        <h3 class="kanban-column-title">Atendimento</h3>
                         <div class="kanban-cards-container"></div>
                     </div>
                     <div class="kanban-column" data-temperatura="FUNDO DO FUNIL">
-                        <h3 class="kanban-column-title">Fundo do Funil</h3>
+                        <h3 class="kanban-column-title">Agendado</h3>
                         <div class="kanban-cards-container"></div>
                     </div>
                     <div class="kanban-column" data-temperatura="PÓS-VENDA">
-                        <h3 class="kanban-column-title">Pós-venda</h3>
+                        <h3 class="kanban-column-title">Finalizado</h3>
                         <div class="kanban-cards-container"></div>
                     </div>
                 </div>
             </div>
-            
+
+            <!-- ✅ NOVA PÁGINA CLIENTES -->
+            <div id="clientsPage" class="page-content">
+                <div class="page-header">
+                    <h2>Clientes</h2>
+                    <button class="btn btn-primary" id="openClientModalBtn"><i class="fas fa-plus"></i> Novo Cliente</button>
+                </div>
+                 <div class="metrics-grid">
+                    <div class="metric-card">
+                         <div class="card-icon icon-atendimentos"><i class="fas fa-user-plus"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="totalClients">0</span>
+                            <span class="metric-label">Total de Clientes</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                         <div class="card-icon icon-leads"><i class="fas fa-check-circle"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="activeClients">0</span>
+                            <span class="metric-label">Clientes Ativos</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                         <div class="card-icon icon-valor"><i class="fas fa-phone-square-alt"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="whatsappClients">0</span>
+                            <span class="metric-label">Clientes via WhatsApp</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="card-icon icon-ia"><i class="fas fa-envelope"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="emailClients">0</span>
+                            <span class="metric-label">Clientes com Email</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-bar-container">
+                    <div class="input-group search-input">
+                         <i class="fas fa-search"></i>
+                         <input type="text" id="clientSearchInput" placeholder="Buscar por nome, email ou telefone...">
+                    </div>
+                </div>
+                <h3>Lista de Clientes</h3>
+                <div class="table-container" id="clientTableContainer">
+                    <table class="client-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Telefone</th>
+                                <th>Email</th>
+                                <th>Localização</th>
+                                <th>Status</th>
+                                <th>Origem</th>
+                                <th>Data Cadastro</th>
+                                <th>Pessoal (IA Ignora)</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientTableBody">
+                            <!-- Linhas de clientes serão inseridas aqui via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
             <div id="produtosPage" class="page-content">
                 <div class="page-header">
                     <h2>Gestão de Produtos</h2>
@@ -378,7 +371,6 @@
             </div>
             
             <div id="iaPage" class="page-content">
-                <!-- ✅ ESTRUTURA REORDENADA -->
                <div class="ia-management-container">
                    <div class="ia-card">
                        <h3>Controle Geral</h3>
@@ -421,7 +413,6 @@
                        </div>
                    </div>
                    
-                   <!-- ✅ SEÇÕES REORDENADAS -->
                    <div class="ia-card">
                        <h3>Orientações para sua IA</h3>
                        <p class="description">Estas serão as orientações principais que definem o comportamento geral do seu agente. As configurações abaixo ajudarão a refinar este comportamento.</p>
@@ -571,6 +562,7 @@
         </div>
     </div>
     
+    <!-- Modais Genéricos -->
     <div class="modal" id="eventDetailModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -578,11 +570,11 @@
                 <h3 id="eventDetailAssunto"></h3>
             </div>
             <div class="event-details">
-                <p><i class="fas fa-calendar-alt"></i> <strong id="eventDetailData"></strong></p>
-                <p><i class="fas fa-clock"></i> <strong id="eventDetailHorario"></strong></p>
-                <p><i class="fas fa-user"></i> <strong id="eventDetailCliente"></strong></p>
-                <p><i class="fas fa-phone"></i> <strong id="eventDetailTelefone"></strong></p>
-                <p><i class="fas fa-map-marker-alt"></i> <strong id="eventDetailLocal"></strong></p>
+                <p><i class="fas fa-calendar-alt"></i> <strong>Data:</strong> <strong id="eventDetailData"></strong></p>
+                <p><i class="fas fa-clock"></i> <strong>Horário:</strong> <strong id="eventDetailHorario"></strong></p>
+                <p><i class="fas fa-user"></i> <strong>Cliente:</strong> <strong id="eventDetailCliente"></strong></p>
+                <p><i class="fas fa-phone"></i> <strong>Telefone:</strong> <strong id="eventDetailTelefone"></strong></p>
+                <p><i class="fas fa-map-marker-alt"></i> <strong>Local:</strong> <strong id="eventDetailLocal"></strong></p>
             </div>
         </div>
     </div>
@@ -600,7 +592,6 @@
                 <p><i class="fas fa-calendar-alt"></i> <strong>Início:</strong> <span id="chatDetailCreated"></span></p>
                 <p><i class="fas fa-comment-dots"></i> <strong>Última Mensagem:</strong></p>
                 <p id="chatDetailSummary" class="summary-text"></p>
-                <p id="chatDetailLinkedClient" style="font-size: 14px; margin-top: 15px;"><i class="fas fa-address-book"></i> <strong>Cliente Vinculado:</strong> <span id="linkedClientName">N/A</span></p>
             </div>
             <div class="modal-footer">
                 <button id="descartarLeadBtn" class="btn btn-danger">Descartar Lead</button>
@@ -677,58 +668,84 @@
         </div>
     </div>
     
-    <!-- ✅ NOVO: Modal de Clientes -->
+    <!-- Modal de Clientes -->
     <div class="modal" id="clientFormModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
             <div class="modal-header">
-                <h3 id="clientModalTitle"><i class="fas fa-user-plus"></i> Adicionar Novo Cliente</h3>
+                <h3 id="clientModalTitle">Novo Cliente</h3>
             </div>
             <form id="clientForm">
                 <input type="hidden" id="clientId">
-                <div class="form-grid-columns" style="grid-template-columns: 1fr 1fr;">
-                    <div class="input-group">
-                        <label for="clientName">Nome Completo</label>
-                        <input type="text" id="clientName" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="clientPhone">Telefone (WhatsApp)</label>
-                        <input type="tel" id="clientPhone" required>
-                    </div>
+                <div class="input-group">
+                    <label for="clientName">Nome Completo</label>
+                    <input type="text" id="clientName" required>
                 </div>
-                <div class="form-grid-columns" style="grid-template-columns: 1fr 1fr;">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="clientPhone">Telefone</label>
+                        <input type="tel" id="clientPhone" placeholder="5511988887777" required>
+                    </div>
                     <div class="input-group">
                         <label for="clientEmail">Email</label>
                         <input type="email" id="clientEmail">
                     </div>
                     <div class="input-group">
-                        <label for="clientLocation">Localização</label>
-                        <input type="text" id="clientLocation" placeholder="Cidade/Estado">
+                        <label for="clientOrigin">Origem</label>
+                        <input type="text" id="clientOrigin" placeholder="Ex: WhatsApp, Site, Indicação">
                     </div>
-                </div>
-                <div class="form-grid-columns" style="grid-template-columns: 1fr 1fr;">
+                    <div class="input-group">
+                        <label for="clientLocation">Localização</label>
+                        <input type="text" id="clientLocation" placeholder="Ex: São Paulo - SP">
+                    </div>
                     <div class="input-group">
                         <label for="clientStatus">Status</label>
-                        <select id="clientStatus" required>
+                        <select id="clientStatus">
+                            <option value="Lead">Lead</option>
                             <option value="Ativo">Ativo</option>
                             <option value="Inativo">Inativo</option>
-                            <option value="Lead">Lead</option>
                         </select>
                     </div>
-                    <div class="input-group">
-                        <label for="clientOrigin">Origem</label>
-                        <input type="text" id="clientOrigin" placeholder="Ex: WhatsApp, Site, Facebook">
+                    <div class="form-group form-group-toggle" style="align-self: end; border-bottom: none; padding-bottom: 0;">
+                        <label for="isPersonal">Pessoal (IA Ignora)</label>
+                        <div class="toggle-switch" style="margin-top: 10px;">
+                            <input type="checkbox" id="isPersonal" class="toggle-input">
+                            <label for="isPersonal" class="toggle-label"></label>
+                        </div>
                     </div>
                 </div>
-                <div class="input-group">
-                    <label for="clientNotes">Notas/Resumo</label>
-                    <textarea id="clientNotes" rows="3" placeholder="Informações relevantes sobre o cliente"></textarea>
+                 <div class="input-group">
+                    <label for="clientNotes">Notas</label>
+                    <textarea id="clientNotes" rows="3" placeholder="Informações adicionais..."></textarea>
                 </div>
-                
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Salvar Cliente</button>
                 </div>
             </form>
+        </div>
+    </div>
+    
+    <!-- Modal de Assinatura em Atraso -->
+    <div class="modal" id="overdueSubscriptionModal">
+        <div class="modal-content" style="max-width: 450px;">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header" style="border-bottom: none; padding-bottom: 0;">
+                <h3 style="color: var(--danger); font-size: 26px;"><i class="fas fa-exclamation-triangle"></i> Assinatura em Atraso</h3>
+            </div>
+            <p style="margin-top: 15px; color: var(--text-color); font-weight: 500;">
+                Detectamos que o pagamento da sua assinatura está pendente.
+            </p>
+            <p style="margin-top: 10px; color: var(--danger); font-weight: 600;">
+                <i class="fas fa-robot"></i> Os serviços de Inteligência Artificial foram pausados.
+            </p>
+            <div class="modal-footer" style="padding-top: 20px;">
+                <button id="asaasPortalBtn" class="btn btn-danger" onclick="window.open(this.dataset.link, '_blank')">
+                    <i class="fas fa-credit-card"></i> Pagar Agora
+                </button>
+                <button class="btn btn-secondary close-modal">
+                    <i class="fas fa-times"></i> Fechar
+                </button>
+            </div>
         </div>
     </div>
 
