@@ -1,5 +1,45 @@
 import { showToast, updateUserInfo, setupRoleBasedUI } from './ui.js'; 
 import { initializeApp, fetchUserProfile, supabaseClient, logEvent } from './api.js';
+import { getSubscriptionStatus, getSubscriptionPaymentUrl } from './asaasService.js'; // ✅ Adicionado getSubscriptionPaymentUrl
+
+// Função para verificar e exibir o modal de assinatura em atraso
+async function checkSubscriptionStatus(companyData) {
+    if (!companyData.asaas_subscription_id) return;
+    
+    try {
+        const subscription = await getSubscriptionStatus(companyData.asaas_subscription_id);
+        
+        // Verifica se o status é de atraso ou cancelamento
+        if (subscription && (subscription.status === 'OVERDUE' || subscription.status === 'CANCELED')) {
+            const modal = document.getElementById('overdueSubscriptionModal');
+            const portalBtn = document.getElementById('asaasPortalBtn'); // ID do botão no modal
+            
+            if (modal) {
+                // 1. Tenta obter o link da última fatura/invoice
+                const paymentUrl = await getSubscriptionPaymentUrl(companyData.asaas_subscription_id);
+                
+                if (portalBtn) {
+                     // 2. Se a URL da fatura for encontrada, usa ela. Senão, mantém o link para a página de finanças.
+                    if (paymentUrl) {
+                        portalBtn.onclick = () => window.open(paymentUrl, '_blank');
+                        portalBtn.textContent = 'Pagar Fatura Pendente';
+                    } else {
+                        portalBtn.onclick = () => window.location.href='/finances'; // Volta para a página de finanças padrão
+                        portalBtn.textContent = 'Gerir Assinatura';
+                    }
+                }
+                
+                modal.style.display = 'flex';
+                logEvent('WARNING', `Assinatura em status de risco: ${subscription.status}`);
+            }
+        }
+    } catch (error) {
+        console.error('[Auth.js] Erro ao verificar status da assinatura no Asaas:', error);
+        logEvent('ERROR', 'Falha ao checar status da assinatura', { errorMessage: error.message });
+        // Continua o login mesmo com erro na API de pagamento.
+    }
+}
+
 
 async function checkLoginState() {
     console.log('[Auth.js] Verificando estado do login...');
@@ -29,6 +69,12 @@ async function checkLoginState() {
             console.log('[Auth.js] Acesso permitido. Mostrando a aplicação principal.');
             loginPage.style.display = 'none';
             appContainer.style.display = 'block';
+            
+            // ✅ REGRA DE NOTIFICAÇÃO DE ATRASO
+            if (companyStatus === 'active' || companyStatus === 'payment_pending') {
+                 await checkSubscriptionStatus(userProfile.companies);
+            }
+            
             await initializeApp();
 
         } else {
@@ -91,6 +137,10 @@ async function logout() {
 
     localStorage.removeItem('oreh_userName');
     localStorage.removeItem('oreh_userInitial');
+    
+    // Esconde o modal ao fazer logout
+    const modal = document.getElementById('overdueSubscriptionModal');
+    if (modal) modal.style.display = 'none';
     
     await checkLoginState();
 }
@@ -167,4 +217,3 @@ async function signUp() {
 
 
 export { checkLoginState, login, logout, signUp };
-

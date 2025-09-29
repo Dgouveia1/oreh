@@ -7,8 +7,8 @@ import { loadDriveFiles } from './drive.js';
 import { loadSettings } from './settings.js';
 import { loadFinancesPage } from './finances.js';
 import { loadDashboard, cleanupDashboard } from './dashboard.js';
-// ✅ CORREÇÃO: Adicionada a importação do módulo de produtos
 import { loadProducts, cleanupProducts } from './produtos.js';
+import { loadClients, cleanupClients } from './clientes.js'; // ✅ NOVO IMPORT
 
 // =================================================================================
 // FUNÇÕES DE UI GENÉRICAS
@@ -38,6 +38,7 @@ export function setupNavigation() {
             cleanupDashboard();
             cleanupAtendimentos();
             cleanupProducts();
+            cleanupClients(); // ✅ NOVO CLEANUP
             if (targetPage !== 'status') {
                 stopStatusPolling();
             }
@@ -56,6 +57,9 @@ export function setupNavigation() {
                 case 'dashboard':
                     loadDashboard();
                     break;
+                case 'clientes': // ✅ NOVO CASE
+                    loadClients();
+                    break;
                 case 'status':
                     updateConnectionStatus();
                     break;
@@ -65,7 +69,6 @@ export function setupNavigation() {
                 case 'atendimentos':
                     loadAtendimentos();
                     break;
-                // ✅ CORREÇÃO: Adicionado o case para carregar a página de produtos
                 case 'produtos':
                     loadProducts();
                     break;

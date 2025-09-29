@@ -1,6 +1,6 @@
 import { supabaseClient, logEvent } from './api.js';
 import { showToast } from './ui.js';
-import { getSubscriptionStatus } from './asaasService.js';
+import { getSubscriptionStatus, getSubscriptionPaymentUrl } from './asaasService.js'; // ✅ Adicionado getSubscriptionPaymentUrl
 
 export async function loadFinancesPage() {
     console.log('[OREH] A carregar página de Assinatura...');
@@ -24,9 +24,20 @@ export async function loadFinancesPage() {
         if (error) throw error;
         
         if (company && company.asaas_subscription_id) {
-            // ✅ SUBSTITUIÇÃO: Agora busca os dados reais da assinatura via Edge Function
-            const subscriptionDetails = await getSubscriptionStatus(company.asaas_subscription_id);
-            const asaasPortalUrl = `https://www.asaas.com/portal/customers/${company.asaas_customer_id}`;
+            
+            const [subscriptionDetails, paymentUrl] = await Promise.all([
+                getSubscriptionStatus(company.asaas_subscription_id),
+                getSubscriptionPaymentUrl(company.asaas_subscription_id) // ✅ Busca a URL de pagamento direto/fatura
+            ]);
+            
+            // Define o link do botão: URL de pagamento direto > Portal do Cliente
+            const finalLink = paymentUrl 
+                ? paymentUrl
+                : `https://www.asaas.com/portal/customers/${company.asaas_customer_id}`; 
+            
+            const buttonText = paymentUrl && (subscriptionDetails.status === 'OVERDUE' || subscriptionDetails.status === 'PENDING')
+                ? 'Pagar Fatura Pendente'
+                : 'Gerir Pagamentos';
 
             // Formata a data que vem da API (YYYY-MM-DD) para DD/MM/YYYY
             const formattedDueDate = subscriptionDetails.nextDueDate 
@@ -48,7 +59,7 @@ export async function loadFinancesPage() {
                 </div>
                 <div class="subscription-actions">
                     <p>Para gerir os seus pagamentos, alterar o cartão ou emitir segunda via, aceda ao seu portal do cliente.</p>
-                    <button class="btn btn-primary" onclick="window.open('${asaasPortalUrl}', '_blank')">Gerir Pagamentos</button>
+                    <button class="btn btn-primary" onclick="window.open('${finalLink}', '_blank')">${buttonText}</button>
                 </div>
             `;
         } else {
@@ -69,4 +80,3 @@ export async function loadFinancesPage() {
         logEvent('ERROR', 'Falha ao carregar página de finanças', { errorMessage: error.message });
     }
 }
-

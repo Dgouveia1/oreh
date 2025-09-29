@@ -9,9 +9,26 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
     <div id="toast" class="toast hidden" role="alert" aria-live="assertive"></div>
+    <!-- Modal de Notificação de Assinatura Atrasada -->
+    <div class="modal" id="overdueSubscriptionModal">
+        <div class="modal-content" style="max-width: 450px; border-top: 4px solid var(--danger);">
+            <div class="modal-header">
+                <h3 style="color: var(--danger);"><i class="fas fa-exclamation-triangle"></i> Assinatura em Atraso</h3>
+            </div>
+            <p style="margin-bottom: 20px; text-align: left; color: var(--text-color);">
+                Parece que sua assinatura está com pagamentos pendentes. Para evitar a suspensão dos serviços, regularize a situação o mais rápido possível.
+            </p>
+            <div id="asaasPortalLink" class="modal-footer" style="border: none; padding-top: 0; display: flex; justify-content: flex-end;">
+                <!-- ✅ ID CORRIGIDO: O JS irá definir a ação e o texto deste botão -->
+                <button class="btn btn-primary" id="asaasPortalBtn">Gerir Assinatura</button>
+            </div>
+        </div>
+    </div>
+    
     <div id="loginPage" class="login-container">
         <div class="login-card">
             <div class="logo-text">OREH</div>
@@ -38,6 +55,8 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <!-- ✅ NOVO LINK PARA CLIENTES -->
+                <li><a href="#" class="nav-link" data-page="clientes"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
                 <li><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i> <span>Status de Conexão</span></a></li>
                 <li><a href="#" class="nav-link" data-page="agenda"><i class="fas fa-calendar"></i> <span>Agenda</span></a></li>
                 <li><a href="#" class="nav-link" data-page="atendimentos"><i class="fas fa-comments"></i> <span>Atendimentos</span></a></li>
@@ -102,6 +121,77 @@
                 </div>
             </div>
             
+            <div id="clientesPage" class="page-content">
+                <div class="page-header">
+                    <div>
+                         <h2>Clientes</h2>
+                         <p>Gerencie seus clientes e informações de contato.</p>
+                    </div>
+                    <button class="btn btn-primary" id="openClientModalBtn"><i class="fas fa-plus"></i> Novo Cliente</button>
+                </div>
+                <!-- Card de Métricas de Clientes -->
+                <div class="metrics-grid">
+                    <div class="metric-card" id="totalClientsCard">
+                        <div class="card-icon icon-leads"><i class="fas fa-users"></i></div>
+                        <div class="card-content">
+                            <div class="metric-value" id="metricTotalClients">0</div>
+                            <div class="metric-label">Total de Clientes</div>
+                        </div>
+                    </div>
+                     <div class="metric-card" id="activeClientsCard">
+                        <div class="card-icon icon-leads"><i class="fas fa-check-circle"></i></div>
+                        <div class="card-content">
+                            <div class="metric-value" id="metricActiveClients">0</div>
+                            <div class="metric-label">Clientes Ativos</div>
+                        </div>
+                    </div>
+                    <div class="metric-card" id="waClientsCard">
+                        <div class="card-icon icon-leads"><i class="fab fa-whatsapp"></i></div>
+                        <div class="card-content">
+                            <div class="metric-value" id="metricWAClients">0</div>
+                            <div class="metric-label">Via WhatsApp</div>
+                        </div>
+                    </div>
+                    <div class="metric-card" id="emailClientsCard">
+                        <div class="card-icon icon-leads"><i class="fas fa-envelope"></i></div>
+                        <div class="card-content">
+                            <div class="metric-value" id="metricEmailClients">0</div>
+                            <div class="metric-label">Com Email</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Barra de Busca -->
+                <div class="search-bar-container">
+                    <div class="input-group">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="clientSearchInput" placeholder="Buscar por nome, email ou telefone...">
+                    </div>
+                </div>
+
+                <!-- Lista de Clientes -->
+                <div class="table-container" style="margin-top: 30px;">
+                    <h3 class="list-title">Lista de Clientes</h3>
+                    <table class="client-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Telefone</th>
+                                <th>Email</th>
+                                <th>Localização</th>
+                                <th>Status</th>
+                                <th>Origem</th>
+                                <th>Data Cadastro</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientTableBody">
+                            <!-- Linhas de clientes serão inseridas aqui via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
             <div id="statusPage" class="page-content">
                 <div class="status-container">
                     <div class="status-card">
@@ -117,6 +207,7 @@
 
                 <div class="modal" id="firstConnectionModal">
                     <div class="modal-content">
+                        <button class="close-modal">&times;</button>
                         <div class="modal-header">
                             <h3>Primeira Conexão</h3>
                         </div>
@@ -509,6 +600,7 @@
                 <p><i class="fas fa-calendar-alt"></i> <strong>Início:</strong> <span id="chatDetailCreated"></span></p>
                 <p><i class="fas fa-comment-dots"></i> <strong>Última Mensagem:</strong></p>
                 <p id="chatDetailSummary" class="summary-text"></p>
+                <p id="chatDetailLinkedClient" style="font-size: 14px; margin-top: 15px;"><i class="fas fa-address-book"></i> <strong>Cliente Vinculado:</strong> <span id="linkedClientName">N/A</span></p>
             </div>
             <div class="modal-footer">
                 <button id="descartarLeadBtn" class="btn btn-danger">Descartar Lead</button>
@@ -584,9 +676,64 @@
             </form>
         </div>
     </div>
+    
+    <!-- ✅ NOVO: Modal de Clientes -->
+    <div class="modal" id="clientFormModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3 id="clientModalTitle"><i class="fas fa-user-plus"></i> Adicionar Novo Cliente</h3>
+            </div>
+            <form id="clientForm">
+                <input type="hidden" id="clientId">
+                <div class="form-grid-columns" style="grid-template-columns: 1fr 1fr;">
+                    <div class="input-group">
+                        <label for="clientName">Nome Completo</label>
+                        <input type="text" id="clientName" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="clientPhone">Telefone (WhatsApp)</label>
+                        <input type="tel" id="clientPhone" required>
+                    </div>
+                </div>
+                <div class="form-grid-columns" style="grid-template-columns: 1fr 1fr;">
+                    <div class="input-group">
+                        <label for="clientEmail">Email</label>
+                        <input type="email" id="clientEmail">
+                    </div>
+                    <div class="input-group">
+                        <label for="clientLocation">Localização</label>
+                        <input type="text" id="clientLocation" placeholder="Cidade/Estado">
+                    </div>
+                </div>
+                <div class="form-grid-columns" style="grid-template-columns: 1fr 1fr;">
+                    <div class="input-group">
+                        <label for="clientStatus">Status</label>
+                        <select id="clientStatus" required>
+                            <option value="Ativo">Ativo</option>
+                            <option value="Inativo">Inativo</option>
+                            <option value="Lead">Lead</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="clientOrigin">Origem</label>
+                        <input type="text" id="clientOrigin" placeholder="Ex: WhatsApp, Site, Facebook">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="clientNotes">Notas/Resumo</label>
+                    <textarea id="clientNotes" rows="3" placeholder="Informações relevantes sobre o cliente"></textarea>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar Cliente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <script type="module" src="js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
-

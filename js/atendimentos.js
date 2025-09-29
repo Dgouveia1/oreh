@@ -34,17 +34,55 @@ async function fetchAndRenderAllChats() {
         const { data: profile } = await supabaseClient.from('users').select('company_id').eq('id', user.id).single();
         if (!profile) throw new Error("Perfil do utilizador não encontrado.");
 
+        // ✅ CORREÇÃO: Buscando dados de 'chats' E o nome do 'client' correspondente
         const { data: chats, error } = await supabaseClient
             .from('chats')
-            .select('*')
+            .select(`
+                *,
+                client:clients!inner(name, id)
+            `)
             .eq('company_id', profile.company_id)
             .neq('temperatura', 'DESCARTE')
             .order('created_at', { ascending: false });
+            
+        // NOTE: A foreign key entre chats e clients deve ser configurada
+        // no Supabase para que a consulta acima funcione:
+        // chats.customer_phone -> clients.phone
+        
+        if (error) {
+             // Se houver erro na busca com JOIN (ex: foreign key não existe ou RLS),
+             // faz uma busca simples e continua (em produção, o JOIN seria o ideal).
+             console.warn("Falha na busca com JOIN. Tentando busca simples...");
+             const { data: simpleChats, error: simpleError } = await supabaseClient
+                .from('chats')
+                .select('*')
+                .eq('company_id', profile.company_id)
+                .neq('temperatura', 'DESCARTE')
+                .order('created_at', { ascending: false });
+            if (simpleError) throw simpleError;
+            
+            // Aqui, simulamos o campo 'client_name' para os chats (idealmente viria do JOIN)
+            const chatsWithClientName = simpleChats.map(chat => ({
+                ...chat,
+                client_name: 'N/A (Erro na busca de vínculo)'
+            }));
+            
+            const humanAttentionChats = chatsWithClientName.filter(chat => chat.status === 'ATENDIMENTO_HUMANO');
+            const kanbanChats = chatsWithClientName.filter(chat => chat.status !== 'ATENDIMENTO_HUMANO');
 
-        if (error) throw error;
+            renderHumanAttention(humanAttentionChats);
+            renderKanban(kanbanChats);
+            return;
 
-        const humanAttentionChats = chats.filter(chat => chat.status === 'ATENDIMENTO_HUMANO');
-        const kanbanChats = chats.filter(chat => chat.status !== 'ATENDIMENTO_HUMANO');
+        }
+
+        const formattedChats = chats.map(chat => ({
+            ...chat,
+            client_name: chat.client?.name || 'N/A'
+        }));
+        
+        const humanAttentionChats = formattedChats.filter(chat => chat.status === 'ATENDIMENTO_HUMANO');
+        const kanbanChats = formattedChats.filter(chat => chat.status !== 'ATENDIMENTO_HUMANO');
 
         renderHumanAttention(humanAttentionChats);
         renderKanban(kanbanChats);
@@ -109,11 +147,14 @@ function createChatCard(chat) {
     const leadValueHTML = chat.lead_value && chat.lead_value > 0 
         ? `<div class="lead-value">R$ ${parseFloat(chat.lead_value).toFixed(2).replace('.', ',')}</div>`
         : '';
+        
+    const clientName = chat.client_name || 'Cliente não cadastrado'; // ✅ Novo campo
 
     card.innerHTML = `
         <div>
             <div class="chat-info">
                 <span class="customer-name">${chat.customer_name}</span>
+                <p class="linked-client-name"><i class="fas fa-address-book"></i> ${clientName}</p>
                 <p class="last-message">${chat.last_message_summary || 'Nenhuma mensagem.'}</p>
             </div>
             <div class="chat-meta">
@@ -125,8 +166,11 @@ function createChatCard(chat) {
     `;
 
     Object.keys(chat).forEach(key => {
-        if(chat[key] !== null) card.dataset[key] = chat[key];
+        const value = chat[key];
+        if(value !== null) card.dataset[key] = typeof value === 'object' ? JSON.stringify(value) : value;
     });
+
+    card.dataset.clientName = clientName; // Armazena o nome do cliente no dataset para o modal
 
     return card;
 }
@@ -150,7 +194,9 @@ function renderKanban(chats) {
     kanbanBoard.querySelectorAll('.kanban-cards-container').forEach(c => c.innerHTML = '');
 
     if (!chats || chats.length === 0) {
-        kanbanBoard.querySelector('.kanban-cards-container').innerHTML = '<p class="loading-message">Nenhum atendimento no funil.</p>';
+        // Não apagar a mensagem de carregamento se for no container principal, 
+        // mas sim nos containers de cards individuais
+        // kanbanBoard.querySelector('.kanban-cards-container').innerHTML = '<p class="loading-message">Nenhum atendimento no funil.</p>';
         return;
     }
 
@@ -160,7 +206,8 @@ function renderKanban(chats) {
         if (column) {
             column.querySelector('.kanban-cards-container').appendChild(card);
         } else {
-            kanbanBoard.querySelector('.kanban-cards-container').appendChild(card);
+            // Se o status for desconhecido/novo, coloca no topo do funil
+            kanbanBoard.querySelector('.kanban-column[data-temperatura="TOPO DO FUNIL"] .kanban-cards-container').appendChild(card);
         }
     });
     initDragAndDrop();

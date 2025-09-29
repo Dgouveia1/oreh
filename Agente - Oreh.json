@@ -600,8 +600,8 @@
       "name": "OpenAI Chat Model",
       "credentials": {
         "openAiApi": {
-          "id": "uuOe7XqodkWGmO6M",
-          "name": "OpenAi account"
+          "id": "IBLXfpQDItkijgBk",
+          "name": "OpenAi account 2"
         }
       }
     },
@@ -798,8 +798,8 @@
       "type": "n8n-nodes-base.redis",
       "typeVersion": 1,
       "position": [
-        4720,
-        544
+        4704,
+        528
       ],
       "alwaysOutputData": true,
       "credentials": {
@@ -850,29 +850,6 @@
     {
       "parameters": {
         "resource": "messages-api",
-        "operation": "send-image",
-        "instanceName": "Beaihub",
-        "options_message": {}
-      },
-      "type": "n8n-nodes-evolution-api.evolutionApi",
-      "typeVersion": 1,
-      "position": [
-        5104,
-        -128
-      ],
-      "id": "1e96b1c3-ae58-4fad-8c0e-ec83c486ecf2",
-      "name": "Enviar imagem",
-      "credentials": {
-        "evolutionApi": {
-          "id": "IE9ubFkk1a8AUZWC",
-          "name": "Evolution account"
-        }
-      },
-      "disabled": true
-    },
-    {
-      "parameters": {
-        "resource": "messages-api",
         "instanceName": "={{ $('Config').item.json.evolution_instance_name }}",
         "remoteJid": "={{ $('Config').item.json.telefone_cliente }}",
         "messageText": "={{ $json['output.messages'] }}",
@@ -881,7 +858,7 @@
       "type": "n8n-nodes-evolution-api.evolutionApi",
       "typeVersion": 1,
       "position": [
-        5904,
+        6112,
         272
       ],
       "id": "590c443f-d32a-4151-abaf-46a6c448f04b",
@@ -1379,8 +1356,8 @@
       "type": "n8n-nodes-base.postgresTool",
       "typeVersion": 2.6,
       "position": [
-        3712,
-        672
+        3488,
+        1008
       ],
       "id": "33df4c27-7655-466f-bd6e-f67fc3175114",
       "name": "Cria eventos na agenda",
@@ -1458,7 +1435,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        6752,
+        6960,
         336
       ],
       "id": "e4da6be4-d9ba-446b-a704-e9080427061e",
@@ -1528,8 +1505,8 @@
       "name": "OpenAI Chat Model1",
       "credentials": {
         "openAiApi": {
-          "id": "uuOe7XqodkWGmO6M",
-          "name": "OpenAi account"
+          "id": "IBLXfpQDItkijgBk",
+          "name": "OpenAi account 2"
         }
       }
     },
@@ -2843,6 +2820,376 @@
           "name": "Supabase"
         }
       }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "chats",
+          "mode": "list",
+          "cachedResultName": "chats"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "customer_phone": "={{ $('Config').item.json.telefone_cliente }}",
+            "customer_name": "={{ $('Config').item.json.nome_cliente }}",
+            "last_message_summary": "={{ $('Config').item.json.text }}",
+            "updated_at": "={{ $now }}",
+            "temperatura": "MEIO DE FUNIL",
+            "status": "ATENDIMENTO_HUMANO"
+          },
+          "matchingColumns": [
+            "customer_phone"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "company_id",
+              "displayName": "company_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_name",
+              "displayName": "customer_name",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_phone",
+              "displayName": "customer_phone",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "last_message_summary",
+              "displayName": "last_message_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "temperatura",
+              "displayName": "temperatura",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        4912,
+        528
+      ],
+      "id": "a2d1ff27-398b-4b6d-915b-410075ee08c0",
+      "name": "Update rows in a table1",
+      "credentials": {
+        "postgres": {
+          "id": "OI4L03aWJ1n7R7pf",
+          "name": "Supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Ferramenta para criar obter dados dos produtos",
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "products",
+          "mode": "list",
+          "cachedResultName": "products"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "company_id",
+              "value": "={{ $('Config').item.json.companie_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6,
+      "position": [
+        3680,
+        1024
+      ],
+      "id": "f59f7fb6-ffac-4030-97c0-28c70bffba27",
+      "name": "obtem produtos",
+      "credentials": {
+        "postgres": {
+          "id": "OI4L03aWJ1n7R7pf",
+          "name": "Supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json['output.messages'] }}",
+                    "rightValue": ".png",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "1078c6bf-aa82-4ab0-8853-3a2023e776b1"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0f15bae5-db19-458d-a3a5-3b07b95a49a6",
+                    "leftValue": "={{ $json['output.messages'] }}",
+                    "rightValue": ".jpg",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ab7d8613-5815-4ee4-b0b5-42d31081b2a7",
+                    "leftValue": "={{ $json['output.messages'] }}",
+                    "rightValue": ".jpeg",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6678bba2-7a9b-435b-a235-3bf1d21b3cf7",
+                    "leftValue": "={{ $json['output.messages'] }}",
+                    "rightValue": "pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        5616,
+        -16
+      ],
+      "id": "f99f42ff-3723-4cdc-8586-22634b0cfc24",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "dd9d8971-490c-4533-8e09-dff52b2292ee",
+              "leftValue": "={{ $json['output.messages'] }}",
+              "rightValue": "http",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5456,
+        240
+      ],
+      "id": "9ec42287-5a42-46e4-a045-d1ac1ff09511",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "operation": "send-document",
+        "instanceName": "={{ $('Config').item.json.evolution_instance_name }}",
+        "remoteJid": "={{ $('Config').item.json.telefone_cliente }}",
+        "media": "={{ $json['output.messages'] }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        6112,
+        80
+      ],
+      "id": "1008de65-b7de-47f0-a7ea-157b4f3c5db6",
+      "name": "Enviar documento",
+      "credentials": {
+        "evolutionApi": {
+          "id": "IE9ubFkk1a8AUZWC",
+          "name": "Evolution account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "messages-api",
+        "operation": "send-image",
+        "instanceName": "={{ $('Config').item.json.evolution_instance_name }}",
+        "remoteJid": "={{ $('Config').item.json.telefone_cliente }}",
+        "media": "={{ $json['output.messages'] }}",
+        "options_message": {}
+      },
+      "type": "n8n-nodes-evolution-api.evolutionApi",
+      "typeVersion": 1,
+      "position": [
+        6112,
+        -80
+      ],
+      "id": "8960bddd-8a65-407c-9871-80a295ad1697",
+      "name": "Enviar imagem",
+      "credentials": {
+        "evolutionApi": {
+          "id": "IE9ubFkk1a8AUZWC",
+          "name": "Evolution account"
+        }
+      }
     }
   ],
   "pinData": {
@@ -2852,56 +3199,52 @@
           "headers": {
             "host": "oreh-n8n.p7rc7g.easypanel.host",
             "user-agent": "axios/1.7.9",
-            "content-length": "978",
+            "content-length": "2292",
             "accept-encoding": "gzip, compress, deflate, br",
             "content-type": "application/json",
             "x-forwarded-for": "31.97.26.249",
             "x-forwarded-host": "oreh-n8n.p7rc7g.easypanel.host",
             "x-forwarded-port": "443",
             "x-forwarded-proto": "https",
-            "x-forwarded-server": "78093635befb",
+            "x-forwarded-server": "1e62f334fd7d",
             "x-real-ip": "31.97.26.249"
           },
           "params": {},
           "query": {},
           "body": {
             "event": "messages.upsert",
-            "instance": "712f62b3-1888-4c4b-bbe8-893fce07e15b",
+            "instance": "2f7752c2-4827-4eb1-b074-366fc6a610f5",
             "data": {
               "key": {
-                "remoteJid": "5517981112074@s.whatsapp.net",
+                "remoteJid": "554799045252@s.whatsapp.net",
                 "fromMe": false,
-                "id": "3F6C4F8D27CC2F5FDDA8"
+                "id": "3EB01B249F67DFBB48F3D3"
               },
-              "pushName": "Davi Gouveia",
+              "pushName": "Michelle Scolaro Terapia Integrativa",
               "status": "DELIVERY_ACK",
               "message": {
                 "messageContextInfo": {
                   "deviceListMetadata": {
-                    "senderKeyHash": "c1XsURE26e8jKA==",
-                    "senderTimestamp": "1756460486",
-                    "recipientKeyHash": "DTeBlgg95vw16A==",
-                    "recipientTimestamp": "1756485197"
+                    "senderKeyHash": "b9l+C7AM4R/vhg==",
+                    "senderTimestamp": "1758496708",
+                    "senderAccountType": "E2EE",
+                    "receiverAccountType": "E2EE",
+                    "recipientKeyHash": "4qiACIH7Xb3MqA==",
+                    "recipientTimestamp": "1757364724"
                   },
                   "deviceListMetadataVersion": 2
                 },
-                "conversation": "oi"
+                "conversation": "*Setembro: Mês de Fechamento de Ciclos*\n\nSetembro de 2025 não é só mais um mês.  *É um portal.*\nNa numerologia, estamos encerrando um ciclo de 9 anos.  \n2026 será um ano 1 — de recomeços, renascimentos, novas sementes.  \nMas só quem fecha o que precisa fechar agora…  \nvai conseguir começar leve.\n\n⚠️ *E aqui vai um alerta gentil:*  \nSe você não fizer esse movimento agora, vai carregar o peso antigo para o novo ciclo.  \nE isso custa caro: cansaço, confusão, repetição de padrões.  \n*Você merece mais do que isso.*\n\nE não é só você que está fazendo esse movimento.  \nMuitos já começaram.  O *grupo VIP está cheio de gente corajosa* que decidiu virar a chave.  \nNão fique para trás.  \nNão deixe para depois.  \nO tempo é agora.\n\n*Quanto mais você adia, mais pesada fica a vida.*  \nMas quando você escolhe agir, tudo muda:  \nVocê se sente mais inteira, mais leve, mais dona de si.\n\nEntão bora fazer diferente.  \nBora fazer uma semana de encerramento, coragem e leveza.\n\n👉 Entre no grupo VIP: https://chat.whatsapp.com/IVLnrdY6uiPJWYVh05n59X?mode=r_c\n📲 Siga @michelle.scolaro para receber as mensagens semanais e caminhar junto com quem já escolheu evoluir.\n📩 Caso não deseje continuar recebendo, envie *“NÃO”* que retiro você com carinho da lista.\n"
               },
-              "contextInfo": {
-                "expiration": 0,
-                "ephemeralSettingTimestamp": "0",
-                "disappearingMode": {
-                  "initiator": "CHANGED_IN_CHAT"
-                }
-              },
+              "contextInfo": null,
               "messageType": "conversation",
-              "messageTimestamp": 1757320526,
-              "instanceId": "a9e7b3f3-58ea-4f74-ad60-2a94ba1ae493",
-              "source": "unknown"
+              "messageTimestamp": 1758554315,
+              "instanceId": "79714da0-e4f2-40cc-81b9-128aaf365f46",
+              "source": "web"
             },
             "destination": "https://oreh-n8n.p7rc7g.easypanel.host/webhook/oreh-ia",
-            "date_time": "2025-09-08T05:35:26.452Z",
-            "sender": "5517996047456@s.whatsapp.net",
+            "date_time": "2025-09-22T12:18:35.899Z",
+            "sender": "5518988143930@s.whatsapp.net",
             "server_url": "https://oreh-evolution-api.gggzhe.easypanel.host",
             "apikey": "429683C4C977415CAAFCCE10F7D57E11"
           },
@@ -3117,7 +3460,7 @@
         [],
         [
           {
-            "node": "Enviar texto",
+            "node": "If4",
             "type": "main",
             "index": 0
           }
@@ -3497,11 +3840,6 @@
         ]
       ]
     },
-    "Enviar imagem": {
-      "main": [
-        []
-      ]
-    },
     "obtem infos do drive": {
       "ai_tool": [
         [
@@ -3579,13 +3917,96 @@
           }
         ]
       ]
+    },
+    "PARAR ISIS": {
+      "main": [
+        [
+          {
+            "node": "Update rows in a table1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar texto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Enviar imagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar imagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar imagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar documento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar documento": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar imagem": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "eedb6c2f-22b1-4b04-b3a1-3e10f46b8915",
+  "versionId": "26109a70-b806-4c78-85ec-e4f877638e7e",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "1128babbae6f10858c40bce82555c777a1061ae74d2b98e3b28bcfb267c345e1"

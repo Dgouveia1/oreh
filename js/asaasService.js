@@ -59,14 +59,35 @@ export async function createSubscription(customerId, value, description) {
     return await callAsaasApi('POST', 'subscriptions', body);
 }
 
+// ✅ FUNÇÃO CORRIGIDA para buscar o link da fatura da assinatura
 export async function getSubscriptionPaymentUrl(subscriptionId) {
-    console.log(`[Asaas Service] Buscando URL de pagamento para ${subscriptionId}...`);
-    const response = await callAsaasApi('GET', `subscriptions/${subscriptionId}/payments`);
-    return response?.data?.[0]?.invoiceUrl || null;
+    console.log(`[Asaas Service] Buscando URL de pagamento para a assinatura ${subscriptionId}...`);
+    // O Asaas não tem um endpoint direto 'subscriptions/{id}/invoiceUrl'.
+    // Devemos buscar as payments/invoices vinculadas à assinatura e achar a URL da mais recente.
+    // Vamos buscar as cobranças (payments) vinculadas à assinatura.
+    // Endpoint: payments?subscription={subscriptionId}
+    const response = await callAsaasApi('GET', `payments?subscription=${subscriptionId}&limit=1&order=desc`);
+    
+    // Verificamos se há dados retornados e se a primeira (mais recente) tem um link de pagamento (invoiceUrl)
+    if (response && response.data && response.data.length > 0) {
+        const latestPayment = response.data[0];
+        
+        // Retorna a URL da fatura (invoiceUrl) se for encontrada.
+        if (latestPayment.invoiceUrl) {
+            return latestPayment.invoiceUrl;
+        }
+        
+        // Se a fatura mais recente não tiver URL, tentamos a URL de pagamento direto (externalPaymentLink)
+        if (latestPayment.externalPaymentLink) {
+             return latestPayment.externalPaymentLink;
+        }
+    }
+    
+    // Se não encontrar nenhum link, retorna null
+    return null;
 }
 
 export async function getSubscriptionStatus(subscriptionId) {
     console.log(`[Asaas Service] Buscando status da assinatura ${subscriptionId}...`);
     return await callAsaasApi('GET', `subscriptions/${subscriptionId}`);
 }
-

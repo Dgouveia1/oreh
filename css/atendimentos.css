@@ -247,22 +247,29 @@ body.dark-mode .kanban-column.drag-over .kanban-cards-container {
 
 /* Conteúdo do Card */
 .chat-info {
-    margin-bottom: 18px;
+    margin-bottom: 12px; /* Reduz margem para caber o nome do cliente */
 }
 
 .customer-name {
     font-weight: 700;
     color: var(--text-color);
     font-size: 1.1em;
+    margin-bottom: 5px;
+    display: block; /* Garante que o nome do cliente fique em uma linha separada */
+}
+
+/* ✅ NOVO: Estilo para o nome do cliente vinculado */
+.linked-client-name {
+    font-size: 0.85em;
+    color: var(--text-color-light);
     margin-bottom: 8px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
-.customer-name::before {
-    content: '👤';
-    font-size: 16px;
+.linked-client-name i {
+    color: var(--accent);
 }
 
 .last-message {

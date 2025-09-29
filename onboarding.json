@@ -239,350 +239,6 @@
       ],
       "id": "30dced1d-a5df-4f11-acf3-018b906c6da0",
       "name": "Respond to Webhook"
-    },
-    {
-      "parameters": {
-        "httpMethod": "POST",
-        "path": "criar-cliente-asaas",
-        "responseMode": "responseNode",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
-      "position": [
-        -272,
-        -208
-      ],
-      "id": "8ca770d7-917c-4b02-a8a0-0f49e87d80b1",
-      "name": "Webhook1",
-      "webhookId": "041ef31f-432f-41b0-b447-112e55bd6ca3"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api-sandbox.asaas.com/v3/customers",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "accept",
-              "value": "application/json"
-            },
-            {
-              "name": "access_token",
-              "value": "$aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjFiOTU0ZGFlLWY4NDMtNGFjMy1hMzg1LTVlZmY2Njk1NTU3YTo6JGFhY2hfOTlhOGU5NzUtN2U0ZC00MzM2LTlmMTctYWJlYTYwYTc5NWQ1"
-            }
-          ]
-        },
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "name",
-              "value": "={{ $json.body.name }}"
-            },
-            {
-              "name": "cpfCnpj",
-              "value": "={{ $json.body.cpfCnpj }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -64,
-        -208
-      ],
-      "id": "73d7d69b-f56d-4f17-83d1-35e9687d4309",
-      "name": "HTTP Request",
-      "onError": "continueRegularOutput"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.4,
-      "position": [
-        144,
-        -208
-      ],
-      "id": "671de753-dfb1-40fd-b34c-8d55e8fcf8c2",
-      "name": "Respond to Webhook1"
-    },
-    {
-      "parameters": {
-        "httpMethod": "POST",
-        "path": "criar_assinatura_asaas",
-        "responseMode": "responseNode",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2.1,
-      "position": [
-        -272,
-        -352
-      ],
-      "id": "6b7e0f94-a6ba-4d99-b643-687f7a69925a",
-      "name": "Webhook2",
-      "webhookId": "3b67edb3-3e76-4a10-82c9-3a67e01a7e66"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api-sandbox.asaas.com/v3/subscriptions",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "accept",
-              "value": "application/json"
-            },
-            {
-              "name": "access_token",
-              "value": "$aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjFiOTU0ZGFlLWY4NDMtNGFjMy1hMzg1LTVlZmY2Njk1NTU3YTo6JGFhY2hfOTlhOGU5NzUtN2U0ZC00MzM2LTlmMTctYWJlYTYwYTc5NWQ1"
-            }
-          ]
-        },
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "billingType",
-              "value": "UNDEFINED"
-            },
-            {
-              "name": "cycle",
-              "value": "MONTHLY"
-            },
-            {
-              "name": "customer",
-              "value": "={{ $json.body.customerId }}"
-            },
-            {
-              "name": "value",
-              "value": "={{ $json.body.planValue }}"
-            },
-            {
-              "name": "nextDueDate",
-              "value": "={{ new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -64,
-        -352
-      ],
-      "id": "3df660e3-495a-4fff-a9d7-e5b2beeb70a4",
-      "name": "HTTP Request1"
-    },
-    {
-      "parameters": {
-        "respondWith": "json",
-        "responseBody": "{\"paymentLink\": \"{{ $('HTTP Request').item.json.invoiceUrl }}\"}\n",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1.4,
-      "position": [
-        640,
-        -352
-      ],
-      "id": "fb6ea42b-3ea9-4f80-91a5-00b6affe8d08",
-      "name": "Respond to Webhook2"
-    },
-    {
-      "parameters": {
-        "url": "=https://api-sandbox.asaas.com/v3/subscriptions/{{ $json.id }}/payments",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "accept",
-              "value": "application/json"
-            },
-            {
-              "name": "access_token",
-              "value": "$aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjFiOTU0ZGFlLWY4NDMtNGFjMy1hMzg1LTVlZmY2Njk1NTU3YTo6JGFhY2hfOTlhOGU5NzUtN2U0ZC00MzM2LTlmMTctYWJlYTYwYTc5NWQ1"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        144,
-        -352
-      ],
-      "id": "219c2cbd-d684-497d-87d0-3fd075b0640f",
-      "name": "HTTP Request2"
-    },
-    {
-      "parameters": {
-        "operation": "update",
-        "schema": {
-          "__rl": true,
-          "mode": "list",
-          "value": "public"
-        },
-        "table": {
-          "__rl": true,
-          "value": "companies",
-          "mode": "list",
-          "cachedResultName": "companies"
-        },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {},
-          "matchingColumns": [
-            "id"
-          ],
-          "schema": [
-            {
-              "id": "id",
-              "displayName": "id",
-              "required": false,
-              "defaultMatch": true,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true,
-              "removed": false
-            },
-            {
-              "id": "name",
-              "displayName": "name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "official_name",
-              "displayName": "official_name",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "cnpj",
-              "displayName": "cnpj",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "industry",
-              "displayName": "industry",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "corporate_email",
-              "displayName": "corporate_email",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "phone",
-              "displayName": "phone",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "address",
-              "displayName": "address",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "created_at",
-              "displayName": "created_at",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "dateTime",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "plan_id",
-              "displayName": "plan_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "affiliate_id",
-              "displayName": "affiliate_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "asaas_customer_id",
-              "displayName": "asaas_customer_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "asaas_subscription_id",
-              "displayName": "asaas_subscription_id",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            }
-          ],
-          "attemptToConvertTypes": false,
-          "convertFieldsToString": false
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        352,
-        -352
-      ],
-      "id": "ea9c7396-f208-4b24-b44f-6b7d6bafa22d",
-      "name": "Update rows in a table1",
-      "credentials": {
-        "postgres": {
-          "id": "OI4L03aWJ1n7R7pf",
-          "name": "Supabase"
-        }
-      }
     }
   ],
   "pinData": {
@@ -591,112 +247,35 @@
         "json": {
           "headers": {
             "host": "oreh-n8n.p7rc7g.easypanel.host",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
             "content-length": "80",
             "accept": "*/*",
             "accept-encoding": "gzip, deflate, br, zstd",
             "accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
             "content-type": "application/json",
-            "origin": "https://app.beaihub.com.br",
+            "origin": "http://127.0.0.1:3000",
             "priority": "u=1, i",
-            "referer": "https://app.beaihub.com.br/",
-            "sec-ch-ua": "\"Google Chrome\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+            "referer": "http://127.0.0.1:3000/",
+            "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"Google Chrome\";v=\"140\"",
             "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"macOS\"",
+            "sec-ch-ua-platform": "\"Windows\"",
             "sec-fetch-dest": "empty",
             "sec-fetch-mode": "cors",
             "sec-fetch-site": "cross-site",
-            "x-forwarded-for": "200.155.179.229",
+            "x-forwarded-for": "187.10.167.176",
             "x-forwarded-host": "oreh-n8n.p7rc7g.easypanel.host",
             "x-forwarded-port": "443",
             "x-forwarded-proto": "https",
-            "x-forwarded-server": "78093635befb",
-            "x-real-ip": "200.155.179.229"
+            "x-forwarded-server": "1e62f334fd7d",
+            "x-real-ip": "187.10.167.176"
           },
           "params": {},
           "query": {},
           "body": {
-            "telefone": "5516997563421",
-            "company_id": "9ef0b6fe-08e5-4b8d-a67b-1c086021b103"
+            "telefone": "5517996047456",
+            "company_id": "1c43e6df-aec0-45cb-83f3-00f585fd65c5"
           },
           "webhookUrl": "https://oreh-n8n.p7rc7g.easypanel.host/webhook/oreh-onboarding",
-          "executionMode": "production"
-        }
-      }
-    ],
-    "Webhook1": [
-      {
-        "json": {
-          "headers": {
-            "host": "oreh-n8n.p7rc7g.easypanel.host",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-            "content-length": "39",
-            "accept": "*/*",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
-            "content-type": "application/json",
-            "origin": "http://127.0.0.1:3002",
-            "priority": "u=1, i",
-            "referer": "http://127.0.0.1:3002/",
-            "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"Google Chrome\";v=\"140\"",
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"Windows\"",
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "cross-site",
-            "x-forwarded-for": "177.112.87.16",
-            "x-forwarded-host": "oreh-n8n.p7rc7g.easypanel.host",
-            "x-forwarded-port": "443",
-            "x-forwarded-proto": "https",
-            "x-forwarded-server": "78093635befb",
-            "x-real-ip": "177.112.87.16"
-          },
-          "params": {},
-          "query": {},
-          "body": {
-            "name": "Davi",
-            "cpfCnpj": "33429919842"
-          },
-          "webhookUrl": "https://oreh-n8n.p7rc7g.easypanel.host/webhook/criar-cliente-asaas",
-          "executionMode": "production"
-        }
-      }
-    ],
-    "Webhook2": [
-      {
-        "json": {
-          "headers": {
-            "host": "oreh-n8n.p7rc7g.easypanel.host",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-            "content-length": "99",
-            "accept": "*/*",
-            "accept-encoding": "gzip, deflate, br, zstd",
-            "accept-language": "pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7",
-            "content-type": "application/json",
-            "origin": "http://127.0.0.1:3002",
-            "priority": "u=1, i",
-            "referer": "http://127.0.0.1:3002/",
-            "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"Google Chrome\";v=\"140\"",
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"Windows\"",
-            "sec-fetch-dest": "empty",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-site": "cross-site",
-            "x-forwarded-for": "177.112.87.16",
-            "x-forwarded-host": "oreh-n8n.p7rc7g.easypanel.host",
-            "x-forwarded-port": "443",
-            "x-forwarded-proto": "https",
-            "x-forwarded-server": "78093635befb",
-            "x-real-ip": "177.112.87.16"
-          },
-          "params": {},
-          "query": {},
-          "body": {
-            "customerId": "cus_000007023912",
-            "planValue": "147",
-            "planId": "352ae83f-5cc0-4b86-ae4a-f05e4b554ce1"
-          },
-          "webhookUrl": "https://oreh-n8n.p7rc7g.easypanel.host/webhook/criar_assinatura_asaas",
           "executionMode": "production"
         }
       }
@@ -735,79 +314,13 @@
           }
         ]
       ]
-    },
-    "Webhook1": {
-      "main": [
-        [
-          {
-            "node": "HTTP Request",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "HTTP Request": {
-      "main": [
-        [
-          {
-            "node": "Respond to Webhook1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Webhook2": {
-      "main": [
-        [
-          {
-            "node": "HTTP Request1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "HTTP Request1": {
-      "main": [
-        [
-          {
-            "node": "HTTP Request2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "HTTP Request2": {
-      "main": [
-        [
-          {
-            "node": "Update rows in a table1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Update rows in a table1": {
-      "main": [
-        [
-          {
-            "node": "Respond to Webhook2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "1c0e3d6e-fb05-42f2-9bcd-4317158c2865",
+  "versionId": "7cf2d2df-26be-42c8-a100-ec3d0be8034d",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "1128babbae6f10858c40bce82555c777a1061ae74d2b98e3b28bcfb267c345e1"
