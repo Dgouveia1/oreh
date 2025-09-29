@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Oreh - Gestão de Atendimentos com IA</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -24,7 +25,7 @@
             </div>
             <button id="loginBtn" class="btn btn-primary" aria-label="Entrar no sistema">Entrar</button>
             <p class="signup-link">
-                Não tem uma conta? <a href="#" id="openSignUpModalBtn">Cadastre-se</a>
+                Não tem uma conta? <a href="onboarding.html">Cadastre-se</a>
             </p>
         </div>
     </div>
@@ -36,13 +37,14 @@
                 <h1><i class="fas fa-cloud"></i> <span>OREH</span></h1>  
             </div>
             <ul class="nav-links">
-                <li><a href="#" class="nav-link active" data-page="home"><i class="fas fa-home"></i> <span>Home</span></a></li>
+                <li><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
                 <li><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i> <span>Status de Conexão</span></a></li>
                 <li><a href="#" class="nav-link" data-page="agenda"><i class="fas fa-calendar"></i> <span>Agenda</span></a></li>
                 <li><a href="#" class="nav-link" data-page="atendimentos"><i class="fas fa-comments"></i> <span>Atendimentos</span></a></li>
+                <li><a href="#" class="nav-link" data-page="produtos"><i class="fas fa-box-open"></i> <span>Produtos</span></a></li>
                 <li><a href="#" class="nav-link" data-page="drive"><i class="fas fa-book"></i> <span>Biblioteca de Conhecimento</span></a></li>
                 <li><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de IA</span></a></li>
-                <li><a href="#" class="nav-link" data-page="finances"><i class="fas fa-money-bill"></i> <span>Fatuas</span></a></li>  
+                <li><a href="#" class="nav-link" data-page="finances"><i class="fas fa-money-bill"></i> <span>Assinatura</span></a></li>  
                 <li><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> <span>Configurações</span></a></li>  
             </ul>
         </div>
@@ -65,7 +67,39 @@
                 </div>
             </div>
 
-            <div id="homePage" class="page-content active">
+            <div id="dashboardPage" class="page-content active">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h3>Novos Leads (Mês)</h3>
+                        <p id="metricNovosLeads">0</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Atendimentos Humanos</h3>
+                        <p id="metricAtendimentosHumanos">0</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Leads Ganhos</h3>
+                        <p id="metricLeadsGanhos">0</p>
+                    </div>
+                    <div class="metric-card">
+                        <h3>Leads Perdidos</h3>
+                        <p id="metricLeadsPerdidos">0</p>
+                    </div>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Funil de Vendas</h3>
+                        <div class="chart-container">
+                            <canvas id="funilVendasChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Volume de Atendimentos (Últimos 7 dias)</h3>
+                         <div class="chart-container">
+                            <canvas id="volumeAtendimentosChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div id="statusPage" class="page-content">
@@ -175,8 +209,11 @@
             </div>
 
             <div id="atendimentosPage" class="page-content">
-                <div class="page-header">
-                    <h2>Funil de Atendimentos</h2>
+                 <div class="page-header">
+                    <h2>Atendimento Humano Necessário</h2>
+                    <div id="humanAttentionContainer" class="human-attention-container">
+                        <!-- Cards de atendimento humano serão inseridos aqui -->
+                    </div>
                 </div>
                 <div id="kanbanBoard" class="kanban-board">
                     <div class="kanban-column" data-temperatura="TOPO DO FUNIL">
@@ -197,6 +234,29 @@
                     </div>
                 </div>
             </div>
+            
+            <div id="produtosPage" class="page-content">
+                <div class="page-header">
+                    <h2>Gestão de Produtos</h2>
+                    <button class="btn btn-primary" id="openProductModalBtn"><i class="fas fa-plus"></i> Adicionar Produto</button>
+                </div>
+                <div class="table-container" id="productTableContainer">
+                    <table class="product-table">
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productTableBody">
+                            <!-- Linhas de produtos serão inseridas aqui via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
 
             <div id="drivePage" class="page-content">
                 <div class="drive-header">
@@ -227,73 +287,129 @@
             </div>
             
             <div id="iaPage" class="page-content">
-                <div class="ia-management-container">
-                    <div class="ia-card">
-                        <h3>Controle Geral</h3>
-                        <div class="form-group form-group-toggle">
-                            <label for="aiActiveToggle">Resposta de IA Ativadas</label>
-                            <div class="toggle-switch">
-                                <input type="checkbox" id="aiActiveToggle" class="toggle-input">
-                                <label for="aiActiveToggle" class="toggle-label"></label>
-                            </div>
+                <!-- ✅ ESTRUTURA REORDENADA -->
+               <div class="ia-management-container">
+                   <div class="ia-card">
+                       <h3>Controle Geral</h3>
+                       <div class="form-group form-group-toggle">
+                           <label for="aiActiveToggle">Respostas da IA Ativadas</label>
+                           <div class="toggle-switch">
+                               <input type="checkbox" id="aiActiveToggle" class="toggle-input">
+                               <label for="aiActiveToggle" class="toggle-label"></label>
+                           </div>
+                       </div>
+                   </div>
+                   
+                   <div class="ia-card">
+                       <h3>Informações do Negócio</h3>
+                       <p class="description">Forneça detalhes sobre sua empresa para que a IA possa dar respostas mais precisas sobre localização, redes sociais e horários.</p>
+                       <div class="settings-grid">
+                           <div class="form-group" style="grid-column: 1 / -1;">
+                               <label for="companyAddress">Endereço da Empresa</label>
+                               <input type="text" id="companyAddress" placeholder="Ex: Av. Brasil, 123, São Paulo - SP">
+                           </div>
+                           <div class="form-group">
+                               <label for="socialInstagram">Instagram</label>
+                               <input type="text" id="socialInstagram" placeholder="@seuinstagram">
+                           </div>
+                           <div class="form-group">
+                               <label for="socialFacebook">Facebook</label>
+                               <input type="text" id="socialFacebook" placeholder="/suapagina">
+                           </div>
+                           <div class="form-group">
+                               <label for="socialSite">Site</label>
+                               <input type="text" id="socialSite" placeholder="https://seusite.com.br">
+                           </div>
+                            <div class="form-group form-group-toggle" style="grid-column: 1 / -1;">
+                               <label for="hasPhysicalAttendance">Possui Atendimento Presencial</label>
+                               <div class="toggle-switch">
+                                   <input type="checkbox" id="hasPhysicalAttendance" class="toggle-input">
+                                   <label for="hasPhysicalAttendance" class="toggle-label"></label>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   
+                   <!-- ✅ SEÇÕES REORDENADAS -->
+                   <div class="ia-card">
+                       <h3>Orientações para sua IA</h3>
+                       <p class="description">Estas serão as orientações principais que definem o comportamento geral do seu agente. As configurações abaixo ajudarão a refinar este comportamento.</p>
+                       <div class="form-group">
+                           <label for="basePrompt">Instruções Base</label>
+                           <textarea id="basePrompt" rows="8" placeholder="Ex: Você é um assistente virtual da empresa X..."></textarea>
+                       </div>
+                   </div>
+                   
+                   <div class="ia-grid">
+                       <div class="ia-card">
+                           <h3>1. Personalidade</h3>
+                           <div class="form-group">
+                               <label for="personalityStyle">Estilo de Comportamento</label>
+                               <input type="text" id="personalityStyle" placeholder="Ex: Amigável, Profissional">
+                           </div>
+                           <div class="form-group">
+                               <label for="dominantTraits">Traços Dominantes</label>
+                               <input type="text" id="dominantTraits" placeholder="Ex: Curioso, Empático">
+                           </div>
+                       </div>
+                       <div class="ia-card">
+                           <h3>2. Tom de Voz</h3>
+                           <div class="form-group">
+                               <label for="toneFormality">Formalidade</label>
+                               <input type="text" id="toneFormality" placeholder="Ex: Casual, Técnico">
+                           </div>
+                            <div class="form-group form-group-toggle">
+                               <label for="toneAdaptability">Adaptabilidade de Tom</label>
+                               <div class="toggle-switch">
+                                   <input type="checkbox" id="toneAdaptability" class="toggle-input">
+                                   <label for="toneAdaptability" class="toggle-label"></label>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="ia-card">
+                           <h3>3. Linguagem e Estilo</h3>
+                            <div class="form-group">
+                               <label for="languageComplexity">Nível de Complexidade</label>
+                               <input type="text" id="languageComplexity" placeholder="Ex: Simples, Técnico">
+                           </div>
+                       </div>
+                       <div class="ia-card">
+                           <h3>4. Função Principal do Agente</h3>
+                            <div class="form-group">
+                               <label for="agentFunction">Função</label>
+                               <input type="text" id="agentFunction" placeholder="Ex: Vendedor, Suporte">
+                           </div>
+                       </div>
+                   </div>
+
+                   <div class="ia-card">
+                       <h3>Horário de Atendimento</h3>
+                       <div class="business-hours-grid" id="businessHoursContainer">
+                           <!-- Linhas de dias da semana serão inseridas via JS -->
+                       </div>
+                   </div>
+                   
+                   <div class="ia-card-footer">
+                       <button id="saveAiSettingsBtn" class="btn btn-primary">Salvar Configurações de IA</button>
+                   </div>
+               </div>
+           </div>
+
+            <div id="financesPage" class="page-content">
+                <div class="subscription-container">
+                    <div class="settings-card" id="currentSubscriptionCard">
+                        <h3>Sua Assinatura</h3>
+                        <div id="currentSubscriptionInfo">
+                            <p class="loading-message">Carregando dados da assinatura...</p>
                         </div>
                     </div>
-                    <div class="ia-card">
-                        <h3>Orientações para o sua IA</h3>
-                        <p class="description">Estas serão as orientações principais que definem o comportamento geral do seu agente. As configurações abaixo ajudarão a refinar este comportamento.</p>
-                        <div class="form-group">
-                            <label for="basePrompt"></label>
-                            <textarea id="basePrompt" rows="8" placeholder="Ex: Você é um assistente virtual da empresa X..."></textarea>
-                        </div>
-                    </div>
-                    <div class="ia-grid">
-                        <div class="ia-card">
-                            <h3>1. Personalidade</h3>
-                            <div class="form-group">
-                                <label for="personalityStyle">Estilo de Comportamento</label>
-                                <input type="text" id="personalityStyle" placeholder="Ex: Amigável, Profissional">
+            
+                    <div class="settings-card" id="plansCard">
+                        <h3>Planos Disponíveis</h3>
+                        <div class="plans-grid" id="plansGrid">
                             </div>
-                            <div class="form-group">
-                                <label for="dominantTraits">Traços Dominantes</label>
-                                <input type="text" id="dominantTraits" placeholder="Ex: Curioso, Empático">
-                            </div>
-                        </div>
-                        <div class="ia-card">
-                            <h3>2. Tom de Voz</h3>
-                            <div class="form-group">
-                                <label for="toneFormality">Formalidade</label>
-                                <input type="text" id="toneFormality" placeholder="Ex: Casual, Técnico">
-                            </div>
-                             <div class="form-group form-group-toggle">
-                                <label for="toneAdaptability">Adaptabilidade de Tom</label>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="toneAdaptability" class="toggle-input">
-                                    <label for="toneAdaptability" class="toggle-label"></label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ia-card">
-                            <h3>3. Linguagem e Estilo</h3>
-                             <div class="form-group">
-                                <label for="languageComplexity">Nível de Complexidade</label>
-                                <input type="text" id="languageComplexity" placeholder="Ex: Simples, Técnico">
-                            </div>
-                        </div>
-                        <div class="ia-card">
-                            <h3>4. Função Principal do Agente</h3>
-                             <div class="form-group">
-                                <label for="agentFunction">Função</label>
-                                <input type="text" id="agentFunction" placeholder="Ex: Vendedor, Suporte">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ia-card-footer">
-                        <button id="saveAiSettingsBtn" class="btn btn-primary">Salvar</button>
                     </div>
                 </div>
-            </div>
-
-            <div id="financesPage" class="page-content active">
             </div>
 
             <div id="settingsPage" class="page-content">
@@ -358,16 +474,12 @@
                             </div>
                         </div>
                     </form>
-                    <div class="settings-card">
-                        <h3>Planos</h3>
-                        <div class="plans-grid" id="plansGrid">
-                            </div>
-                    </div>
                     </div>
             </div>
         
         </div>
     </div>
+    
     <div class="modal" id="eventDetailModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -412,6 +524,14 @@
             </div>
             <form id="signUpForm">
                 <div class="input-group">
+                    <label for="signUpFullName">Nome Completo</label>
+                    <input type="text" id="signUpFullName" required>
+                </div>
+                <div class="input-group">
+                    <label for="signUpCpfCnpj">CPF ou CNPJ</label>
+                    <input type="text" id="signUpCpfCnpj" required>
+                </div>
+                <div class="input-group">
                     <label for="signUpEmail">E-mail</label>
                     <input type="email" id="signUpEmail" required>
                 </div>
@@ -430,7 +550,43 @@
         </div>
     </div>
     
+    <!-- Modal de Produtos -->
+    <div class="modal" id="productFormModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3 id="productModalTitle">Adicionar Novo Produto</h3>
+            </div>
+            <form id="productForm">
+                <input type="hidden" id="productId">
+                <div class="input-group">
+                    <label for="productName">Nome do Produto</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="input-group">
+                    <label for="productDescription">Descrição</label>
+                    <textarea id="productDescription" rows="4"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="productValue">Valor (R$)</label>
+                    <input type="number" id="productValue" required step="0.01">
+                </div>
+                <div class="input-group">
+                    <label for="productPhotos">Fotos ou Arquivos (PDF)</label>
+                    <input type="file" id="productPhotos" multiple accept="image/*,.pdf">
+                    <div class="image-preview-container" id="imagePreviewContainer">
+                        <p>Nenhuma imagem ou arquivo selecionado.</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar Produto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script type="module" src="js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
+

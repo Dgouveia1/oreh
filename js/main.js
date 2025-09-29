@@ -6,6 +6,10 @@ import { saveEvent, changeDay } from './agenda.js';
 import { descartarLead } from './atendimentos.js';
 import { uploadFile, deleteFile } from './drive.js';
 import { saveUserSettings, saveCompanySettings } from './settings.js';
+// ✅ Importa a nova função para editar produtos
+import { handleProductFormSubmit, deleteProduct, openEditModal } from './produtos.js';
+import './finances.js'; 
+
 
 console.log('[OREH] Módulo principal carregado.');
 
@@ -148,6 +152,51 @@ function setupEventListeners() {
             }
         });
     }
+
+    // Produtos
+    const openProductModalBtn = document.getElementById('openProductModalBtn');
+    if (openProductModalBtn) {
+        openProductModalBtn.addEventListener('click', () => {
+            const form = document.getElementById('productForm');
+            form.reset();
+            form.dataset.existingPhotos = '[]';
+            document.getElementById('productId').value = '';
+            document.getElementById('productModalTitle').textContent = 'Adicionar Novo Produto';
+            document.getElementById('imagePreviewContainer').innerHTML = '<p>Nenhuma imagem ou arquivo selecionado.</p>';
+            document.getElementById('productFormModal').style.display = 'flex';
+        });
+    }
+
+    const productForm = document.getElementById('productForm');
+    if (productForm) {
+        productForm.addEventListener('submit', handleProductFormSubmit);
+    }
+    
+    const productTableContainer = document.getElementById('productTableContainer');
+    if(productTableContainer) {
+        productTableContainer.addEventListener('click', (e) => {
+            const button = e.target.closest('button');
+            if (!button) return;
+            
+            const action = button.dataset.action;
+            const row = button.closest('tr');
+            if (!row) return;
+
+            const productId = row.dataset.productId;
+
+            if (action === 'delete') {
+                deleteProduct(productId);
+            }
+            
+            // ✅ AÇÃO DE EDITAR IMPLEMENTADA
+            if (action === 'edit') {
+                // clona todos os dados do dataset da linha (tr)
+                const productData = { ...row.dataset }; 
+                openEditModal(productData);
+            }
+        });
+    }
+
 
     // Listeners para os formulários de Configurações
     const userSettingsForm = document.getElementById('userSettingsForm');

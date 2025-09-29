@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bem-vindo ao Oreh - Configuração de Conta</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="onboarding-body">
+    <div id="toast" class="toast hidden"></div>
+    <div class="onboarding-container">
+        <div class="onboarding-card">
+            <h1 class="logo-text">OREH</h1>
+            <div id="stepContainer">
+                <!-- As etapas do onboarding serão renderizadas aqui -->
+            </div>
+            <button id="backButton" class="btn btn-secondary" style="display: none;">Voltar</button>
+        </div>
+    </div>
+    
+    <!-- ✅ CORREÇÃO: Biblioteca do Supabase carregada ANTES do nosso script -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="js/onboarding.js"></script>
+
+</body>
+</html>
+

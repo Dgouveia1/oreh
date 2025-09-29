@@ -43,7 +43,12 @@ async function initializeApp() {
     console.log('[OREH] A inicializar a aplicação...');
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (session) {
-        document.querySelector('.nav-link[data-page="home"]').click();
+        // A lógica de qual página mostrar agora é tratada no checkLoginState
+        // para evitar cliques antes da verificação de status.
+        const dashboardLink = document.querySelector('.nav-link[data-page="dashboard"]');
+        if (dashboardLink) {
+            dashboardLink.click();
+        }
     } else {
         console.log('[OREH] Nenhum utilizador com sessão iniciada.');
     }
@@ -54,20 +59,38 @@ async function fetchUserProfile() {
         const { data: { user } } = await supabaseClient.auth.getUser();
         if (!user) throw new Error("Utilizador não autenticado para obter o perfil.");
 
-        const { data, error } = await supabaseClient
+        // Passo 1: Busca os dados básicos do usuário
+        const { data: userData, error: userError } = await supabaseClient
             .from('users')
-            .select('full_name, userinitial, role')
+            .select('full_name, userinitial, role, company_id')
             .eq('id', user.id)
             .single();
 
-        if (error) throw error;
+        if (userError) throw userError;
+        if (!userData || !userData.company_id) {
+            // Se não tiver company_id, retorna apenas os dados do usuário.
+            // O auth.js vai lidar com o redirecionamento para o onboarding.
+            return { ...userData, companies: null };
+        }
+
+        // Passo 2: Busca os dados da empresa usando o company_id
+        const { data: companyData, error: companyError } = await supabaseClient
+            .from('companies')
+            .select('*')
+            .eq('id', userData.company_id)
+            .single();
+
+        if (companyError) {
+             console.warn(`[API] Não foi possível buscar a empresa para o company_id: ${userData.company_id}. Erro: ${companyError.message}`);
+             return { ...userData, companies: null };
+        }
         
-        return data; 
+        // Combina os dados e retorna o perfil completo
+        return { ...userData, companies: companyData };
 
     } catch (error) {
         console.error('[OREH] Falha ao obter o perfil do utilizador:', error.message);
         showToast('Não foi possível carregar os dados do utilizador.', 'error');
-        // ✅ LOG DE ERRO
         logEvent('ERROR', 'Falha ao obter perfil do utilizador', { errorMessage: error.message, stack: error.stack });
         if (error.status === 401 || error.status === 403) {
             logout();
@@ -77,3 +100,4 @@ async function fetchUserProfile() {
 }
 
 export { initializeApp, fetchUserProfile };
+

@@ -10,11 +10,14 @@
 @import url('css/main.css');
 @import url('css/components.css');
 
-/* ✅ CAMINHOS CORRIGIDOS: Aponta para a pasta 'pages' dentro de 'css' */
 @import url('css/login.css');
 @import url('css/status.css');
 @import url('css/agenda.css');
 @import url('css/atendimentos.css');
+@import url('css/dashboard.css');
 @import url('css/drive.css');
 @import url('css/ia.css');
 @import url('css/settings.css');
+@import url('css/finances.css');
+@import url('css/produtos.css');
+@import url('css/onboarding.css');

@@ -1,12 +1,14 @@
 // Importa as funções dos novos módulos para serem usadas na navegação
 import { updateConnectionStatus, stopStatusPolling } from './status.js';
 import { loadAgenda } from './agenda.js';
-import { loadAtendimentos } from './atendimentos.js';
+import { loadAtendimentos, cleanupAtendimentos } from './atendimentos.js';
 import { loadAiSettings } from './ia.js';
 import { loadDriveFiles } from './drive.js';
 import { loadSettings } from './settings.js';
-
-
+import { loadFinancesPage } from './finances.js';
+import { loadDashboard, cleanupDashboard } from './dashboard.js';
+// ✅ CORREÇÃO: Adicionada a importação do módulo de produtos
+import { loadProducts, cleanupProducts } from './produtos.js';
 
 // =================================================================================
 // FUNÇÕES DE UI GENÉRICAS
@@ -14,6 +16,7 @@ import { loadSettings } from './settings.js';
 
 export function showToast(message, type = 'info') {
     const toast = document.getElementById('toast');
+    if (!toast) return;
     toast.textContent = message;
     toast.className = `toast ${type} show`;
     setTimeout(() => {
@@ -30,7 +33,11 @@ export function setupNavigation() {
         link.addEventListener('click', function (e) {
             e.preventDefault();
             const targetPage = this.getAttribute('data-page');
-            
+
+            // Limpa subscrições de páginas anteriores para evitar vazamentos de memória
+            cleanupDashboard();
+            cleanupAtendimentos();
+            cleanupProducts();
             if (targetPage !== 'status') {
                 stopStatusPolling();
             }
@@ -44,7 +51,11 @@ export function setupNavigation() {
 
             pageTitle.textContent = this.querySelector('span')?.textContent || 'Dashboard';
 
+            // Carrega o conteúdo da página clicada
             switch (targetPage) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
                 case 'status':
                     updateConnectionStatus();
                     break;
@@ -54,11 +65,18 @@ export function setupNavigation() {
                 case 'atendimentos':
                     loadAtendimentos();
                     break;
+                // ✅ CORREÇÃO: Adicionado o case para carregar a página de produtos
+                case 'produtos':
+                    loadProducts();
+                    break;
                 case 'drive':
                     loadDriveFiles();
                     break;
                 case 'ia':
                     loadAiSettings();
+                    break;
+                case 'finances':
+                    loadFinancesPage();
                     break;
                 case 'settings':
                     loadSettings();
@@ -70,7 +88,7 @@ export function setupNavigation() {
 export function setupUploadModal() {
     const openUploadModalBtn = document.getElementById('openUploadModalBtn');
     const uploadModal = document.getElementById('uploadModal');
-    if (openUploadModalBtn) {
+    if (openUploadModalBtn && uploadModal) {
         openUploadModalBtn.addEventListener('click', () => {
             uploadModal.style.display = 'flex';
         });
@@ -89,7 +107,7 @@ export function setupModals() {
 
     window.addEventListener('click', (event) => {
         modals.forEach(modal => {
-            if (event.target == modal) {
+            if (event.target === modal) {
                 modal.style.display = 'none';
             }
         });
@@ -110,14 +128,7 @@ export function updateUserInfo(name, initial) {
 }
 
 export function setupRoleBasedUI(userProfile) {
-    const adminLink = document.getElementById('adminNav');
-    if (!adminLink) return;
-
-    if (userProfile && userProfile.role === 'admin') {
-        adminLink.style.display = 'block';
-    } else {
-        adminLink.style.display = 'none';
-    }
+    // Lógica para UI baseada em roles (funções) pode ser adicionada aqui
 }
 
 export function setupThemeToggle() {

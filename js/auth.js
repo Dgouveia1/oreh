@@ -2,29 +2,39 @@ import { showToast, updateUserInfo, setupRoleBasedUI } from './ui.js';
 import { initializeApp, fetchUserProfile, supabaseClient, logEvent } from './api.js';
 
 async function checkLoginState() {
-    console.log('[OREH] A verificar o estado da sessão com o Supabase...');
+    console.log('[Auth.js] Verificando estado do login...');
     const loginPage = document.getElementById('loginPage');
     const appContainer = document.getElementById('appContainer');
 
     const { data: { session } } = await supabaseClient.auth.getSession();
 
     if (session) {
-        loginPage.style.display = 'none';
-        appContainer.style.display = 'block';
-
         const userProfile = await fetchUserProfile();
         
-        if (userProfile) {
-            const { full_name, userinitial, role } = userProfile;
-            
-            localStorage.setItem('oreh_userName', full_name || 'Utilizador');
-            localStorage.setItem('oreh_userInitial', userinitial || '?');
-            updateUserInfo(full_name, userinitial);
-
+        if (userProfile && userProfile.companies) {
+            updateUserInfo(userProfile.full_name, userProfile.userinitial);
             setupRoleBasedUI(userProfile);
+
+            // ✅ NOVA LÓGICA DE REDIRECIONAMENTO
+            const companyStatus = userProfile.companies.status;
+            console.log(`[Auth.js] Status da empresa: ${companyStatus}`);
+
+            if (companyStatus === 'onboarding') {
+                console.log('[Auth.js] Status é "onboarding". Redirecionando para /onboarding.html...');
+                window.location.replace('onboarding.html');
+                return; // Impede a execução do resto da função
+            }
+            
+            // Para qualquer outro status ('active', 'payment_pending', etc), permite o acesso.
+            console.log('[Auth.js] Acesso permitido. Mostrando a aplicação principal.');
+            loginPage.style.display = 'none';
+            appContainer.style.display = 'block';
+            await initializeApp();
+
+        } else {
+            console.warn('[Auth.js] Usuário logado mas sem empresa associada. Redirecionando para onboarding.');
+            window.location.replace('onboarding.html');
         }
-        
-        await initializeApp();
 
     } else {
         loginPage.style.display = 'flex';
@@ -52,14 +62,12 @@ async function login() {
         }
 
         console.log('[OREH] Início de sessão bem-sucedido!');
-        // ✅ LOG DE SUCESSO
         logEvent('INFO', `Login bem-sucedido para: ${emailInput.value}`);
         await checkLoginState();
 
     } catch (error) {
         console.error('[OREH] Falha no início de sessão:', error);
         showToast(error.message, 'error');
-        // ✅ LOG DE ERRO
         logEvent('ERROR', `Falha no login para: ${emailInput.value}`, { errorMessage: error.message, stack: error.stack });
     } finally {
         loginBtn.disabled = false;
@@ -71,7 +79,6 @@ async function logout() {
     console.log('[OREH] A terminar sessão com o Supabase...');
     
     const userName = localStorage.getItem('oreh_userName') || 'usuário desconhecido';
-    // ✅ LOG DE INFO
     logEvent('INFO', `Logout realizado por: ${userName}`);
     
     const { error } = await supabaseClient.auth.signOut();
@@ -79,7 +86,6 @@ async function logout() {
     if (error) {
         console.error('[OREH] Erro ao terminar sessão:', error);
         showToast('Erro ao sair da conta.', 'error');
-        // ✅ LOG DE ERRO
         logEvent('ERROR', `Falha no logout para: ${userName}`, { errorMessage: error.message, stack: error.stack });
     }
 
@@ -89,11 +95,13 @@ async function logout() {
     await checkLoginState();
 }
 
- async function signUp() {
-    console.log('[OREH] A tentar criar nova conta...');
+async function signUp() {
+    console.log('[OREH] A tentar criar nova conta e cliente Asaas via n8n...');
     const emailInput = document.getElementById('signUpEmail');
     const passwordInput = document.getElementById('signUpPassword');
     const passwordConfirmInput = document.getElementById('signUpPasswordConfirm');
+    const fullNameInput = document.getElementById('signUpFullName');
+    const cpfCnpjInput = document.getElementById('signUpCpfCnpj');
     const signUpBtn = document.getElementById('signUpBtn');
 
     if (passwordInput.value !== passwordConfirmInput.value) {
@@ -105,35 +113,58 @@ async function logout() {
     signUpBtn.textContent = 'A registar...';
 
     try {
+        console.log('[OREH] Chamando webhook n8n para criar cliente Asaas...');
+        const asaasResponse = await fetch('https://oreh-n8n.p7rc7g.easypanel.host/webhook/criar-cliente-asaas', { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: fullNameInput.value,
+                cpfCnpj: cpfCnpjInput.value.replace(/\D/g, '')
+            })
+        });
+
+        const responseData = await asaasResponse.json();
+
+        if (!asaasResponse.ok) {
+            const errorMessage = responseData.errors?.[0]?.description || 'Ocorreu um erro no cadastro. Verifique seus dados.';
+            throw new Error(errorMessage);
+        }
+
+        const asaasCustomerId = responseData.id;
+        if (!asaasCustomerId) {
+            throw new Error('Ocorreu um erro no cadastro. Verifique seus dados.');
+        }
+        console.log(`[OREH] Cliente Asaas criado com sucesso: ${asaasCustomerId}`);
+
         const { data, error } = await supabaseClient.auth.signUp({
             email: emailInput.value,
             password: passwordInput.value,
+            options: {
+                data: {
+                    full_name: fullNameInput.value,
+                    cpf_cnpj: cpfCnpjInput.value.replace(/\D/g, ''),
+                    asaas_customer_id: asaasCustomerId
+                }
+            }
         });
 
         if (error) throw error;
         
-        // ✅ LOG DE SUCESSO
-        logEvent('INFO', `Nova conta criada para: ${emailInput.value}`);
-
-        if (data.user && data.user.identities && data.user.identities.length > 0) {
-             showToast('Registo concluído! Faça o login para continuar.', 'success');
-             document.getElementById('signUpModal').style.display = 'none';
-             document.getElementById('signUpForm').reset();
-        } else {
-             showToast('Registo concluído! Por favor, verifique o seu e-mail para confirmar a conta.', 'success');
-             document.getElementById('signUpModal').style.display = 'none';
-             document.getElementById('signUpForm').reset();
-        }
+        logEvent('INFO', `Nova conta criada para: ${emailInput.value} com Asaas ID: ${asaasCustomerId}`);
+        showToast('Registo concluído! Verifique seu e-mail para confirmar a conta.', 'success');
+        document.getElementById('signUpModal').style.display = 'none';
+        document.getElementById('signUpForm').reset();
 
     } catch (error) {
         console.error('[OREH] Falha no registo:', error);
         showToast(error.message, 'error');
-        // ✅ LOG DE ERRO
-        logEvent('ERROR', `Falha ao criar conta para: ${emailInput.value}`, { errorMessage: error.message, stack: error.stack });
+        
     } finally {
         signUpBtn.disabled = false;
         signUpBtn.textContent = 'Cadastrar';
     }
 }
 
+
 export { checkLoginState, login, logout, signUp };
+

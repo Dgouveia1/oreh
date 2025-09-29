@@ -1,0 +1,310 @@
+/* ESTILOS DA PÁGINA DE PRODUTOS */
+#produtosPage .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+#produtosPage .page-header h2 {
+    font-weight: 800;
+    color: var(--text-color);
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#produtosPage .page-header h2::before {
+    content: '';
+    width: 6px;
+    height: 30px;
+    background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    border-radius: 3px;
+}
+
+.table-container {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    transition: var(--transition);
+}
+
+.table-container:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.product-table th,
+.product-table td {
+    padding: 18px 24px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.product-table th {
+    background: linear-gradient(135deg, var(--bg-color), var(--card-bg));
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: var(--text-color-light);
+    letter-spacing: 0.5px;
+    position: relative;
+}
+
+.product-table th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.product-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.product-table tbody tr {
+    transition: var(--transition);
+}
+
+.product-table tbody tr:hover {
+    background-color: rgba(255, 127, 64, 0.05);
+    transform: translateX(5px);
+}
+
+body.dark-mode .product-table tbody tr:hover {
+    background-color: rgba(255, 127, 64, 0.08);
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+/* ✅ CORREÇÃO: Renomeado para 'media' para aceitar ambos os tipos */
+.product-media-cell {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.product-media-cell img {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+    transition: var(--transition);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.product-media-cell img:hover {
+    transform: scale(1.05);
+    border-color: var(--primary);
+}
+
+/* ✅ NOVO: Estilo para o ícone de PDF na tabela */
+.product-file-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--bg-color), var(--card-bg));
+    border: 2px solid var(--border-color);
+    font-size: 28px;
+    color: var(--danger);
+    transition: var(--transition);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.product-file-icon:hover {
+    transform: scale(1.05);
+    border-color: var(--danger);
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), var(--card-bg));
+}
+
+.product-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.product-actions .btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: var(--transition);
+}
+
+.btn-edit { 
+    background: linear-gradient(135deg, var(--accent), #0056b3);
+    color: white;
+}
+
+.btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.btn-delete { 
+    background: linear-gradient(135deg, var(--danger), #c0392b);
+    color: white;
+}
+
+.btn-delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+/* Botão de adicionar produto */
+#openProductModalBtn {
+    padding: 14px 28px;
+    font-weight: 600;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(255, 105, 0, 0.3);
+}
+
+#openProductModalBtn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 105, 0, 0.4);
+}
+
+/* Estilos para o preview de arquivos no modal */
+.image-preview-container {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+    padding: 15px;
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    min-height: 90px;
+    align-items: center;
+    background-color: var(--bg-color);
+    transition: var(--transition);
+}
+
+.image-preview-container:hover {
+    border-color: var(--primary);
+    background-color: rgba(255, 127, 64, 0.05);
+}
+
+.img-preview, .file-preview {
+    position: relative;
+    transition: var(--transition);
+}
+
+.img-preview:hover, .file-preview:hover {
+    transform: scale(1.05);
+}
+
+.img-preview img {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* ✅ NOVO: Estilo para o preview de PDF no modal */
+.file-preview {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--bg-color), var(--card-bg));
+    border: 2px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.file-preview i {
+    font-size: 36px;
+    color: var(--danger);
+}
+
+.remove-img-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, var(--danger), #c0392b);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: var(--transition);
+}
+
+.remove-img-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+}
+
+/* Modal de produto */
+#productFormModal .modal-content {
+    max-width: 600px;
+}
+
+#productFormModal .modal-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#productFormModal .modal-header h3::before {
+    content: '📦';
+    font-size: 24px;
+}
+
+@media (max-width: 768px) {
+    #produtosPage .page-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .product-table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .product-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .product-actions {
+        flex-direction: column;
+    }
+    
+    .product-actions .btn {
+        width: 100%;
+    }
+}

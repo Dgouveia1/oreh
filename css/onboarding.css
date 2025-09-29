@@ -1,0 +1,344 @@
+/* Estilos gerais para a página de onboarding */
+.onboarding-body {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.onboarding-body::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.onboarding-container {
+    width: 100%;
+    max-width: 700px;
+    animation: fadeIn 0.5s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.onboarding-header {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.onboarding-header .logo-text {
+    color: white;
+    font-size: 52px;
+    margin-bottom: 20px;
+    font-weight: 800;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.onboarding-header .logo-text::before {
+    content: '🚀';
+    font-size: 48px;
+}
+
+.progress-bar-container {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    height: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, white, #f0f0f0);
+    border-radius: 12px;
+    transition: width 0.4s ease-in-out;
+    box-shadow: 0 2px 8px rgba(255,255,255,0.3);
+}
+
+.onboarding-card {
+    background-color: var(--card-bg);
+    border-radius: 24px;
+    padding: 50px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+}
+
+.onboarding-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 24px 24px 0 0;
+}
+
+/* Estilos das etapas */
+.step-content {
+    animation: fadeIn 0.4s ease;
+}
+
+.step-content h2 {
+    color: var(--primary);
+    font-size: 28px;
+    margin-bottom: 15px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.step-content h2::before {
+    content: '';
+    width: 6px;
+    height: 30px;
+    background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    border-radius: 3px;
+}
+
+.step-content p.description {
+    color: var(--text-color-light);
+    font-size: 17px;
+    line-height: 1.7;
+    margin-bottom: 35px;
+    padding: 20px;
+    background-color: var(--bg-color);
+    border-radius: 12px;
+    border-left: 4px solid var(--primary);
+}
+
+.step-actions {
+    margin-top: 35px;
+    text-align: right;
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
+.step-actions .btn {
+    padding: 14px 32px;
+    font-weight: 600;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.step-actions .btn-primary {
+    box-shadow: 0 4px 15px rgba(255, 105, 0, 0.3);
+}
+
+.step-actions .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 105, 0, 0.4);
+}
+
+.step-actions .btn-secondary {
+    box-shadow: 0 4px 15px rgba(149, 165, 166, 0.3);
+}
+
+.step-actions .btn-secondary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(149, 165, 166, 0.4);
+}
+
+/* Estilos para a seleção de planos */
+.plans-grid-onboarding {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+    margin: 30px 0;
+}
+
+.plan-card-onboarding {
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    padding: 30px 25px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    background: linear-gradient(135deg, var(--card-bg), var(--bg-color));
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.plan-card-onboarding::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.plan-card-onboarding:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
+}
+
+.plan-card-onboarding:hover::before {
+    transform: scaleX(1);
+}
+
+.plan-card-onboarding.selected {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 127, 64, 0.4), var(--shadow-lg);
+    background: linear-gradient(135deg, var(--card-bg), rgba(255, 127, 64, 0.05));
+}
+
+.plan-card-onboarding.selected::before {
+    transform: scaleX(1);
+}
+
+.plan-card-onboarding h4 {
+    font-size: 20px;
+    color: var(--text-color);
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.plan-card-onboarding .price {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+.plan-card-onboarding .price span {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color-light);
+}
+
+.plan-card-onboarding .features {
+    text-align: left;
+    margin: 20px 0;
+}
+
+.plan-card-onboarding .features ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.plan-card-onboarding .features li {
+    padding: 8px 0;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.plan-card-onboarding .features li::before {
+    content: '✓';
+    color: var(--success);
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Spinner de carregamento */
+.loading-spinner {
+    text-align: center;
+    padding: 50px;
+    color: var(--primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.loading-spinner i {
+    font-size: 48px;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.loading-spinner p {
+    margin-top: 0;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+/* Formulários no onboarding */
+.onboarding-card .input-group {
+    margin-bottom: 25px;
+}
+
+.onboarding-card .input-group label {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.onboarding-card .input-group input,
+.onboarding-card .input-group select {
+    padding: 16px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 16px;
+    transition: var(--transition);
+    background-color: var(--input-bg);
+}
+
+.onboarding-card .input-group input:focus,
+.onboarding-card .input-group select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(255, 127, 64, 0.2);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .onboarding-card {
+        padding: 35px 25px;
+    }
+    
+    .onboarding-header .logo-text {
+        font-size: 42px;
+    }
+    
+    .plans-grid-onboarding {
+        grid-template-columns: 1fr;
+    }
+    
+    .step-actions {
+        flex-direction: column;
+    }
+    
+    .step-actions .btn {
+        width: 100%;
+    }
+}

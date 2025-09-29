@@ -2,94 +2,274 @@
 .drive-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 15px 0 20px;
+    align-items: flex-start;
+    padding: 20px 0 30px;
+    gap: 20px;
+}
+
+.drive-header > div {
+    flex: 1;
 }
 
 .drive-header h2 {
     color: var(--primary);
-    font-weight: 700;
-    font-size: 22px;
-    margin-bottom: 0;
+    font-weight: 800;
+    font-size: 26px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.drive-header h2::before {
+    content: '📚';
+    font-size: 28px;
 }
 
 .drive-header p {
     margin-top: 5px;
-    color: var(--gray);
-    font-size: 14px;
+    color: var(--text-color-light);
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 600px;
+}
+
+#openUploadModalBtn {
+    padding: 16px 32px;
+    font-weight: 600;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 15px rgba(255, 105, 0, 0.3);
+    white-space: nowrap;
+}
+
+#openUploadModalBtn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 105, 0, 0.4);
 }
 
 #fileGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    padding: 15px 0;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
 }
 
 .file-card {
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    padding: 15px;
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    padding: 25px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-height: 120px;
+    min-height: 140px;
     position: relative;
-    transition: transform 0.2s ease-in-out;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.file-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
 }
 
 .file-card:hover {
-    transform: scale(1.05);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.file-card:hover::before {
+    transform: scaleX(1);
 }
 
 .file-card-link {
     text-decoration: none;
-    color: var(--dark);
+    color: var(--text-color);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
+    gap: 15px;
 }
 
 .file-icon {
-    font-size: 2em;
+    font-size: 2.5em;
     color: var(--accent);
-    margin-bottom: 8px;
+    margin-bottom: 0;
+    transition: var(--transition);
+}
+
+.file-card:hover .file-icon {
+    transform: scale(1.1);
+    color: var(--primary);
 }
 
 .file-name {
-    font-size: 0.9em;
+    font-size: 0.95em;
     word-break: break-word;
+    font-weight: 600;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.file-size {
+    font-size: 0.8em;
+    color: var(--text-color-light);
+    margin-top: 5px;
 }
 
 .delete-file-btn {
     position: absolute;
-    top: 5px;
-    right: 5px;
-    background: var(--danger);
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(135deg, var(--danger), #c0392b);
     color: white;
     border: none;
     border-radius: 50%;
-    width: 25px;
-    height: 25px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.8em;
+    font-size: 0.9em;
     cursor: pointer;
     opacity: 0;
-    transition: opacity 0.2s ease-in-out;
+    transition: var(--transition);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 2;
 }
 
 .file-card:hover .delete-file-btn {
     opacity: 1;
+    transform: scale(1.1);
 }
 
 .delete-file-btn:hover {
-    background: darken(var(--danger), 10%);
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: scale(1.2);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+}
+
+/* Modal de upload */
+#uploadModal .modal-content {
+    max-width: 500px;
+}
+
+#uploadModal .modal-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#uploadModal .modal-header h3::before {
+    content: '📤';
+    font-size: 24px;
+}
+
+#fileInput {
+    padding: 16px;
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    transition: var(--transition);
+    background-color: var(--bg-color);
+}
+
+#fileInput:hover {
+    border-color: var(--primary);
+    background-color: rgba(255, 127, 64, 0.05);
+}
+
+#fileInput:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(255, 127, 64, 0.2);
+}
+
+/* Tipos de arquivo com cores diferentes */
+.file-card[data-type="pdf"] .file-icon {
+    color: #e74c3c;
+}
+
+.file-card[data-type="doc"] .file-icon,
+.file-card[data-type="docx"] .file-icon {
+    color: #3498db;
+}
+
+.file-card[data-type="txt"] .file-icon,
+.file-card[data-type="md"] .file-icon {
+    color: #95a5a6;
+}
+
+.file-card[data-type="csv"] .file-icon {
+    color: #27ae60;
+}
+
+.file-card[data-type="xls"] .file-icon,
+.file-card[data-type="xlsx"] .file-icon {
+    color: #2ecc71;
+}
+
+/* Estado de carregamento */
+.file-card.uploading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.file-card.uploading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@media (max-width: 768px) {
+    .drive-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    #openUploadModalBtn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    #fileGrid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+    }
+    
+    .file-card {
+        padding: 20px 15px;
+        min-height: 120px;
+    }
+    
+    .file-icon {
+        font-size: 2em;
+    }
 }

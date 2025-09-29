@@ -31,10 +31,6 @@ async function loadSettings() {
             document.getElementById('corporateEmail').value = company.corporate_email || '';
             document.getElementById('phone').value = company.phone || '';
             document.getElementById('address').value = company.address || '';
-            
-            loadPlans(company.plan_id); 
-        } else {
-            loadPlans(null);
         }
 
     } catch (error) {
@@ -133,98 +129,6 @@ async function saveCompanySettings(event) {
 }
 
 
-// --- LÓGICA DE PLANOS DINÂMICA ---
 
-async function loadPlans(currentPlanId) {
-    console.log('[OREH] Carregando planos do Supabase. Plano atual:', currentPlanId);
-    const plansGrid = document.getElementById('plansGrid');
-    if (!plansGrid) return;
-
-    plansGrid.innerHTML = '<p>Carregando planos...</p>'; 
-
-    try {
-        const { data: plans, error } = await supabaseClient
-            .from('plans')
-            .select('*')
-            .order('price', { ascending: true });
-
-        if (error) throw error;
-        if (!plans || plans.length === 0) {
-            plansGrid.innerHTML = '<p>Nenhum plano encontrado.</p>';
-            return;
-        }
-
-        plansGrid.innerHTML = ''; 
-
-        plans.forEach(plan => {
-            const isCurrentPlan = plan.id === currentPlanId;
-            const planCard = document.createElement('div');
-            planCard.className = 'plan-card';
-            if (isCurrentPlan) planCard.classList.add('active-plan');
-            if (plan.name === 'Business' && !isCurrentPlan) planCard.classList.add('recommended');
-            
-            const buttonHtml = isCurrentPlan
-                ? `<button class="btn btn-secondary" disabled>Plano Atual</button>`
-                : `<button class="btn btn-primary select-plan-btn" data-plan-id="${plan.id}">Selecionar Plano</button>`;
-
-            planCard.innerHTML = `
-                ${plan.name === 'Business' && !isCurrentPlan ? '<div class="recommended-badge">Recomendado</div>' : ''}
-                <h4>${plan.name}</h4>
-                <div class="price">R$ ${parseFloat(plan.price).toFixed(2).replace('.', ',')}<span>/mês</span></div>
-                <p>${plan.monthly_chat_limit.toLocaleString('pt-BR')} conversas/mês</p>
-                ${buttonHtml}
-            `;
-            plansGrid.appendChild(planCard);
-        });
-
-        document.querySelectorAll('.select-plan-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const planId = e.target.dataset.planId;
-                selectPlan(planId, e.target);
-            });
-        });
-
-    } catch (error) {
-        console.error('[OREH] Erro ao carregar os planos:', error);
-        plansGrid.innerHTML = `<p class="error">Não foi possível carregar os planos.</p>`;
-        showToast('Erro ao carregar os planos.', 'error');
-        // ✅ LOG DE ERRO
-        logEvent('ERROR', 'Falha ao carregar planos da empresa', { errorMessage: error.message, stack: error.stack });
-    }
-}
-
-async function selectPlan(planId, button) {
-    console.log(`[OREH] A selecionar o plano ${planId}...`);
-    button.disabled = true;
-    button.textContent = 'A guardar...';
-
-    try {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if (!user) throw new Error("Utilizador não autenticado.");
-
-        const { data: profile } = await supabaseClient.from('users').select('company_id').eq('id', user.id).single();
-        if (!profile || !profile.company_id) throw new Error("Perfil do utilizador não encontrado ou não associado a uma empresa.");
-
-        const { error } = await supabaseClient
-            .from('companies')
-            .update({ plan_id: planId })
-            .eq('id', profile.company_id);
-
-        if (error) throw error;
-
-        showToast('Plano atualizado com sucesso!', 'success');
-        // ✅ LOG DE SUCESSO
-        logEvent('INFO', `Plano da empresa alterado para o ID: ${planId}`);
-        loadSettings();
-
-    } catch (error) {
-        console.error('[OREH] Erro ao selecionar o plano:', error);
-        showToast('Não foi possível atualizar o plano.', 'error');
-        // ✅ LOG DE ERRO
-        logEvent('ERROR', `Falha ao alterar o plano para o ID: ${planId}`, { errorMessage: error.message, stack: error.stack });
-        button.disabled = false;
-        button.textContent = 'Selecionar Plano';
-    }
-}
 
 export { loadSettings, saveUserSettings, saveCompanySettings };

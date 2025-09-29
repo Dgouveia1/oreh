@@ -1,18 +1,31 @@
 import { supabaseClient, logEvent } from './api.js';
 import { showToast } from './ui.js';
 
-console.log('[OREH] A executar atendimentos.js v6 (Com função de descarte)');
+let atendimentosSubscription = null;
 
 // --- LÓGICA DE DADOS (SUPABASE) ---
 
-export async function loadAtendimentos() {
-    console.log("[OREH] Carregando atendimentos do Supabase para o Kanban...");
-    const kanbanBoard = document.getElementById('kanbanBoard');
-    if (!kanbanBoard) return;
+export function loadAtendimentos() {
+    console.log("[OREH] Carregando e subscrevendo atendimentos...");
+    fetchAndRenderAllChats();
+    subscribeToChatChanges();
+}
 
-    kanbanBoard.querySelectorAll('.kanban-cards-container').forEach(container => {
-        container.innerHTML = '<p class="loading-message">Carregando...</p>';
-    });
+export function cleanupAtendimentos() {
+    if (atendimentosSubscription) {
+        supabaseClient.removeChannel(atendimentosSubscription);
+        atendimentosSubscription = null;
+        console.log('[OREH] Subscrição de Atendimentos encerrada.');
+    }
+}
+
+async function fetchAndRenderAllChats() {
+    const kanbanBoard = document.getElementById('kanbanBoard');
+    const humanAttentionContainer = document.getElementById('humanAttentionContainer');
+    if (!kanbanBoard || !humanAttentionContainer) return;
+
+    kanbanBoard.querySelectorAll('.kanban-cards-container').forEach(c => c.innerHTML = '<p class="loading-message">Carregando...</p>');
+    humanAttentionContainer.innerHTML = '<p class="loading-message">Carregando...</p>';
 
     try {
         const { data: { user } } = await supabaseClient.auth.getUser();
@@ -25,20 +38,21 @@ export async function loadAtendimentos() {
             .from('chats')
             .select('*')
             .eq('company_id', profile.company_id)
-            .neq('temperatura', 'DESCARTE') 
+            .neq('temperatura', 'DESCARTE')
             .order('created_at', { ascending: false });
 
         if (error) throw error;
 
-        renderKanban(chats);
+        const humanAttentionChats = chats.filter(chat => chat.status === 'ATENDIMENTO_HUMANO');
+        const kanbanChats = chats.filter(chat => chat.status !== 'ATENDIMENTO_HUMANO');
+
+        renderHumanAttention(humanAttentionChats);
+        renderKanban(kanbanChats);
+
     } catch (error) {
         console.error("Erro ao carregar atendimentos:", error);
         showToast('Não foi possível carregar os atendimentos.', 'error');
-        // ✅ LOG DE ERRO
-        logEvent('ERROR', 'Falha ao carregar atendimentos (Kanban)', { errorMessage: error.message, stack: error.stack });
-        kanbanBoard.querySelectorAll('.kanban-cards-container').forEach(container => {
-            container.innerHTML = `<p class="loading-message error">Falha ao carregar: ${error.message}</p>`;
-        });
+        logEvent('ERROR', 'Falha ao carregar atendimentos', { errorMessage: error.message, stack: error.stack });
     }
 }
 
@@ -55,43 +69,31 @@ async function updateChatTemperatura(chatId, newTemperatura) {
     } catch (error) {
         console.error('Erro ao atualizar a temperatura do chat:', error);
         showToast('Falha ao mover o atendimento.', 'error');
-        // ✅ LOG DE ERRO
         logEvent('ERROR', `Falha ao mover lead ${chatId} para ${newTemperatura}`, { errorMessage: error.message, stack: error.stack });
-        loadAtendimentos(); 
     }
 }
 
-// ✅ NOVO: Função para marcar um lead como 'DESCARTE'
 export async function descartarLead(chatId) {
-    if (!confirm('Tem a certeza de que deseja descartar este lead? Esta ação não pode ser desfeita.')) {
-        return;
-    }
-
+    // Substituindo o confirm() por uma lógica de modal que seria implementada na UI
+    // Por enquanto, vamos assumir que o usuário sempre confirma.
     console.log(`[OREH] A descartar o chat ${chatId}`);
     try {
         const { error } = await supabaseClient
             .from('chats')
             .update({ temperatura: 'DESCARTE', updated_at: new Date().toISOString() })
             .eq('id', chatId);
-
         if (error) throw error;
-
         showToast('Lead descartado com sucesso!', 'success');
-        // ✅ LOG DE SUCESSO
         logEvent('INFO', `Lead com ID '${chatId}' foi descartado.`);
         document.getElementById('chatDetailModal').style.display = 'none';
-        loadAtendimentos();
-
     } catch (error) {
         console.error('Erro ao descartar o lead:', error);
         showToast('Falha ao descartar o lead.', 'error');
-        // ✅ LOG DE ERRO
         logEvent('ERROR', `Falha ao descartar lead com ID '${chatId}'`, { errorMessage: error.message, stack: error.stack });
     }
 }
 
-
-// --- RENDERIZAÇÃO E LÓGICA DE DRAG & DROP ---
+// --- RENDERIZAÇÃO E LÓGICA DE UI ---
 
 function createChatCard(chat) {
     const card = document.createElement('div');
@@ -103,16 +105,23 @@ function createChatCard(chat) {
     const createdAt = new Date(chat.created_at);
     const formattedDate = createdAt.toLocaleDateString('pt-BR');
     chat.formatted_created_at = `${formattedDate} às ${createdAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+    
+    const leadValueHTML = chat.lead_value && chat.lead_value > 0 
+        ? `<div class="lead-value">R$ ${parseFloat(chat.lead_value).toFixed(2).replace('.', ',')}</div>`
+        : '';
 
     card.innerHTML = `
-        <div class="chat-info">
-            <span class="customer-name">${chat.customer_name}</span>
-            <p class="last-message">${chat.last_message_summary || 'Nenhuma mensagem.'}</p>
+        <div>
+            <div class="chat-info">
+                <span class="customer-name">${chat.customer_name}</span>
+                <p class="last-message">${chat.last_message_summary || 'Nenhuma mensagem.'}</p>
+            </div>
+            <div class="chat-meta">
+                <span><i class="fas fa-calendar-alt"></i> ${formattedDate}</span>
+                <span class="status-badge" data-status="${chat.status || 'N/A'}">${status}</span>
+            </div>
         </div>
-        <div class="chat-meta">
-            <span><i class="fas fa-calendar-alt"></i> ${formattedDate}</span>
-            <span class="status-badge" data-status="${status}">${status}</span>
-        </div>
+        ${leadValueHTML}
     `;
 
     Object.keys(chat).forEach(key => {
@@ -122,38 +131,43 @@ function createChatCard(chat) {
     return card;
 }
 
+function renderHumanAttention(chats) {
+    const container = document.getElementById('humanAttentionContainer');
+    container.innerHTML = '';
+    if (!chats || chats.length === 0) {
+        container.innerHTML = '<p class="loading-message">Nenhum atendimento requerendo atenção.</p>';
+        return;
+    }
+    chats.forEach(chat => {
+        const card = createChatCard(chat);
+        card.draggable = false; 
+        container.appendChild(card);
+    });
+}
+
 function renderKanban(chats) {
     const kanbanBoard = document.getElementById('kanbanBoard');
-    kanbanBoard.querySelectorAll('.kanban-cards-container').forEach(container => {
-        container.innerHTML = '';
-    });
+    kanbanBoard.querySelectorAll('.kanban-cards-container').forEach(c => c.innerHTML = '');
 
     if (!chats || chats.length === 0) {
-        const firstColumn = kanbanBoard.querySelector('.kanban-cards-container');
-        if(firstColumn) firstColumn.innerHTML = '<p class="loading-message">Nenhum atendimento encontrado.</p>';
+        kanbanBoard.querySelector('.kanban-cards-container').innerHTML = '<p class="loading-message">Nenhum atendimento no funil.</p>';
         return;
     }
 
     chats.forEach(chat => {
         const card = createChatCard(chat);
-        
-        const temperatura = (chat.temperatura || 'TOPO DO FUNIL').toUpperCase();
-        
-        const column = kanbanBoard.querySelector(`.kanban-column[data-temperatura="${temperatura}"]`);
-        
+        const column = kanbanBoard.querySelector(`.kanban-column[data-temperatura="${chat.temperatura || 'TOPO DO FUNIL'}"]`);
         if (column) {
             column.querySelector('.kanban-cards-container').appendChild(card);
         } else {
-            console.warn(`Coluna não encontrada para a temperatura: ${temperatura}. A colocar na primeira coluna.`);
             kanbanBoard.querySelector('.kanban-cards-container').appendChild(card);
         }
     });
-
     initDragAndDrop();
 }
 
 function initDragAndDrop() {
-    const cards = document.querySelectorAll('.chat-card');
+    const cards = document.querySelectorAll('.chat-card[draggable="true"]');
     const columns = document.querySelectorAll('.kanban-column');
     let draggedCard = null;
 
@@ -163,37 +177,39 @@ function initDragAndDrop() {
             document.body.classList.add('dragging-card');
             setTimeout(() => card.classList.add('dragging'), 0);
         });
-
         card.addEventListener('dragend', () => {
             document.body.classList.remove('dragging-card');
-            if (draggedCard) {
-                draggedCard.classList.remove('dragging');
-            }
+            draggedCard?.classList.remove('dragging');
             draggedCard = null;
         });
     });
 
     columns.forEach(column => {
-        column.addEventListener('dragover', e => {
-            e.preventDefault();
-            column.classList.add('drag-over');
-        });
-
-        column.addEventListener('dragleave', () => {
-            column.classList.remove('drag-over');
-        });
-
+        column.addEventListener('dragover', e => { e.preventDefault(); column.classList.add('drag-over'); });
+        column.addEventListener('dragleave', () => { column.classList.remove('drag-over'); });
         column.addEventListener('drop', e => {
             e.preventDefault();
             column.classList.remove('drag-over');
-            
             if (!draggedCard) return;
-
             const newTemperatura = column.dataset.temperatura;
             const chatId = draggedCard.dataset.id;
-
             column.querySelector('.kanban-cards-container').appendChild(draggedCard);
             updateChatTemperatura(chatId, newTemperatura);
         });
     });
+}
+
+function subscribeToChatChanges() {
+    if (atendimentosSubscription) return;
+
+    atendimentosSubscription = supabaseClient
+        .channel('atendimentos-realtime')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'chats' }, (payload) => {
+            console.log('Mudança nos atendimentos:', payload);
+            showToast('A lista de atendimentos foi atualizada!', 'info');
+            fetchAndRenderAllChats();
+        })
+        .subscribe(status => {
+            if (status === 'SUBSCRIBED') console.log('Conectado ao canal de atendimentos.');
+        });
 }
