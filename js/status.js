@@ -1,81 +1,69 @@
 import { supabaseClient, logEvent } from './api.js';
 import { showToast } from './ui.js';
 
-// Variáveis de controle
 let statusInterval = null;
 let isCheckingStatus = false;
 
-// --- FUNÇÕES DO MODAL DE PRIMEIRA CONEXÃO ---
+// --- FUNÇÕES DE MODAL ---
 
-// Mostra o modal e anexa o evento ao formulário
 function showFirstConnectionModal(companyId) {
     const modal = document.getElementById('firstConnectionModal');
     const form = document.getElementById('firstConnectionForm');
-    
-    form.dataset.companyId = companyId;
-    
+    if (!modal || !form) return;
+
     modal.style.display = 'flex';
 
-    if (!form.dataset.listenerAttached) {
-        form.addEventListener('submit', handleFirstConnection);
-        form.dataset.listenerAttached = 'true';
-    }
-}
+    const formHandler = async (e) => {
+        e.preventDefault();
+        const createBtn = document.getElementById('createConnectionBtn');
+        createBtn.disabled = true;
+        createBtn.textContent = 'Criando...';
 
-// Lida com o envio do formulário do modal
-async function handleFirstConnection(event) {
-    event.preventDefault();
-    const btn = document.getElementById('createConnectionBtn');
-    btn.disabled = true;
-    btn.textContent = 'A criar...';
+        const countryCode = document.getElementById('countryCode').value;
+        const phoneNumber = document.getElementById('phoneNumber').value;
+        const fullPhoneNumber = countryCode + phoneNumber.replace(/\D/g, '');
 
-    const companyId = event.target.dataset.companyId;
-    const countryCode = document.getElementById('countryCode').value;
-    const phoneNumber = document.getElementById('phoneNumber').value;
-    const fullPhoneNumber = countryCode + phoneNumber.replace(/\D/g, '');
+        try {
+            const { data, error } = await supabaseClient.functions.invoke('oreh-onboarding', {
+                body: {
+                    telefone: fullPhoneNumber,
+                    company_id: companyId
+                },
+            });
 
-    try {
-        const webhookUrl = 'https://oreh-n8n.p7rc7g.easypanel.host/webhook/oreh-onboarding';
-        const response = await fetch(webhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                telefone: fullPhoneNumber,
-                company_id: companyId
-            })
-        });
+            if (error) throw error;
+            if (data.error) throw new Error(data.message);
 
-        if (response.status !== 200) {
-            throw new Error(`Ocorreu um erro ao criar a conexão (${response.statusText})`);
+            showToast('Instância criada com sucesso! A carregar QR Code...', 'success');
+            logEvent('INFO', `Primeira conexão criada para o número: ${fullPhoneNumber}`);
+            modal.style.display = 'none';
+            form.removeEventListener('submit', formHandler); // Remove para evitar duplicados
+            
+            // Força a atualização do status para buscar o QR Code da nova instância
+            setTimeout(updateConnectionStatus, 1000); 
+
+        } catch (error) {
+            console.error('Erro ao criar primeira conexão:', error);
+            showToast(`Erro: ${error.message}`, 'error');
+            logEvent('ERROR', `Falha na primeira conexão para ${fullPhoneNumber}`, { errorMessage: error.message });
+        } finally {
+            createBtn.disabled = false;
+            createBtn.textContent = 'Criar Conexão';
         }
-        
-        showToast('Conexão solicitada com sucesso! A obter status...', 'success');
-        logEvent('INFO', `Primeira conexão solicitada para o número: ${fullPhoneNumber}`);
-        document.getElementById('firstConnectionModal').style.display = 'none';
-        
-        await new Promise(resolve => setTimeout(resolve, 2000)); 
-        
-        await updateConnectionStatus();
+    };
 
-    } catch (error) {
-        console.error('[OREH] Erro ao criar primeira conexão:', error);
-        showToast(error.message, 'error');
-        logEvent('ERROR', 'Falha na primeira conexão via n8n', { errorMessage: error.message, stack: error.stack });
-    } finally {
-        btn.disabled = false;
-        btn.textContent = 'Criar Conexão';
-    }
+    // Remove qualquer listener antigo antes de adicionar um novo
+    form.removeEventListener('submit', formHandler);
+    form.addEventListener('submit', formHandler);
 }
-
 
 // --- FUNÇÕES DE VERIFICAÇÃO DE STATUS ---
 
 export function stopStatusPolling() {
   if (statusInterval) {
-    clearInterval(statusInterval);
-    statusInterval = null;
-    isCheckingStatus = false;
-    console.log('[OREH] Polling de status interrompido.');
+      clearInterval(statusInterval);
+      statusInterval = null;
+      console.log('[OREH] Polling de status interrompido.');
   }
 }
 
@@ -121,35 +109,71 @@ export async function updateConnectionStatus() {
     }
 
     const checkStatus = async () => {
-      console.log('[OREH] A verificar status na Evolution API...');
+      const apiUrl = secrets.evolution_api_url;
+      const apiKey = secrets.evolution_api_key;
+      const instanceKey = secrets.evolution_instance_name;
+
+      console.log('[OREH] A verificar status na Mega API...');
       statusElement.textContent = 'A VERIFICAR CONEXÃO...';
 
       try {
-        const evolutionUrl = `${secrets.evolution_api_url}/instance/connect/${secrets.evolution_instance_name}`;
-        const evolutionResponse = await fetch(evolutionUrl, {
-          headers: { 'apikey': secrets.evolution_api_key }
+        // 1. Verificar o status da instância com o endpoint da Mega API
+        const statusUrl = `${apiUrl}/rest/instance/${instanceKey}`;
+        const statusResponse = await fetch(statusUrl, {
+            method: 'GET',
+            headers: { 
+                'accept': '*/*',
+                'Authorization': `Bearer ${apiKey}` 
+            }
         });
         
-        if (!evolutionResponse.ok) throw new Error(`Erro na API (${evolutionResponse.status})`);
+        if (!statusResponse.ok) throw new Error(`Erro na comunicação com a API (${statusResponse.status})`);
         
-        const evolutionData = await evolutionResponse.json();
+        const statusData = await statusResponse.json();
+        
+        if (statusData.error === true) {
+            throw new Error(statusData.message || 'API retornou um erro.');
+        }
 
-        if (evolutionData?.instance?.state === 'open') {
-          statusElement.textContent = 'CONECTADO';
-          if (disconnectBtn) disconnectBtn.style.display = 'block';
-          qrCodeOutput.innerHTML = '<p>Telefone conectado.</p>';
-          stopStatusPolling();
-        } else if (evolutionData?.base64) {
-          statusElement.textContent = 'A AGUARDAR CONEXÃO';
-          qrCodeOutput.innerHTML = `<img src="${evolutionData.base64}" alt="QR Code para conexão">`;
+        // 2. Avaliar o status (qualquer coisa diferente de 'disconnected' é considerado conectado)
+        if (statusData.instance && statusData.instance.status !== 'disconnected') {
+            statusElement.textContent = 'CONECTADO';
+            if (disconnectBtn) disconnectBtn.style.display = 'block';
+            qrCodeOutput.innerHTML = '<p>Telefone conectado.</p>';
+            stopStatusPolling();
         } else {
-          statusElement.textContent = 'DESCONECTADO';
-          qrCodeOutput.innerHTML = '<p>Telefone desconectado. A tentar obter novo QR Code...</p>';
+            statusElement.textContent = 'DESCONECTADO - A OBTER QR CODE...';
+            const qrCodeUrl = `${apiUrl}/rest/instance/qrcode_base64/${instanceKey}`;
+
+            const qrCodeResponse = await fetch(qrCodeUrl, {
+                method: 'GET',
+                headers: {
+                    'accept': '*/*',
+                    'Authorization': `Bearer ${apiKey}`
+                }
+            });
+
+            if (!qrCodeResponse.ok) throw new Error(`Erro na comunicação ao obter QR Code (${qrCodeResponse.status})`);
+            
+            const qrCodeData = await qrCodeResponse.json();
+
+            if (qrCodeData.error === true) {
+                 throw new Error(qrCodeData.message || 'API retornou um erro ao buscar QR Code.');
+            }
+
+            if (qrCodeData.qrcode) {
+                statusElement.textContent = 'A AGUARDAR CONEXÃO';
+                // A Mega API já retorna o data URI completo
+                qrCodeOutput.innerHTML = `<img src="${qrCodeData.qrcode}" alt="QR Code para conexão">`;
+            } else {
+                statusElement.textContent = 'DESCONECTADO';
+                qrCodeOutput.innerHTML = '<p>Telefone desconectado. Não foi possível obter novo QR Code.</p>';
+            }
         }
       } catch (e) {
         console.error('Erro dentro do loop de verificação:', e);
         statusElement.textContent = 'ERRO NA VERIFICAÇÃO';
-        qrCodeOutput.innerHTML = `<p>${e.message}</p>`;
+        qrCodeOutput.innerHTML = `<p>Erro: ${e.message}</p>`;
         logEvent('WARN', 'Falha ao verificar status da instância (loop)', { errorMessage: e.message });
         stopStatusPolling();
       }
@@ -191,17 +215,29 @@ export async function disconnectInstance() {
   
       const { data: secrets } = await supabaseClient.from('company_secrets').select('evolution_api_url, evolution_api_key, evolution_instance_name').eq('company_id', profile.company_id).single();
       if (!secrets) throw new Error('Não foi possível encontrar as configurações da API.');
-  
-      const evolutionUrl = `${secrets.evolution_api_url}/instance/logout/${secrets.evolution_instance_name}`;
+
+      const apiUrl = secrets.evolution_api_url;
+      const apiKey = secrets.evolution_api_key;
+      const instanceKey = secrets.evolution_instance_name;
+
+      // Endpoint de logout da Mega API
+      const disconnectUrl = `${apiUrl}/rest/instance/logout/${instanceKey}`;
       
-      const response = await fetch(evolutionUrl, {
+      const response = await fetch(disconnectUrl, {
         method: 'DELETE',
-        headers: { 'apikey': secrets.evolution_api_key }
+        headers: { 
+            'accept': '*/*',
+            'Authorization': `Bearer ${apiKey}` 
+        }
       });
   
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || `Erro na API (${response.status})`);
+        try {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `Erro na API (${response.status})`);
+        } catch(e) {
+            throw new Error(`Erro na API (${response.status})`);
+        }
       }
   
       showToast('Instância desconectada com sucesso!', 'success');
@@ -217,4 +253,4 @@ export async function disconnectInstance() {
       disconnectBtn.disabled = false;
       disconnectBtn.textContent = 'Desconectar';
     }
-  }
+}

@@ -1,0 +1,1416 @@
+mega-API BUSINESS
+Permite a integração do WhatsApp com qualquer aplicação por meio de requisições POST/GET;
+
+Observações
+Esta Api, segue os mesmos termos de serviço do WhatsApp. É importante que você leia atentamente a estes termos. Você é responsável pelo uso da ferramenta e pelas conseqüências do mau uso. Reforçamos que a API não é destinada para prática de SPAM e que o envio de mensagens indesejadas, viola os termos de serviço do WhatsApp. A violação dos termos pode acarretar no bloqueio e banimento definitivo de sua conta no WhatsApp.
+
+Contatos Comercial:
+(61) 9 8111-3325
+megaapiwhatsapp@gmail.com
+https://mega-api-whats.com.br
+
+📄Guia de Integração
+
+Confira nosso guia de integração completo, com todos os detalhes de cada endpoint, da melhor api whatsapp do Brasil!!!
+
+Clique aqui
+
+⚠️Faça do download da API Completa para seu Postman
+
+Acessar GitHub
+
+AUTORIZAÇÃO ( BEARER TOKEN )
+Atributos	Tipo	Descrição
+Authorization	Bearer Token (String)	Token para validação das requisições.
+Em algumas plataformas (Wappler, Bubble, N8N)
+é necessário adicionar manualmente: Authorization: Bearer Token da sua instanciaNo PHP, usando CURL, adicionar no Header: Authorization: Bearer Token da sua instancia
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+GET
+webhook
+https://HOST/rest/webhook/INSTANCE_KEY
+CONCEITO
+
+Obter dados de um webhook de instância
+
+Response 200
+Atributos	Tipo	Descrição
+error	boolean	Status do retorno
+message	string	Mensagem do retorno da requisição
+webhookUrl	string	URL do Webhookk salvo na api
+webhookEnabled	boolean	true - Ativado para receber os eventos
+false - Desativado para receber os eventos
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+Example Request
+webhook
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/webhook/INSTANCE_KEY", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+Example Response
+Body
+Headers (0)
+No response body
+This request doesn't return any response body
+POST
+mediaUrlToMany
+https://HOST/rest/sendMessage/INSTANCE_KEY/mediaUrlToMany
+CONCEITO
+
+Envie uma mensagem de mídia por meio de um URL para muitos usuários
+
+Request Body
+View More
+Atributos	Tipo	Descrição
+to	array	Lista de contatos que vão receber a mensagem
+url	string	URL da mídia a ser enviada
+fileName	string	Nome do arquivo
+type	string	É o tipo de mídia a ser enviada
+( image - video - audio - document )
+caption	string	É a legenda da mídia a ser enviada (Funciona somente em imagem e vídeo)
+mineType	string	MineTypes:
+imagem = image/jpeg
+video = video/mp4
+audio = audio/ogg; codecs=opus
+pdf = application/pdf
+xlsx = application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+word = application/vnd.openxmlformats-officedocument.wordprocessingml.document
+php, bin, html = application/octet-stream
+sql = application/x-sql
+Response 200
+View More
+Atributos	Tipo	Descrição
+error	boolean	Status do retorno
+message	string	Mensagem do retorno da requisição
+sent	number	Quantidade que foram enviadas
+failed	number	Quantidade que deram falhas
+jidFailed	array	Contatos que deram falhas
+data	array	Lista dos contatos que receberam a mensagem enviada
+remoteJid	string	Contato que recebeu a mensagem
+formMe	boolean	true - Mensagem Enviada
+false- Mensagem Recebida
+id	string	ID da mensagem
+url	string	Link do arquivo enviado
+mimetype	string	MineType do arquivo enviado
+mediaKey	string	Key do arquivo enviado
+fileName	string	Nome do arquivo enviado
+directPath	string	Path do arquivo enviado
+mediaKeyTimestamp	string	Data e Hora do arquivo enviado
+messageTimestamp	string	Data e Hora do arquivo enviado
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+Body
+raw (json)
+View More
+json
+{
+    "messageData": {
+        "to": [
+            "551199999999@s.whatsapp.net", "551199999999@s.whatsapp.net"
+        ],
+        "url": "https://www.thecampusqdl.com/uploads/files/pdf_sample_2.pdf",
+        "type": "document",
+        "caption": "Legenda",
+        "mimeType": "application/pdf"
+    }
+}
+Example Request
+mediaUrlToMany
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var raw = JSON.stringify({
+  "messageData": {
+    "to": [
+      "551199999999@s.whatsapp.net",
+      "551199999999@s.whatsapp.net"
+    ],
+    "url": "https://www.thecampusqdl.com/uploads/files/pdf_sample_2.pdf",
+    "type": "document",
+    "caption": "Legenda",
+    "mimeType": "application/pdf"
+  }
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/sendMessage/INSTANCE_KEY/mediaUrlToMany", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+Example Response
+Body
+Headers (0)
+No response body
+This request doesn't return any response body
+POST
+mediaUrl
+https://HOST/rest/sendMessage/INSTANCE_KEY/mediaUrl
+CONCEITO
+
+Envie uma mensagem de mídia por meio de um URL para um contato whatsapp
+
+Request Body
+View More
+Atributos	Tipo	Descrição
+to	string	Contato que vai receber a mensagem
+url	string	URL da mídia a ser enviada
+fileName	string	Nome do arquivo
+type	string	É o tipo de mídia a ser enviada
+( image - video - audio - document )
+caption	string	É a legenda da mídia a ser enviada (Funciona somente em imagem e vídeo)
+mineType	string	MineTypes:
+imagem = image/jpeg
+video = video/mp4
+audio = audio/ogg; codecs=opus
+pdf = application/pdf
+xlsx = application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+word = application/vnd.openxmlformats-officedocument.wordprocessingml.document
+php, bin, html = application/octet-stream
+sql = application/x-sql
+Response 200
+View More
+Atributos	Tipo	Descrição
+error	boolean	Status do retorno
+message	string	Mensagem do retorno da requisição
+remoteJid	string	Contato que recebeu a mensagem
+formMe	boolean	true - Mensagem Enviada
+false- Mensagem Recebida
+id	string	ID da mensagem
+url	string	Link do arquivo enviado
+mimetype	string	MineType do arquivo enviado
+mediaKey	string	Key do arquivo enviado
+fileName	string	Nome do arquivo enviado
+directPath	string	Path do arquivo enviado
+mediaKeyTimestamp	string	Data e Hora do arquivo enviado
+messageTimestamp	string	Data e Hora do arquivo enviado
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+Body
+raw (json)
+View More
+json
+{
+    "messageData": {
+        "to": "551199999999@s.whatsapp.net",
+        "url": "https://www.thecampusqdl.com/uploads/files/pdf_sample_2.pdf",
+        "fileName": "pdfExemplo.pdf",
+        "type": "document",
+        "caption": "string",
+        "mimeType": "application/pdf"
+    }
+}
+Example Request
+mediaUrl
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var raw = JSON.stringify({
+  "messageData": {
+    "to": "556195562618@s.whatsapp.net",
+    "url": "https://www.thecampusqdl.com/uploads/files/pdf_sample_2.pdf",
+    "fileName": "pdfExemplo.png",
+    "type": "document",
+    "caption": "string",
+    "mimeType": "application/pdf"
+  }
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/sendMessage/INSTANCE_KEY/mediaUrl", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+200 OK
+Example Response
+Body
+Headers (9)
+View More
+json
+{
+  "error": false,
+  "message": "Message sent",
+  "messageData": {
+    "key": {
+      "remoteJid": "551199999999@s.whatsapp.net",
+      "fromMe": true,
+      "id": "BAE5E1B0B0627AD9"
+    },
+    "message": {
+      "documentMessage": {
+        "url": "https://mmg.whatsapp.net/d/f/Aj6_GzzU7aOzSuEIpw_gtmi3XgiR2h7f4g5d5QPdcVCB.enc",
+        "mimetype": "application/pdf",
+        "fileSha256": "bwiIc7hMuMF20BKWmXdDDj86aSIi1uJvWWZEpG45Lcc=",
+        "fileLength": "10527",
+        "mediaKey": "htt1ZMGaNR4uASHMnod/BrptPtXcr4LBaQhK/cd9iy8=",
+        "fileName": "pdfExemplo.png",
+        "fileEncSha256": "pRgNlhsG/p3wJqTBFJGpotdBBfUUoFG57G9emex/Jc8=",
+        "directPath": "/v/t62.7119-24/34637413_418024026765473_8126463599557713607_n.enc?ccb=11-4&oh=01_AVyuk_dwzZEbnBz1iJuzSWQBtU48n30CGN3RHIc7MqV1hA&oe=62FC1CC0",
+        "mediaKeyTimestamp": "1658264653"
+      }
+    },
+    "messageTimestamp": "1658264653",
+    "status": "PENDING"
+  }
+}
+POST
+templateMessage
+https://HOST/rest/sendMessage/INSTANCE_KEY/templateMessage
+⚠️ Recomendamos a não estar utilizando em projetos em produção, pois tem apresentado muitas falhas do whatsapp
+
+Envie uma mensagem de modelo interativa para vários usuários do WhatsApp
+
+O templateMessageToMany é um tipo especial de mensagem que permite
+
+você enviar uma mensagem com botões especiais como quickReply,
+
+urlButton, callButton, etc.
+
+Como enviar templateMessageToMany?
+
+O objeto messageData requer que você especifique o tipo de botão que você
+
+deseja enviar para os vários usuários.
+
+Os tipos de botão que você pode enviar são:
+
+ReplyButton
+
+urlButton
+
+callButton
+
+
+No campo payload, você deve inserir o payload
+
+ou seja, url no caso de urlButton ou número de telefone no caso de callButton
+
+
+
+OBSERVAÇÃO: Devido a certas limitações do WhatsApp, quando você envia templateMessage para alguém,a mensagem não será visível em seu telefone. Além disso, você também verá que a mensagem foi enviadatambém seu próprio número de telefone.
+
+Request Body
+Atributos	Tipo	Descrição
+to	string	Contato whatsapp
+text	string	Mensagem
+buttons	array	Lista de botões
+type	string	Tipo de botão ( replyButton - urlButton - callButton )
+title	string	Titulo do botão
+payload	string	URL no caso de urlButton ou número de telefone no caso de callButton
+footerText	string	Texto Template
+Response 200
+View More
+Atributos	Tipo	Descrição
+error	boolean	Status do retorno
+message	string	Mensagem do retorno da requisição
+sent	number	Quantidade que foram enviadas
+failed	number	Quantidade que deram falhas
+jidFailed	array	Contatos que deram falhas
+data	array	Lista dos contatos que receberam a mensagem enviada
+remoteJid	string	Contato que recebeu a mensagem
+formMe	boolean	true - Mensagem Enviada
+false- Mensagem Recebida
+id	string	ID da mensagem
+hydratedContentText	string	Mensagem
+hydratedFooterText	string	Texto Template
+hydratedButtons	array	Botões que foram enviados
+messageTimestamp	string	Data e Hora do arquivo enviado
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+Body
+raw
+View More
+{
+    "messageData": {
+        "to": "556199999999@s.whatsapp.net",
+        "title": "Message Title",
+        "text": "Message Text",
+        "footer": "Message Footer",
+        "type": "image", // ("text" | "image" | "video" | "document")
+        "mediaUrl": "https://www.example.com/imagem.jpg",
+        "buttons": [
+            {
+                "type": "copy",
+                "title": "This is a copyButton",
+                "payload": "Your text for copy"
+            },
+            {
+                "type": "url",
+                "title": "This is a urlButton",
+                "payload": "https://google.com"
+            },
+            {
+                "type": "call",
+                "title": "This is a callButton",
+                "payload": "918788889688"
+            }
+        ]
+    }
+}
+Example Request
+templateMessage
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var raw = "{\r\n    \"messageData\": {\r\n        \"to\": \"556199999999@s.whatsapp.net\",\r\n        \"title\": \"Message Title\",\r\n        \"text\": \"Message Text\",\r\n        \"footer\": \"Message Footer\",\r\n        \"type\": \"image\", // (\"text\" | \"image\" | \"video\" | \"document\")\r\n        \"mediaUrl\": \"https://www.example.com/imagem.jpg\",\r\n        \"buttons\": [\r\n            {\r\n                \"type\": \"copy\",\r\n                \"title\": \"This is a copyButton\",\r\n                \"payload\": \"Your text for copy\"\r\n            },\r\n            {\r\n                \"type\": \"url\",\r\n                \"title\": \"This is a urlButton\",\r\n                \"payload\": \"https://google.com\"\r\n            },\r\n            {\r\n                \"type\": \"call\",\r\n                \"title\": \"This is a callButton\",\r\n                \"payload\": \"918788889688\"\r\n            }\r\n        ]\r\n    }\r\n}";
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/sendMessage/INSTANCE_KEY/templateMessage", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+Example Response
+Body
+Headers (0)
+No response body
+This request doesn't return any response body
+POST
+listMessage
+https://HOST/rest/sendMessage/INSTANCE_KEY/listMessage
+CONCEITO
+
+Envie uma mensagem de modelo interativa com listMessage para um usuário do WhatsApp
+
+⚠️ Recomendamos a não estar utilizando em projetos em produção, pois tem apresentado muitas falhas do whatsapp
+
+Request Body
+View More
+Atributos	Tipo	Descrição
+to	string	Contato whatsapp que vai receber a mensagem
+buttonText	string	Titulo do botão
+text	string	Mensagem
+title	string	Titulo da mensagem
+description	string	Descrição
+sections	array	Lista de sessões
+title	string	Titulo da sessão
+rows	array	Lista de itens
+title	string	Titulo do iten
+description	string	Descrição do iten
+rowId	string	ID do iten
+Response 200
+View More
+Atributos	Tipo	Descrição
+error	boolean	Status do retorno
+message	string	Mensagem do retorno da requisição
+remoteJid	string	Contato que recebeu a mensagem
+formMe	boolean	true - Mensagem Enviada
+false- Mensagem Recebida
+id	string	ID da mensagem
+title	string	Titulo
+description	string	Descrição
+buttonText	string	Titulo do botão
+listType	string	Tipo da lista enviada
+sections	array	Lista todos os itens que foram criados dentro da sessão
+footerText	string	Texto do rodapé
+messageTimestamp	string	Data e Hora do arquivo enviado
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+Body
+raw
+View More
+{
+    "messageData": {
+        "to": "551199999999@s.whatsapp.net",
+        "buttonText": "Escolha",
+        "text": "Testanto",
+        "title": "TEste",
+        "description": "Selecione uma forma de pagamento",
+        "sections": [
+            {
+                "title": "PIX",
+                "rows": [
+                    {
+                        "title": "PIX",
+                        "description": "pagamento via pix",
+                        "rowId": "01"
+                    }
+                ]
+            }
+        ],
+        "listType": 0
+    }
+}
+Example Request
+listMessage
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var raw = JSON.stringify({
+  "messageData": {
+    "to": "556195562618@s.whatsapp.net",
+    "buttonText": "Escolha",
+    "text": "Testanto",
+    "title": "TEste",
+    "description": "Selecione uma forma de pagamento",
+    "sections": [
+      {
+        "title": "PIX",
+        "rows": [
+          {
+            "title": "PIX",
+            "description": "pagamento via pix",
+            "rowId": "01"
+          }
+        ]
+      }
+    ],
+    "listType": 0
+  }
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/sendMessage/INSTANCE_KEY/listMessage", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+200 OK
+Example Response
+Body
+Headers (9)
+View More
+json
+{
+  "error": false,
+  "message": "Message sent",
+  "messageData": {
+    "key": {
+      "remoteJid": "5511999999999@s.whatsapp.net",
+      "fromMe": true,
+      "id": "BAE5403BBB515C2F"
+    },
+    "message": {
+      "listMessage": {
+        "title": "TEste",
+        "description": "Testanto",
+        "buttonText": "Escolha",
+        "listType": "SINGLE_SELECT",
+        "sections": [
+          {
+            "title": "PIX",
+            "rows": [
+              {
+                "title": "PIX",
+                "description": "pagamento via pix",
+                "rowId": "01"
+              }
+            ]
+          }
+        ],
+        "footerText": "Selecione uma forma de pagamento"
+      }
+    },
+    "messageTimestamp": "1658283308",
+    "status": "PENDING"
+  }
+}
+POST
+quoteMessage
+https://HOST/rest/sendMessage/INSTANCE_KEY/quoteMessage
+Responder uma mensagem enviada
+
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Body
+raw
+{
+  "messageData": {
+    "to": "551199999999@s.whatsapp.net",
+    "text": "Mensagem",
+    "key": {},
+    "message": {}
+  }
+}
+Example Request
+quoteMessage
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "messageData": {
+    "to": "551199999999@s.whatsapp.net",
+    "text": "Mensagem",
+    "key": {},
+    "message": {}
+  }
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/sendMessage/INSTANCE_KEY/quoteMessage", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+Example Response
+Body
+Headers (0)
+No response body
+This request doesn't return any response body
+ChatController
+AUTHORIZATION
+Bearer Token
+This folder is using Bearer Token from collectionmega-API BUSINESS
+POST
+readChat
+https://HOST/rest/chat/INSTANCE_KEY/readChat
+CONCEITO
+
+Confirmar a vizualização das mensagens (ou á não vizualização - false) de um chat
+
+Request Body
+
+Atributos	Tipo	Descrição
+to	string	Contato do chat que deseja confirmar a vizualização das mensagens
+option	boolean	true - confirmar
+false - não confirmar
+key	string	Objeto key. Esse objeto você terá que coletar do retorno webhook ,para confirmar a leitura da mensagem.(Veja o exemplo na imagem abaixo)
+messageTimestamp	number	Data / Hora da ultima mensagem. Esse valor você precisa coletar tambem do retorno webhook
+Exemplo%20do%20retorno%20webhook.%20Campos%20em%20vermelhor%20e%20azul%20é%20os%20que%20precisam%20ser%20preenchidos%20no%20body%20da%20requisição
+Exemplo do retorno webhook. Campos em vermelhor e azul é os que precisam ser preenchidos no body da requisição
+
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+Body
+raw
+{
+    "to": "551199999999@s.whatsapp.net",
+    "option": true,
+    "messageData": {
+        "key": {},
+        "messageTimestamp": 0
+    }
+}
+Example Request
+readChat
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var raw = JSON.stringify({
+  "to": "551199999999@s.whatsapp.net",
+  "option": true,
+  "messageData": {
+    "key": {},
+    "messageTimestamp": 0
+  }
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/chat/INSTANCE_KEY/readChat", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+Example Response
+Body
+Headers (0)
+No response body
+This request doesn't return any response body
+POST
+deleteMessage
+https://HOST/rest/chat/INSTANCE_KEY/deleteMessage
+CONCEITO
+
+Deletar uma mensagem
+
+Request Body
+
+Atributos	Tipo	Descrição
+to	string	Contato do chat que deseja deletar uma mensagem
+key	string	Objeto key. Esse objeto você terá que coletar do retorno webhook ,para confirmar a leitura da mensagem.(Veja o exemplo na imagem abaixo)
+Exemplo%20retorno%20webhook
+<br>Campo%20marcado%20em%20vermelho%20-%20São%20os%20dados%20a%20serem%20enviados%20no%20body%20da%20requisição
+Exemplo retorno webhook <br>Campo marcado em vermelho - São os dados a serem enviados no body da requisição
+
+
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+Body
+raw
+{
+  "messageData": {
+    "to": "551199999999@s.whatsapp.net",
+    "key": {}
+  }
+}
+Example Request
+deleteMessage
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var raw = JSON.stringify({
+  "messageData": {
+    "to": "551199999999@s.whatsapp.net",
+    "key": {}
+  }
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/chat/INSTANCE_KEY/deleteMessage", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+Example Response
+Body
+Headers (0)
+No response body
+This request doesn't return any response body
+GET
+adminGroups
+https://HOST/rest/group/INSTANCE_KEY/adminGroups
+CONCEITO
+
+Liste todos os grupos em que você está como administrador
+
+Response 200
+Atributos	Tipo	Descrição
+error	boolean	Status do retorno
+message	string	Mensagem do retorno
+groups	array	Lista com todos os grupos
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+Example Request
+adminGroups
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/group/INSTANCE_KEY/adminGroups", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+Example Response
+Body
+Headers (0)
+No response body
+This request doesn't return any response body
+GET
+adminGroupsWithParticipants
+https://HOST/rest/group/INSTANCE_KEY/adminGroupsWithParticipants
+CONCEITO
+
+Liste todos os grupos em que você está como admin junto com a matriz de participantes
+
+Response 200
+Atributos	Tipo	Descrição
+error	boolean	Status do retorno
+message	string	Mensagem do retorno
+groups	array	Lista com todos os grupos
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+Example Request
+adminGroupsWithParticipants
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/group/INSTANCE_KEY/adminGroupsWithParticipants", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+Example Response
+Body
+Headers (0)
+No response body
+This request doesn't return any response body
+POST
+create
+https://HOST/rest/group/INSTANCE_KEY/create
+CONCEITO
+
+Criar um novo grupo
+
+Request Body
+Atributos	Tipo	Descrição
+group_name	string	Nome do Grupo
+participants	array	Lista de contatos que serão adicionados no grupo
+( EX: 551199999999@s.whatsapp.net )
+Response 200
+View More
+Atributos	Tipo	Descrição
+error	boolean	Status do retorno
+message	string	Mensagem do retorno
+id	string	ID do grupo
+subject	string	Nome do grupo
+creation	number	Data e Hora que o grupo foi criado
+owner	string	Contato do criador do grupo
+restrict	boolean	true - Somente Admin podem fazer alterações
+false - Todos os participantes podem fazer alterações
+announce	boolean	true - Somente Admin podem enviar mensagens
+false - Todos os participantes podem enviar mensagens
+participants	array	Lista com os participantes que foram adicionados
+id	string	Contato whatsapp
+admin	string	null - Não é administrador
+superadmin - Contato é um administrador do grupo
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+Body
+raw
+{
+  "group_data": {
+    "group_name": "Nome do Grupo",
+    "participants": [
+      "551199999999@s.whatsapp.net"
+    ]
+  }
+}
+Example Request
+create
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var raw = JSON.stringify({
+  "group_data": {
+    "group_name": "Nome do Grupo",
+    "participants": [
+      "556195562618@s.whatsapp.net"
+    ]
+  }
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/group/INSTANCE_KEY/create", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+200 OK
+Example Response
+Body
+Headers (9)
+View More
+json
+{
+  "error": false,
+  "message": "Group created",
+  "group": {
+    "id": "120363041490582303@g.us",
+    "subject": "Nome do Grupo",
+    "creation": 1658323320,
+    "owner": "551188888888@s.whatsapp.net",
+    "restrict": false,
+    "announce": false,
+    "participants": [
+      {
+        "id": "551188888888@s.whatsapp.net",
+        "admin": "superadmin"
+      },
+      {
+        "id": "551199999999@s.whatsapp.net",
+        "admin": null
+      }
+    ]
+  }
+}
+POST
+addParticipants
+https://HOSTrest/group/INSTANCE_KEY/addParticipants
+CONCEITO
+
+Adicionar participantes no grupo
+
+Request Body
+Atributos	Tipo	Descrição
+jid	string	ID do grupo
+participants	array	Lista de contatos que serão adicionados no grupo
+( EX: 551199999999@s.whatsapp.net )
+Response 200
+Atributos	Tipo	Descrição
+error	boolean	Status
+message	string	Mensagem de retorno
+updatedParticipants	array	Lista de contatos que foram adicionados no grupo
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+Body
+raw
+{
+    "group_data": {
+        "jid": "120363041490582303@g.us",
+        "participants": [
+            "551188888888@s.whatsapp.net"
+        ]
+    }
+}
+Example Request
+addParticipants
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var raw = JSON.stringify({
+  "group_data": {
+    "jid": "120363041490582303@g.us",
+    "participants": [
+      "556192319923@s.whatsapp.net"
+    ]
+  }
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://HOSTrest/group/INSTANCE_KEY/addParticipants", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+200 OK
+Example Response
+Body
+Headers (9)
+json
+{
+  "error": false,
+  "message": "Participants added",
+  "updatedParticipants": [
+    [
+      "551188888888@s.whatsapp.net"
+    ]
+  ]
+}
+POST
+demoteParticipants
+https://HOST/rest/group/INSTANCE_KEY/demoteParticipants
+CONCEITO
+
+Rebaixar determinados participantes no grupo
+
+Request Body
+Atributos	Tipo	Descrição
+jid	string	ID do grupo
+participants	array	Lista de contatos que serão rebaixados administradores do grupo
+( EX: 551199999999@s.whatsapp.net )
+Response 200
+Atributos	Tipo	Descrição
+error	boolean	Status
+message	string	Mensagem de retorno
+updatedParticipants	array	Lista de contatos que não são mais administradores do grupo
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+Body
+raw
+{
+    "group_data": {
+        "jid": "120363041490582303@g.us",
+        "participants": [
+            "551188888888@s.whatsapp.net"
+        ]
+    }
+}
+Example Request
+demoteParticipants
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var raw = JSON.stringify({
+  "group_data": {
+    "jid": "120363041490582303@g.us",
+    "participants": [
+      "556195562618@s.whatsapp.net"
+    ]
+  }
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/group/INSTANCE_KEY/demoteParticipants", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+200 OK
+Example Response
+Body
+Headers (9)
+json
+{
+  "error": false,
+  "message": "Participants demoted",
+  "updatedParticipants": [
+    [
+      "551188888888@s.whatsapp.net"
+    ]
+  ]
+}
+POST
+promoteParticipants
+https://HOST/rest/group/INSTANCE_KEY/promoteParticipants
+CONCEITO
+
+Promova determinados participantes no grupo
+
+Request Body
+Atributos	Tipo	Descrição
+jid	string	ID do grupo
+participants	array	Lista de contatos que serão administradores do grupo
+( EX: 551199999999@s.whatsapp.net )
+Response 200
+Atributos	Tipo	Descrição
+error	boolean	Status
+message	string	Mensagem de retorno
+updatedParticipants	array	Lista de contatos que se tornaram administradores
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+Body
+raw
+{
+    "group_data": {
+        "jid": "120363041490582303@g.us",
+        "participants": [
+            "551188888888@s.whatsapp.net"
+        ]
+    }
+}
+Example Request
+promoteParticipants
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var raw = JSON.stringify({
+  "group_data": {
+    "jid": "120363041490582303@g.us",
+    "participants": [
+      "556195562618@s.whatsapp.net"
+    ]
+  }
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/group/INSTANCE_KEY/promoteParticipants", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+200 OK
+Example Response
+Body
+Headers (9)
+json
+{
+  "error": false,
+  "message": "Participants promoted",
+  "updatedParticipants": [
+    [
+      "551188888888@s.whatsapp.net"
+    ]
+  ]
+}
+PUT
+setWhoCanSendMessage
+https://HOST/rest/group/INSTANCE_KEY/setWhoCanSendMessage?jid=120363041490582303@g.us&allowOnlyAdmins=false
+CONCEITO
+
+Definir quem pode enviar mensagem no grupo
+
+Request Params
+Atributos	Tipo	Descrição
+jid	string	ID do grupo
+allowOnlyAdmins	boolean	true - Somente admin envia mensagem no grupo
+false - Participantes podem enviar mensagens no grupo
+Response 200
+Atributos	Tipo	Descrição
+error	boolean	Status
+message	string	Mensagem de retorno
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+PARAMS
+jid
+120363041490582303@g.us
+
+allowOnlyAdmins
+false
+
+Example Request
+setWhoCanSendMessage
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var requestOptions = {
+  method: 'PUT',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/group/INSTANCE_KEY/setWhoCanSendMessage?jid=120363041490582303@g.us&allowOnlyAdmins=false", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+Example Response
+Body
+Headers (0)
+No response body
+This request doesn't return any response body
+PUT
+setWhoCanChangeSettings
+https://HOST/rest/group/INSTANCE_KEY/setWhoCanChangeSettings?jid=120363041490582303@g.us&allowOnlyAdmins=true
+CONCEITO
+
+Definir quem pode alterar as configurações do grupo
+
+Request Params
+Atributos	Tipo	Descrição
+jid	string	ID do grupo
+allowOnlyAdmins	boolean	true - Somente admin pode alterar as configurações do grupo
+false - Participantes podem alterar as configurações do grupo
+Response 200
+Atributos	Tipo	Descrição
+error	boolean	Status
+message	string	Mensagem de retorno
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+PARAMS
+jid
+120363041490582303@g.us
+
+allowOnlyAdmins
+true
+
+Example Request
+setWhoCanChangeSettings
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var requestOptions = {
+  method: 'PUT',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/group/INSTANCE_KEY/setWhoCanChangeSettings?jid=120363041490582303@g.us&allowOnlyAdmins=true", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+Example Response
+Body
+Headers (0)
+No response body
+This request doesn't return any response body
+DELETE
+leaveGroup
+https://HOST/rest/group/INSTANCE_KEY/leaveGroup?jid=120363042979163716@g.us
+CONCEITO
+
+Deixar o grupo
+
+Request Params
+Atributos	Tipo	Descrição
+jid	string	ID do grupo
+AUTHORIZATION
+Bearer Token
+Token
+TOKEN
+
+HEADERS
+Content-Type
+application/json
+
+Authorization
+Bearer TOKEN
+
+PARAMS
+jid
+120363042979163716@g.us
+
+Example Request
+leaveGroup
+View More
+javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+myHeaders.append("Authorization", "Bearer TOKEN");
+
+var requestOptions = {
+  method: 'DELETE',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("https://HOST/rest/group/INSTANCE_KEY/leaveGroup?jid=120363042979163716@g.us", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+Example Response
+Body
+Headers (0)
+No response body
+This request doesn't return any response body

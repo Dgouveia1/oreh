@@ -20,44 +20,6 @@
     },
     {
       "parameters": {
-        "instanceName": "={{ $json.body.company_id }}",
-        "token": "429683C4C977415CAAFCCE10F7D57E11",
-        "number": "={{ $json.body.telefone }}",
-        "options_Create_instance": {
-          "instanceSettings": {
-            "settings": {
-              "groupsIgnore": true
-            }
-          },
-          "webhook": {
-            "webhookSettings": {
-              "webhookUrl": "https://oreh-n8n.p7rc7g.easypanel.host/webhook/oreh-ia",
-              "webhookBase64": true,
-              "webhookEvents": [
-                "MESSAGES_SET",
-                "MESSAGES_UPSERT"
-              ]
-            }
-          }
-        }
-      },
-      "type": "n8n-nodes-evolution-api.evolutionApi",
-      "typeVersion": 1,
-      "position": [
-        -80,
-        -48
-      ],
-      "id": "06431a42-45d7-4bb5-9a36-051397098cfe",
-      "name": "Criar instancia",
-      "credentials": {
-        "evolutionApi": {
-          "id": "IE9ubFkk1a8AUZWC",
-          "name": "Evolution account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "operation": "update",
         "schema": {
           "__rl": true,
@@ -76,9 +38,9 @@
             "is_ai_active": false,
             "ai_tone_adaptability": false,
             "company_id": "={{ $('Webhook').item.json.body.company_id }}",
-            "evolution_api_url": "https://oreh-evolution-api.gggzhe.easypanel.host/",
+            "evolution_api_url": "https://beaihub.megaapi.com.br",
             "evolution_api_key": "429683C4C977415CAAFCCE10F7D57E11",
-            "evolution_instance_name": "={{ $json.data.instance.instanceName }}",
+            "evolution_instance_name": "={{ $json.data.instance_key }}",
             "evolution_number": "={{ $('Webhook').item.json.body.telefone }}"
           },
           "matchingColumns": [
@@ -239,6 +201,46 @@
       ],
       "id": "30dced1d-a5df-4f11-acf3-018b906c6da0",
       "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://beaihub.megaapi.com.br/rest/instance/init",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "instance_key",
+              "value": "={{ $json.body.company_id }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "*/*"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwNC8xMC8yMDI1IiwibmFtZSI6IkJlQUkgSFVCIiwiYWRtaW4iOnRydWUsImlhdCI6MTc1OTY3NDg0Nn0.JN16uvwUXYWmslYV1xh57UaGV7ei4ToHaMLshGBYnkM"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"messageData\": {\n    \"webhookUrl\": \"https://oreh-n8n.p7rc7g.easypanel.host/webhook/oreh-ia\",\n    \"webhookEnabled\": true\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -64,
+        -48
+      ],
+      "id": "ffcce3a7-943e-4fd2-a002-a0c9d44bc843",
+      "name": "HTTP Request"
     }
   ],
   "pinData": {
@@ -247,7 +249,7 @@
         "json": {
           "headers": {
             "host": "oreh-n8n.p7rc7g.easypanel.host",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+            "user-agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Mobile Safari/537.36",
             "content-length": "80",
             "accept": "*/*",
             "accept-encoding": "gzip, deflate, br, zstd",
@@ -256,9 +258,9 @@
             "origin": "http://127.0.0.1:3000",
             "priority": "u=1, i",
             "referer": "http://127.0.0.1:3000/",
-            "sec-ch-ua": "\"Chromium\";v=\"140\", \"Not=A?Brand\";v=\"24\", \"Google Chrome\";v=\"140\"",
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-ch-ua": "\"Google Chrome\";v=\"141\", \"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"141\"",
+            "sec-ch-ua-mobile": "?1",
+            "sec-ch-ua-platform": "\"Android\"",
             "sec-fetch-dest": "empty",
             "sec-fetch-mode": "cors",
             "sec-fetch-site": "cross-site",
@@ -273,10 +275,26 @@
           "query": {},
           "body": {
             "telefone": "5517996047456",
-            "company_id": "1c43e6df-aec0-45cb-83f3-00f585fd65c5"
+            "company_id": "ad1cfa58-aa11-4a7f-8b7f-3cf867d66c63"
           },
           "webhookUrl": "https://oreh-n8n.p7rc7g.easypanel.host/webhook/oreh-onboarding",
           "executionMode": "production"
+        }
+      }
+    ],
+    "HTTP Request": [
+      {
+        "json": {
+          "error": false,
+          "createdInstances": 1,
+          "maxNumberInstances": 10,
+          "message": "Instance created",
+          "data": {
+            "instance_key": "ad1cfa58-aa11-4a7f-8b7f-3cf867d66c63",
+            "webhookUrl": "https://oreh-n8n.p7rc7g.easypanel.host/webhook/oreh-ia",
+            "webhookEnabled": true,
+            "qrCode": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARQAAAEUCAYAAADqcMl5AAAAAklEQVR4AewaftIAABIRSURBVO3BQY7YypLAQFLo+1+Z42WuChBU7ec/yAj7g7XWuuBhrbUueVhrrUse1lrrkoe11rrkYa21LnlYa61LHtZa65KHtda65GGttS55WGutSx7WWuuSh7XWuuRhrbUueVhrrUse1lrrkh8+UvmbKiaVk4oTlTcqTlSmikllqnhD5YuKN1SmikllqphUTipOVE4qJpWTikllqphUTiomlaliUjmpmFT+poovHtZa65KHtda65GGttS754bKKm1TeqJhUpoqp4kRlUpkqTlSmit9UMamcqEwVJypfVHxRMamcVLyhMlWcqEwVv6niJpWbHtZa65KHtda65GGttS754ZepvFFxU8WJyhsVk8pUcaIyVUwqf1PFpHJScaIyVXxR8YXKVHFSMam8ofI3qbxR8Zse1lrrkoe11rrkYa21Lvnhf1zFicpJxd9UMalMFScqJyp/k8qJyhsVJypfqPyXKiaV/08e1lrrkoe11rrkYa21Lvnhf5zKGxWTylQxqUwVU8UbKlPFpDJVnFR8ofKGyhsVk8pUMam8UXGi8kXFpPKFylTx/8nDWmtd8rDWWpc8rLXWJT/8sorfVPGGyhsVJyonFVPFpDJVTConKicVb1S8ofKFylTxhspUMVVMKlPFGxWTylQxqUwVN1X8Sx7WWuuSh7XWuuRhrbUu+eEylb9JZaqYVKaKSeVEZao4qZhUpoovKiaVqWJSmSreUJkqTiomlaliUjlRmSreUJkqJpWpYlKZKm5SmSpOVP5lD2utdcnDWmtd8rDWWpf88FHFf6liUpkq3lC5qWJSOVGZKk4qJpWpYlJ5o+INlaliUpkqJpXfpDJVTCpTxaQyVZxUfFHxv+RhrbUueVhrrUse1lrrEvuDD1SmihOV31TxhsobFTep3FTxhspvqjhReaNiUjmpeENlqjhRmSq+UJkqTlSmiknljYovHtZa65KHtda65GGttS754aOKSeWk4kRlqphU/iUqJxWTyknFicpUMalMFZPKGxUnKicqJxWTyk0qU8UbKm+o3KQyVZyovFFx08Naa13ysNZalzystdYl9gd/kcoXFZPKVHGTyknFicpJxW9SmSomlZsqTlS+qHhD5TdV/CaVqeINlTcqvnhYa61L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"
+          }
         }
       }
     ]
@@ -286,18 +304,7 @@
       "main": [
         [
           {
-            "node": "Criar instancia",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Criar instancia": {
-      "main": [
-        [
-          {
-            "node": "Update rows in a table",
+            "node": "HTTP Request",
             "type": "main",
             "index": 0
           }
@@ -314,13 +321,24 @@
           }
         ]
       ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Update rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "7cf2d2df-26be-42c8-a100-ec3d0be8034d",
+  "versionId": "85b7d97f-8656-41c4-934c-d314df4287ed",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "1128babbae6f10858c40bce82555c777a1061ae74d2b98e3b28bcfb267c345e1"
