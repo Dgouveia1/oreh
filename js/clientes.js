@@ -14,51 +14,53 @@ function updateMetricCard(id, value) {
 // --- LÓGICA DE RENDERIZAÇÃO ---
 
 function renderClientsTable(clients) {
-    const tableBody = document.getElementById('clientTableBody');
-    if (!tableBody) {
-        console.error("Elemento #clientTableBody não encontrado.");
+    const businessTableBody = document.getElementById('clientTableBody');
+    const personalTableBody = document.getElementById('personalClientTableBody');
+
+    if (!businessTableBody || !personalTableBody) {
+        console.error("Elementos #clientTableBody ou #personalClientTableBody não encontrados.");
         return;
     }
     
-    tableBody.innerHTML = ''; 
+    businessTableBody.innerHTML = ''; 
+    personalTableBody.innerHTML = '';
 
-    // Atualiza a métrica principal independentemente de haver clientes
+    // Atualiza a métrica principal
     updateMetricCard('totalClients', clients ? clients.length : 0);
     
     if (!clients || clients.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="9" style="text-align: center;">Nenhum cliente cadastrado.</td></tr>';
-        // Zera as outras métricas se não houver clientes
+        businessTableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Nenhum cliente cadastrado.</td></tr>';
+        personalTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Nenhum contato pessoal.</td></tr>';
+        // Zera as outras métricas
         updateMetricCard('activeClients', 0);
         updateMetricCard('whatsappClients', 0);
         updateMetricCard('emailClients', 0);
         return;
     }
 
+    const businessClients = clients.filter(c => !c.is_personal);
+    const personalClients = clients.filter(c => c.is_personal);
+
     let activeCount = 0;
     let whatsappCount = 0;
     let emailCount = 0;
 
-    clients.forEach(client => {
-        try {
+    // Renderiza clientes de negócio
+    if (businessClients.length > 0) {
+        businessClients.forEach(client => {
+            if (client.status === 'Ativo') activeCount++;
+            if (client.phone) whatsappCount++;
+            if (client.email) emailCount++;
+
             const row = document.createElement('tr');
-            
             Object.keys(client).forEach(key => {
                 const value = client[key];
                 row.dataset[key] = value !== null ? (typeof value === 'object' ? JSON.stringify(value) : value) : '';
             });
             row.dataset.clientId = client.id;
             
-            if (client.status === 'Ativo') activeCount++;
-            if (client.phone) whatsappCount++;
-            if (client.email) emailCount++;
-
             const formattedDate = client.created_at ? new Date(client.created_at).toLocaleDateString('pt-BR') : 'N/A';
-            
-            // ✅ CORREÇÃO: Usando a classe CSS correta 'status-cliente'
             const statusBadge = `<span class="status-cliente" data-status="${client.status || 'N/A'}">${client.status || 'N/A'}</span>`;
-            const personalTag = client.is_personal 
-                ? `<span class="tag-ia-ignore">Sim</span>` 
-                : `<span class="tag-ia-active">Não</span>`;
             
             row.innerHTML = `
                 <td data-label="Nome" class="client-name-cell">
@@ -71,17 +73,45 @@ function renderClientsTable(clients) {
                 <td data-label="Status">${statusBadge}</td>
                 <td data-label="Origem">${client.origin || 'N/A'}</td>
                 <td data-label="Data Cadastro">${formattedDate}</td>
-                <td data-label="Pessoal">${personalTag}</td>
                 <td data-label="Ações" class="client-actions">
                     <button class="btn btn-sm btn-edit" data-action="edit"><i class="fas fa-pencil-alt"></i></button>
                     <button class="btn btn-sm btn-delete" data-action="delete"><i class="fas fa-trash"></i></button>
                 </td>
             `;
-            tableBody.appendChild(row);
-        } catch (e) {
-            console.error("Erro ao renderizar a linha do cliente:", client, e);
-        }
-    });
+            businessTableBody.appendChild(row);
+        });
+    } else {
+        businessTableBody.innerHTML = '<tr><td colspan="8" style="text-align: center;">Nenhum cliente de negócio cadastrado.</td></tr>';
+    }
+
+    // Renderiza contatos pessoais
+    if (personalClients.length > 0) {
+        personalClients.forEach(client => {
+            const row = document.createElement('tr');
+            Object.keys(client).forEach(key => {
+                const value = client[key];
+                row.dataset[key] = value !== null ? (typeof value === 'object' ? JSON.stringify(value) : value) : '';
+            });
+            row.dataset.clientId = client.id;
+            
+            row.innerHTML = `
+                <td data-label="Nome" class="client-name-cell">
+                    <i class="fas fa-user-secret"></i> 
+                    <strong>${client.name || 'Nome não informado'}</strong>
+                </td>
+                <td data-label="Telefone">${client.phone || 'N/A'}</td>
+                <td data-label="Email">${client.email || 'N/A'}</td>
+                <td data-label="Localização">${client.location || 'Não informado'}</td>
+                <td data-label="Ações" class="client-actions">
+                    <button class="btn btn-sm btn-edit" data-action="edit"><i class="fas fa-pencil-alt"></i></button>
+                    <button class="btn btn-sm btn-delete" data-action="delete"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            personalTableBody.appendChild(row);
+        });
+    } else {
+        personalTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Nenhum contato pessoal cadastrado.</td></tr>';
+    }
     
     updateMetricCard('activeClients', activeCount);
     updateMetricCard('whatsappClients', whatsappCount);
@@ -244,9 +274,9 @@ export async function deleteClient(clientId) {
 // Lógica para inicializar listeners na tabela
 export function setupClientTableListeners() {
     const clientTableContainer = document.getElementById('clientTableContainer');
-    if (!clientTableContainer) return;
-    
-    clientTableContainer.addEventListener('click', (e) => {
+    const personalClientTableContainer = document.getElementById('personalClientTableContainer');
+
+    const clickHandler = (e) => {
         const button = e.target.closest('button');
         if (!button) return;
         
@@ -266,5 +296,13 @@ export function setupClientTableListeners() {
         if (action === 'edit') {
             openEditModal(clientData);
         }
-    });
+    };
+
+    if (clientTableContainer) {
+        clientTableContainer.addEventListener('click', clickHandler);
+    }
+    if (personalClientTableContainer) {
+        personalClientTableContainer.addEventListener('click', clickHandler);
+    }
 }
+

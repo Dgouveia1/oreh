@@ -118,7 +118,6 @@ async function fetchAndRenderDashboard() {
         updateMetricCard('totalAtendimentos', data.total_atendimentos_mes);
         updateMetricCard('resolvidosIA', data.resolvidos_ia_percent, '', '%');
         updateMetricCard('leadsQualificados', data.leads_qualificados);
-        updateMetricCard('valorTotalLeads', parseFloat(data.valor_total_leads).toFixed(2).replace('.',','), 'R$ ');
 
         // Renderiza os gráficos
         renderFunilChart(data.funil_data); // Ex: { topo: 50, meio: 25, fundo: 10 }
@@ -176,3 +175,4 @@ export function cleanupDashboard() {
         console.log('[OREH] Subscrição do Dashboard encerrada.');
     }
 }
+

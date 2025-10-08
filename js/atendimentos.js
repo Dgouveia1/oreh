@@ -34,51 +34,33 @@ async function fetchAndRenderAllChats() {
         const { data: profile } = await supabaseClient.from('users').select('company_id').eq('id', user.id).single();
         if (!profile) throw new Error("Perfil do utilizador não encontrado.");
 
-        // ✅ CORREÇÃO: Buscando dados de 'chats' E o nome do 'client' correspondente
-        const { data: chats, error } = await supabaseClient
+        // Passo 1: Buscar todos os clientes da empresa e criar um mapa.
+        const { data: clients, error: clientsError } = await supabaseClient
+            .from('clients')
+            .select('name, phone')
+            .eq('company_id', profile.company_id);
+        
+        if (clientsError) throw clientsError;
+
+        const clientNameMap = new Map();
+        clients.forEach(client => {
+            clientNameMap.set(client.phone, client.name);
+        });
+
+        // Passo 2: Buscar os chats da empresa.
+        const { data: chats, error: chatsError } = await supabaseClient
             .from('chats')
-            .select(`
-                *,
-                client:clients!inner(name, id)
-            `)
+            .select('*')
             .eq('company_id', profile.company_id)
             .neq('temperatura', 'DESCARTE')
             .order('created_at', { ascending: false });
-            
-        // NOTE: A foreign key entre chats e clients deve ser configurada
-        // no Supabase para que a consulta acima funcione:
-        // chats.customer_phone -> clients.phone
-        
-        if (error) {
-             // Se houver erro na busca com JOIN (ex: foreign key não existe ou RLS),
-             // faz uma busca simples e continua (em produção, o JOIN seria o ideal).
-             console.warn("Falha na busca com JOIN. Tentando busca simples...");
-             const { data: simpleChats, error: simpleError } = await supabaseClient
-                .from('chats')
-                .select('*')
-                .eq('company_id', profile.company_id)
-                .neq('temperatura', 'DESCARTE')
-                .order('created_at', { ascending: false });
-            if (simpleError) throw simpleError;
-            
-            // Aqui, simulamos o campo 'client_name' para os chats (idealmente viria do JOIN)
-            const chatsWithClientName = simpleChats.map(chat => ({
-                ...chat,
-                client_name: 'N/A (Erro na busca de vínculo)'
-            }));
-            
-            const humanAttentionChats = chatsWithClientName.filter(chat => chat.status === 'ATENDIMENTO_HUMANO');
-            const kanbanChats = chatsWithClientName.filter(chat => chat.status !== 'ATENDIMENTO_HUMANO');
 
-            renderHumanAttention(humanAttentionChats);
-            renderKanban(kanbanChats);
-            return;
+        if (chatsError) throw chatsError;
 
-        }
-
+        // Passo 3: Mapear os nomes dos clientes para os chats.
         const formattedChats = chats.map(chat => ({
             ...chat,
-            client_name: chat.client?.name || 'N/A'
+            client_name: clientNameMap.get(chat.customer_phone) || 'Cliente não cadastrado'
         }));
         
         const humanAttentionChats = formattedChats.filter(chat => chat.status === 'ATENDIMENTO_HUMANO');
@@ -93,6 +75,7 @@ async function fetchAndRenderAllChats() {
         logEvent('ERROR', 'Falha ao carregar atendimentos', { errorMessage: error.message, stack: error.stack });
     }
 }
+
 
 async function updateChatTemperatura(chatId, newTemperatura) {
     console.log(`[OREH] A atualizar chat ${chatId} para ${newTemperatura}`);
@@ -148,7 +131,7 @@ function createChatCard(chat) {
         ? `<div class="lead-value">R$ ${parseFloat(chat.lead_value).toFixed(2).replace('.', ',')}</div>`
         : '';
         
-    const clientName = chat.client_name || 'Cliente não cadastrado'; // ✅ Novo campo
+    const clientName = chat.client_name || 'Cliente não cadastrado';
 
     card.innerHTML = `
         <div>
@@ -194,9 +177,7 @@ function renderKanban(chats) {
     kanbanBoard.querySelectorAll('.kanban-cards-container').forEach(c => c.innerHTML = '');
 
     if (!chats || chats.length === 0) {
-        // Não apagar a mensagem de carregamento se for no container principal, 
-        // mas sim nos containers de cards individuais
-        // kanbanBoard.querySelector('.kanban-cards-container').innerHTML = '<p class="loading-message">Nenhum atendimento no funil.</p>';
+        kanbanBoard.querySelector('.kanban-column[data-temperatura="TOPO DO FUNIL"] .kanban-cards-container').innerHTML = '<p class="loading-message">Nenhum atendimento no funil.</p>';
         return;
     }
 
@@ -204,10 +185,13 @@ function renderKanban(chats) {
         const card = createChatCard(chat);
         const column = kanbanBoard.querySelector(`.kanban-column[data-temperatura="${chat.temperatura || 'TOPO DO FUNIL'}"]`);
         if (column) {
-            column.querySelector('.kanban-cards-container').appendChild(card);
+            const container = column.querySelector('.kanban-cards-container');
+            if(container.querySelector('.loading-message')) container.innerHTML = '';
+            container.appendChild(card);
         } else {
-            // Se o status for desconhecido/novo, coloca no topo do funil
-            kanbanBoard.querySelector('.kanban-column[data-temperatura="TOPO DO FUNIL"] .kanban-cards-container').appendChild(card);
+            const defaultContainer = kanbanBoard.querySelector('.kanban-column[data-temperatura="TOPO DO FUNIL"] .kanban-cards-container');
+            if(defaultContainer.querySelector('.loading-message')) defaultContainer.innerHTML = '';
+            defaultContainer.appendChild(card);
         }
     });
     initDragAndDrop();
@@ -240,7 +224,9 @@ function initDragAndDrop() {
             if (!draggedCard) return;
             const newTemperatura = column.dataset.temperatura;
             const chatId = draggedCard.dataset.id;
-            column.querySelector('.kanban-cards-container').appendChild(draggedCard);
+            const container = column.querySelector('.kanban-cards-container');
+            if(container.querySelector('.loading-message')) container.innerHTML = '';
+            container.appendChild(draggedCard);
             updateChatTemperatura(chatId, newTemperatura);
         });
     });

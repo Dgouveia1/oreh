@@ -9,8 +9,8 @@ async function checkSubscriptionStatus(companyData) {
     try {
         const subscription = await getSubscriptionStatus(companyData.asaas_subscription_id);
         
-        // Verifica se o status é de atraso ou cancelamento
-        if (subscription && (subscription.status === 'OVERDUE' || subscription.status === 'CANCELED')) {
+        // Verifica se o status é de atraso, cancelamento ou pendente
+        if (subscription && (subscription.status === 'OVERDUE' || subscription.status === 'CANCELED' || subscription.status === 'PENDING')) {
             const modal = document.getElementById('overdueSubscriptionModal');
             const portalBtn = document.getElementById('asaasPortalBtn'); // ID do botão no modal
             

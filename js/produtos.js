@@ -15,18 +15,27 @@ export function cleanupProducts() {
     stopProductsSubscription();
 }
 
-function getFilePreviewHTML(url) {
-    const isPdf = url.toLowerCase().endsWith('.pdf');
-    const fileName = url.split('/').pop().split('?')[0]; 
+function getFilePreviewHTML(url, isEditable = false) {
+    // A 'url' pode ser uma URL pública completa ou um nome de arquivo local
+    const isPdf = typeof url === 'string' && url.toLowerCase().endsWith('.pdf');
+    const fileName = typeof url === 'string' ? url.split('/').pop().split('?')[0] : 'arquivo';
+    const removeButton = isEditable ? `<button type="button" class="remove-img-btn" data-url-to-remove="${url}">&times;</button>` : '';
 
     if (isPdf) {
         return `
-            <div class="file-preview" title="${fileName}">
+            <div class="file-preview" data-url="${url}" title="${fileName}">
                 <i class="fas fa-file-pdf"></i>
+                ${removeButton}
             </div>
         `;
     }
-    return `<div class="img-preview"><img src="${url}" alt="Product image"></div>`;
+    // Para previews de imagem local, a URL será um data URI base64
+    return `
+        <div class="img-preview" data-url="${url}">
+            <img src="${url}" alt="Product image">
+            ${removeButton}
+        </div>
+    `;
 }
 
 
@@ -37,7 +46,7 @@ function renderProductsTable(products) {
     tableBody.innerHTML = ''; 
 
     if (!products || products.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Nenhum produto cadastrado.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Nenhum produto cadastrado.</td></tr>';
         return;
     }
 
@@ -57,6 +66,10 @@ function renderProductsTable(products) {
             return `<img src="${url}" alt="${product.name}">`;
         }).join('');
 
+        const purchaseLinkHtml = product.purchase_link 
+            ? `<a href="${product.purchase_link}" target="_blank" class="btn-link">Ver Link</a>`
+            : 'N/A';
+
         row.innerHTML = `
             <td>
                 <div class="product-info">
@@ -68,6 +81,7 @@ function renderProductsTable(products) {
             </td>
             <td>${product.description || 'N/A'}</td>
             <td>R$ ${parseFloat(product.value || 0).toFixed(2).replace('.', ',')}</td>
+            <td>${purchaseLinkHtml}</td>
             <td class="product-actions">
                 <button class="btn btn-sm btn-edit" data-action="edit"><i class="fas fa-pencil-alt"></i></button>
                 <button class="btn btn-sm btn-delete" data-action="delete"><i class="fas fa-trash"></i></button>
@@ -108,19 +122,21 @@ export async function loadProducts() {
 export function openEditModal(productData) {
     const modal = document.getElementById('productFormModal');
     const form = document.getElementById('productForm');
+    form.reset();
     
     document.getElementById('productModalTitle').textContent = 'Editar Produto';
     document.getElementById('productId').value = productData.id;
     document.getElementById('productName').value = productData.name;
     document.getElementById('productDescription').value = productData.description;
     document.getElementById('productValue').value = productData.value;
+    document.getElementById('productPurchaseLink').value = productData.purchase_link || '';
     
     const photoUrls = JSON.parse(productData.photo_urls || '[]');
     form.dataset.existingPhotos = JSON.stringify(photoUrls);
 
     const previewContainer = document.getElementById('imagePreviewContainer');
     if (photoUrls.length > 0) {
-        previewContainer.innerHTML = photoUrls.map(getFilePreviewHTML).join('');
+        previewContainer.innerHTML = photoUrls.map(url => getFilePreviewHTML(url, true)).join('');
     } else {
         previewContainer.innerHTML = '<p>Nenhuma imagem ou arquivo existente.</p>';
     }
@@ -136,8 +152,7 @@ export async function handleProductFormSubmit(event) {
     saveBtn.textContent = 'A guardar...';
 
     const productId = document.getElementById('productId').value;
-    const existingPhotos = JSON.parse(form.dataset.existingPhotos || '[]');
-
+    
     try {
         const { data: { user } } = await supabaseClient.auth.getUser();
         if (!user) throw new Error("Utilizador não autenticado.");
@@ -146,26 +161,26 @@ export async function handleProductFormSubmit(event) {
         
         const imageInputElement = document.getElementById('productPhotos');
         const imageFiles = Array.from(imageInputElement.files);
-        let uploadedUrls = [];
+        let finalPhotoUrls = JSON.parse(form.dataset.existingPhotos || '[]');
 
         if (imageFiles.length > 0) {
+            finalPhotoUrls = []; // Substitui as fotos antigas se novas forem enviadas
             for (const file of imageFiles) {
                 const fileName = `${Date.now()}-${file.name}`;
                 const filePath = `${profile.company_id}/${fileName}`;
                 const { error: uploadError } = await supabaseClient.storage.from(BUCKET_NAME).upload(filePath, file);
                 if (uploadError) throw uploadError;
                 const { data: { publicUrl } } = supabaseClient.storage.from(BUCKET_NAME).getPublicUrl(filePath);
-                uploadedUrls.push(publicUrl);
+                finalPhotoUrls.push(publicUrl);
             }
         }
-
-        const finalPhotoUrls = uploadedUrls.length > 0 ? uploadedUrls : existingPhotos;
 
         const productData = {
             company_id: profile.company_id,
             name: document.getElementById('productName').value,
             description: document.getElementById('productDescription').value,
             value: parseFloat(document.getElementById('productValue').value),
+            purchase_link: document.getElementById('productPurchaseLink').value,
             photo_urls: finalPhotoUrls,
         };
 
@@ -179,7 +194,8 @@ export async function handleProductFormSubmit(event) {
         showToast(productId ? 'Produto atualizado!' : 'Produto criado!', 'success');
         document.getElementById('productFormModal').style.display = 'none';
         form.reset();
-        loadProducts(); // ✅ RECARREGA A LISTA APÓS SALVAR
+        form.dataset.existingPhotos = '[]';
+        loadProducts();
 
     } catch (error) {
         console.error('Erro ao guardar produto:', error);
@@ -203,6 +219,65 @@ export async function deleteProduct(productId) {
     } catch (error) {
         console.error('Erro ao apagar produto:', error);
         showToast(`Erro ao apagar produto: ${error.message}`, 'error');
+    }
+}
+
+// ✅ NOVA FUNÇÃO: Configura os event listeners para a página de produtos
+export function setupProductEventListeners() {
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    if(previewContainer) {
+        previewContainer.addEventListener('click', (e) => {
+            const removeBtn = e.target.closest('.remove-img-btn');
+            if (removeBtn) {
+                const urlToRemove = removeBtn.dataset.urlToRemove;
+                const form = document.getElementById('productForm');
+                let existingPhotos = JSON.parse(form.dataset.existingPhotos || '[]');
+                
+                // Remove a URL do array
+                existingPhotos = existingPhotos.filter(url => url !== urlToRemove);
+                
+                // Atualiza o dataset e remove o elemento do DOM
+                form.dataset.existingPhotos = JSON.stringify(existingPhotos);
+                removeBtn.parentElement.remove();
+
+                if (previewContainer.children.length === 0) {
+                     previewContainer.innerHTML = '<p>Nenhuma imagem ou arquivo existente.</p>';
+                }
+            }
+        });
+    }
+
+    const imageInputElement = document.getElementById('productPhotos');
+    if(imageInputElement) {
+        imageInputElement.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            previewContainer.innerHTML = ''; // Limpa previews de fotos existentes
+
+            if (files.length > 0) {
+                 files.forEach(file => {
+                    // Para arquivos de imagem, gera um preview local
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            previewContainer.innerHTML += getFilePreviewHTML(e.target.result, false);
+                        }
+                        reader.readAsDataURL(file);
+                    } else if (file.type === 'application/pdf') {
+                         previewContainer.innerHTML += getFilePreviewHTML(file.name, false);
+                    }
+                });
+            } else {
+                // Se nenhum arquivo for selecionado, volta a mostrar os existentes
+                const form = document.getElementById('productForm');
+                const existingPhotos = JSON.parse(form.dataset.existingPhotos || '[]');
+                 if (existingPhotos.length > 0) {
+                    previewContainer.innerHTML = existingPhotos.map(url => getFilePreviewHTML(url, true)).join('');
+                } else {
+                    previewContainer.innerHTML = '<p>Nenhuma imagem ou arquivo selecionado.</p>';
+                }
+            }
+        });
     }
 }
 

@@ -6,7 +6,7 @@ import { saveEvent, changeDay } from './agenda.js';
 import { descartarLead } from './atendimentos.js';
 import { uploadFile, deleteFile } from './drive.js';
 import { saveUserSettings, saveCompanySettings } from './settings.js';
-import { handleProductFormSubmit, deleteProduct, openEditModal as openEditProductModal } from './produtos.js';
+import { handleProductFormSubmit, deleteProduct, openEditModal as openEditProductModal, setupProductEventListeners } from './produtos.js';
 import { handleClientFormSubmit, deleteClient, openEditModal as openEditClientModal, setupClientTableListeners } from './clientes.js'; // ✅ CORREÇÃO: Importação correta e renomeação da função openEditModal para evitar conflito
 import './finances.js'; 
 
@@ -216,6 +216,8 @@ function setupEventListeners() {
     // Inicializa o listener de eventos para os botões de editar/deletar na tabela de Clientes
     setupClientTableListeners(); 
 
+    // ✅ NOVO: Inicializa listeners para a página de produtos
+    setupProductEventListeners();
 
     // Listeners para os formulários de Configurações
     const userSettingsForm = document.getElementById('userSettingsForm');
@@ -257,3 +259,4 @@ document.addEventListener('DOMContentLoaded', () => {
     setupThemeToggle();
     checkLoginState();
 });
+
