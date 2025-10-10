@@ -153,11 +153,11 @@
     flex-direction: column;
     gap: 18px;
     min-height: 120px;
-    overflow-y: auto;
-    padding-right: 10px;
+    /* overflow-y: auto; */ /* ✅ REMOVIDO para empilhar */
+    /* padding-right: 10px; */ /* ✅ REMOVIDO espaçamento da barra de rolagem */
 }
 
-/* Estilização da barra de rolagem */
+/* Estilização da barra de rolagem (mantido caso necessário em outros lugares) */
 .kanban-cards-container::-webkit-scrollbar {
     width: 8px;
 }

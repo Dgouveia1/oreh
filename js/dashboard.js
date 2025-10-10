@@ -16,12 +16,11 @@ function updateMetricCard(id, value, prefix = '', suffix = '') {
 
 // Função para renderizar o gráfico de funil
 function renderFunilChart(data) {
-    // ✅ CORREÇÃO: O ID do canvas foi corrigido de 'funilAtendimentosChart' para 'funilVendasChart' para corresponder ao HTML.
     const ctx = document.getElementById('funilVendasChart')?.getContext('2d');
     if (!ctx) return;
 
     const chartData = {
-        labels: ['Topo do Funil', 'Meio do Funil', 'Fundo do Funil'],
+        labels: ['Novo', 'Atendimento', 'Agendado'],
         datasets: [{
             label: 'Leads por Etapa',
             data: [data.topo, data.meio, data.fundo],
@@ -175,4 +174,3 @@ export function cleanupDashboard() {
         console.log('[OREH] Subscrição do Dashboard encerrada.');
     }
 }
-

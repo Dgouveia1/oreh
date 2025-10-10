@@ -2,6 +2,7 @@ import { supabaseClient, logEvent } from './api.js';
 import { showToast } from './ui.js';
 
 let atendimentosSubscription = null;
+let lastHumanAttentionCount = 0; // ✅ Variável para contar atendimentos humanos
 
 // --- LÓGICA DE DADOS (SUPABASE) ---
 
@@ -95,8 +96,7 @@ async function updateChatTemperatura(chatId, newTemperatura) {
 }
 
 export async function descartarLead(chatId) {
-    // Substituindo o confirm() por uma lógica de modal que seria implementada na UI
-    // Por enquanto, vamos assumir que o usuário sempre confirma.
+    // A confirmação deve ser feita na UI antes de chamar esta função.
     console.log(`[OREH] A descartar o chat ${chatId}`);
     try {
         const { error } = await supabaseClient
@@ -111,6 +111,30 @@ export async function descartarLead(chatId) {
         console.error('Erro ao descartar o lead:', error);
         showToast('Falha ao descartar o lead.', 'error');
         logEvent('ERROR', `Falha ao descartar lead com ID '${chatId}'`, { errorMessage: error.message, stack: error.stack });
+    }
+}
+
+// ✅ NOVA FUNÇÃO: Assumir atendimento
+export async function takeOverChat(chatId) {
+    console.log(`[OREH] Assumindo o atendimento do chat ${chatId}`);
+    try {
+        const { error } = await supabaseClient
+            .from('chats')
+            .update({ 
+                status: 'Em atendimento', 
+                temperatura: 'Atendimento', 
+                updated_at: new Date().toISOString() 
+            })
+            .eq('id', chatId);
+        if (error) throw error;
+        showToast('Atendimento assumido!', 'success');
+        logEvent('INFO', `Atendimento ${chatId} assumido.`);
+        document.getElementById('humanAttentionDetailModal').style.display = 'none';
+        // A subscrição em tempo real cuidará de recarregar a lista
+    } catch (error) {
+        console.error('Erro ao assumir atendimento:', error);
+        showToast('Falha ao assumir o atendimento.', 'error');
+        logEvent('ERROR', `Falha ao assumir atendimento ${chatId}`, { errorMessage: error.message });
     }
 }
 
@@ -163,8 +187,19 @@ function renderHumanAttention(chats) {
     container.innerHTML = '';
     if (!chats || chats.length === 0) {
         container.innerHTML = '<p class="loading-message">Nenhum atendimento requerendo atenção.</p>';
+        lastHumanAttentionCount = 0; // Reseta a contagem
         return;
     }
+
+    // ✅ Lógica de notificação sonora
+    if (chats.length > lastHumanAttentionCount) {
+        const audio = document.getElementById('notificationSound');
+        if (audio) {
+            audio.play().catch(error => console.warn("A reprodução automática do áudio foi bloqueada pelo navegador.", error));
+        }
+    }
+    lastHumanAttentionCount = chats.length;
+
     chats.forEach(chat => {
         const card = createChatCard(chat);
         card.draggable = false; 
@@ -177,19 +212,19 @@ function renderKanban(chats) {
     kanbanBoard.querySelectorAll('.kanban-cards-container').forEach(c => c.innerHTML = '');
 
     if (!chats || chats.length === 0) {
-        kanbanBoard.querySelector('.kanban-column[data-temperatura="TOPO DO FUNIL"] .kanban-cards-container').innerHTML = '<p class="loading-message">Nenhum atendimento no funil.</p>';
+        kanbanBoard.querySelector('.kanban-column[data-temperatura="Novo"] .kanban-cards-container').innerHTML = '<p class="loading-message">Nenhum atendimento no funil.</p>';
         return;
     }
 
     chats.forEach(chat => {
         const card = createChatCard(chat);
-        const column = kanbanBoard.querySelector(`.kanban-column[data-temperatura="${chat.temperatura || 'TOPO DO FUNIL'}"]`);
+        const column = kanbanBoard.querySelector(`.kanban-column[data-temperatura="${chat.temperatura || 'Novo'}"]`);
         if (column) {
             const container = column.querySelector('.kanban-cards-container');
             if(container.querySelector('.loading-message')) container.innerHTML = '';
             container.appendChild(card);
         } else {
-            const defaultContainer = kanbanBoard.querySelector('.kanban-column[data-temperatura="TOPO DO FUNIL"] .kanban-cards-container');
+            const defaultContainer = kanbanBoard.querySelector('.kanban-column[data-temperatura="Novo"] .kanban-cards-container');
             if(defaultContainer.querySelector('.loading-message')) defaultContainer.innerHTML = '';
             defaultContainer.appendChild(card);
         }

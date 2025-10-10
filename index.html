@@ -227,19 +227,19 @@
                     <h2>Funil de Atendimentos</h2>
                 </div>
                 <div id="kanbanBoard" class="kanban-board">
-                    <div class="kanban-column" data-temperatura="TOPO DO FUNIL">
+                    <div class="kanban-column" data-temperatura="Novo">
                         <h3 class="kanban-column-title">Novo</h3>
                         <div class="kanban-cards-container"></div>
                     </div>
-                    <div class="kanban-column" data-temperatura="MEIO DO FUNIL">
+                    <div class="kanban-column" data-temperatura="Atendimento">
                         <h3 class="kanban-column-title">Atendimento</h3>
                         <div class="kanban-cards-container"></div>
                     </div>
-                    <div class="kanban-column" data-temperatura="FUNDO DO FUNIL">
+                    <div class="kanban-column" data-temperatura="Agendado">
                         <h3 class="kanban-column-title">Agendado</h3>
                         <div class="kanban-cards-container"></div>
                     </div>
-                    <div class="kanban-column" data-temperatura="PÓS-VENDA">
+                    <div class="kanban-column" data-temperatura="Finalizado">
                         <h3 class="kanban-column-title">Finalizado</h3>
                         <div class="kanban-cards-container"></div>
                     </div>
@@ -610,6 +610,27 @@
         </div>
     </div>
 
+    <!-- ✅ NOVO MODAL PARA ATENDIMENTO HUMANO -->
+    <div class="modal" id="humanAttentionDetailModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3>Detalhes do Atendimento Humano</h3>
+            </div>
+            <div class="chat-details">
+                <p><i class="fas fa-user"></i> <strong>Cliente:</strong> <span id="humanAttentionCustomer"></span></p>
+                <p><i class="fas fa-phone"></i> <strong>Telefone:</strong> <span id="humanAttentionPhone"></span></p>
+                <p><i class="fas fa-info-circle"></i> <strong>Status:</strong> <span id="humanAttentionStatus" class="status-badge"></span></p>
+                <p><i class="fas fa-calendar-alt"></i> <strong>Início:</strong> <span id="humanAttentionCreated"></span></p>
+                <p><i class="fas fa-comment-dots"></i> <strong>Última Mensagem:</strong></p>
+                <p id="humanAttentionSummary" class="summary-text"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="takeOverBtn" class="btn btn-primary">Assumir Atendimento</button>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="signUpModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -764,9 +785,10 @@
         </div>
     </div>
 
+    <!-- ✅ NOVO: Elemento de áudio para notificação -->
+    <audio id="notificationSound" src=notification.mp3 preload="auto"></audio>
 
     <script type="module" src="js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
-

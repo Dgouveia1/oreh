@@ -3,11 +3,11 @@ import { setupNavigation, setupModals, setupUploadModal, setupThemeToggle } from
 import { saveAiSettings } from './ia.js';
 import { disconnectInstance } from './status.js';
 import { saveEvent, changeDay } from './agenda.js';
-import { descartarLead } from './atendimentos.js';
+import { descartarLead, takeOverChat } from './atendimentos.js'; // ✅ Importa takeOverChat
 import { uploadFile, deleteFile } from './drive.js';
 import { saveUserSettings, saveCompanySettings } from './settings.js';
 import { handleProductFormSubmit, deleteProduct, openEditModal as openEditProductModal, setupProductEventListeners } from './produtos.js';
-import { handleClientFormSubmit, deleteClient, openEditModal as openEditClientModal, setupClientTableListeners } from './clientes.js'; // ✅ CORREÇÃO: Importação correta e renomeação da função openEditModal para evitar conflito
+import { handleClientFormSubmit, deleteClient, openEditModal as openEditClientModal, setupClientTableListeners } from './clientes.js';
 import './finances.js'; 
 
 
@@ -79,12 +79,62 @@ function setupEventListeners() {
             modal.style.display = 'flex';
         });
     }
+    
+    // ✅ NOVO: Listener para cards de atendimento humano
+    const humanAttentionContainer = document.getElementById('humanAttentionContainer');
+    if (humanAttentionContainer) {
+        humanAttentionContainer.addEventListener('click', (e) => {
+            const card = e.target.closest('.chat-card');
+            if (!card) return;
+
+            const modal = document.getElementById('humanAttentionDetailModal');
+            if (!modal) return;
+            
+            const takeOverBtn = modal.querySelector('#takeOverBtn');
+            if (takeOverBtn) {
+                takeOverBtn.dataset.chatId = card.dataset.id;
+            }
+
+            const setText = (id, text) => {
+                const el = modal.querySelector(id);
+                if (el) el.textContent = text || 'N/A';
+            };
+            
+            const status = (card.dataset.status || 'N/A').replace(/_/g, ' ');
+            const statusEl = modal.querySelector('#humanAttentionStatus');
+
+            setText('#humanAttentionCustomer', card.dataset.customer_name);
+            setText('#humanAttentionPhone', card.dataset.customer_phone);
+            setText('#humanAttentionCreated', card.dataset.formatted_created_at || new Date(card.dataset.created_at).toLocaleString('pt-BR'));
+            setText('#humanAttentionSummary', card.dataset.last_message_summary || 'Nenhuma informação.');
+
+            if (statusEl) {
+                statusEl.textContent = status;
+                statusEl.className = 'status-badge';
+                statusEl.dataset.status = card.dataset.status;
+            }
+
+            modal.style.display = 'flex';
+        });
+    }
+    
+    // ✅ NOVO: Listener para o botão de assumir atendimento
+    const takeOverBtn = document.getElementById('takeOverBtn');
+    if(takeOverBtn) {
+        takeOverBtn.addEventListener('click', (e) => {
+            const chatId = e.target.dataset.chatId;
+            if (chatId) {
+                takeOverChat(chatId);
+            }
+        });
+    }
+
 
     const descartarLeadBtn = document.getElementById('descartarLeadBtn');
     if (descartarLeadBtn) {
         descartarLeadBtn.addEventListener('click', (e) => {
             const chatId = e.target.dataset.chatId;
-            if (chatId) {
+            if (chatId && confirm('Tem certeza que deseja descartar este lead?')) {
                 descartarLead(chatId);
             }
         });
@@ -190,12 +240,12 @@ function setupEventListeners() {
             
             if (action === 'edit') {
                 const productData = { ...row.dataset }; 
-                openEditProductModal(productData); // ✅ Uso do alias corrigido
+                openEditProductModal(productData);
             }
         });
     }
 
-    // ✅ NOVO: CLientes
+    // Clientes
     const openClientModalBtn = document.getElementById('openClientModalBtn');
     if (openClientModalBtn) {
         openClientModalBtn.addEventListener('click', () => {
@@ -204,7 +254,7 @@ function setupEventListeners() {
             document.getElementById('clientId').value = '';
             document.getElementById('clientModalTitle').textContent = 'Novo Cliente';
             document.getElementById('clientFormModal').style.display = 'flex';
-            document.getElementById('isPersonal').checked = false; // Garante que o checkbox está desmarcado por padrão
+            document.getElementById('isPersonal').checked = false; 
         });
     }
     
@@ -213,10 +263,8 @@ function setupEventListeners() {
         clientForm.addEventListener('submit', handleClientFormSubmit);
     }
 
-    // Inicializa o listener de eventos para os botões de editar/deletar na tabela de Clientes
     setupClientTableListeners(); 
 
-    // ✅ NOVO: Inicializa listeners para a página de produtos
     setupProductEventListeners();
 
     // Listeners para os formulários de Configurações
@@ -259,4 +307,3 @@ document.addEventListener('DOMContentLoaded', () => {
     setupThemeToggle();
     checkLoginState();
 });
-
