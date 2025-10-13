@@ -1,0 +1,396 @@
+/* admin.css - Estilos específicos para o painel de Superadmin */
+
+/* Variáveis específicas do admin */
+:root {
+    --sidebar-admin-bg: linear-gradient(180deg, #1e293b 0%, #334155 100%);
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --card-hover-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --metric-icon-bg: rgba(255, 255, 255, 0.9);
+}
+
+/* Sidebar melhorado */
+.sidebar {
+    background: var(--sidebar-admin-bg);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.sidebar-header {
+    padding: 25px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-header h1 {
+    color: white;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-header h1 i {
+    color: #60a5fa;
+    font-size: 1.3rem;
+}
+
+.nav-links {
+    padding: 20px 0;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    color: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.nav-link:hover, .nav-link.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-left-color: #60a5fa;
+}
+
+.nav-link i {
+    width: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+/* Topbar melhorada */
+.topbar {
+    background: white;
+    border-bottom: 1px solid var(--border-color);
+    padding: 18px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background: var(--bg-color);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Cards de métricas melhorados */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.metric-card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-hover-shadow);
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: var(--metric-icon-bg);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-icon.icon-valor { background: linear-gradient(135deg, #ffd89b, #19547b); color: white; }
+.card-icon.icon-atendimentos { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+.card-icon.icon-leads { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; }
+.card-icon.icon-ia { background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; }
+
+.metric-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-color);
+    display: block;
+    line-height: 1.2;
+}
+
+.metric-label {
+    color: var(--text-color-light);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Gráficos melhorados */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.chart-card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.chart-card h3 {
+    margin-bottom: 20px;
+    color: var(--text-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.chart-container {
+    height: 250px;
+    position: relative;
+}
+
+/* Tabelas melhoradas */
+.table-container {
+    background: white;
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    background: #f8fafc;
+    padding: 18px 20px;
+    font-weight: 600;
+    color: var(--text-color-light);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* Status badges melhorados */
+.status-badge-admin {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.status-badge-admin.active {
+    background-color: #e0f2f1; /* verde claro */
+    color: #00796b;
+}
+
+.status-badge-admin.inactive {
+    background-color: #ffebee; /* vermelho claro */
+    color: #c62828;
+}
+
+
+/* Modais melhorados */
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 25px 30px 0;
+    border-bottom: none;
+}
+
+.modal-header h3 {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-color-light);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: var(--danger);
+}
+
+/* Botões melhorados */
+.btn {
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Estilos para a busca de usuários no modal de afiliados */
+#userSearchResults {
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    width: calc(100% - 2px);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1050; /* Garante que fique sobre outros elementos do modal */
+}
+
+.user-search-item {
+    padding: 12px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.user-search-item:last-child {
+    border-bottom: none;
+}
+
+.user-search-item:hover {
+    background-color: #f5f5f5;
+}
+
+.user-search-item strong {
+    display: block;
+    color: #333;
+}
+
+.user-search-item small {
+    color: #777;
+}
+
+
+/* Dark mode support */
+body.dark-mode .metric-card,
+body.dark-mode .chart-card,
+body.dark-mode .table-container {
+    background: #2d3748;
+    border-color: #4a5568;
+}
+
+body.dark-mode .topbar {
+    background: #2d3748;
+    border-color: #4a5568;
+}
+
+body.dark-mode .user-info {
+    background: #1a202c;
+    border-color: #4a5568;
+}
+
+body.dark-mode .admin-table th {
+    background: #1a202c;
+}
+
+body.dark-mode .admin-table tbody tr:hover {
+    background: #4a5568;
+}
+
+body.dark-mode .modal-content {
+     background: #2d3748;
+     border-color: #4a5568;
+}
+
+body.dark-mode .close-modal {
+    color: #a0aec0;
+}
+body.dark-mode .close-modal:hover {
+    color: #e53e3e;
+}
+
+
+/* Responsividade melhorada */
+@media (max-width: 1200px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .metric-card {
+        padding: 20px;
+    }
+    
+    .topbar {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .user-info {
+        align-self: flex-end;
+    }
+}

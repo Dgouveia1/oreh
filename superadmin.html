@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superadmin - Oreh</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Importando estilos existentes para manter a consistência -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <!-- Estilos específicos do painel admin -->
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div id="toast" class="toast hidden"></div>
+
+    <div id="appContainer" class="app-container" style="display: block;">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1><i class="fas fa-user-shield"></i> <span>SUPERADMIN</span></h1>  
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active" data-page="adminDashboard"><i class="fas fa-chart-line"></i> <span>Visão Geral</span></a></li>
+                <li><a href="#" class="nav-link" data-page="adminUsers"><i class="fas fa-users-cog"></i> <span>Clientes</span></a></li>
+                <li><a href="#" class="nav-link" data-page="adminPlans"><i class="fas fa-file-invoice-dollar"></i> <span>Planos</span></a></li>
+                <li><a href="#" class="nav-link" data-page="adminAffiliates"><i class="fas fa-sitemap"></i> <span>Afiliados</span></a></li>
+                <li><a href="index.html" class="nav-link"><i class="fas fa-arrow-left"></i> <span>Voltar para Oreh</span></a></li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <div class="topbar">
+                <h2 id="pageTitle">Visão Geral</h2>
+                <div class="user-info">
+                    <div class="user-avatar">SA</div>
+                    <span>Super Admin</span>
+                </div>
+            </div>
+
+            <!-- Página de Visão Geral (Dashboard do Superadmin) -->
+            <div id="adminDashboardPage" class="page-content active">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="card-icon icon-valor"><i class="fas fa-hand-holding-usd"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="totalRevenue">R$ 0,00</span>
+                            <span class="metric-label">Receita Total (MRR)</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="card-icon icon-atendimentos"><i class="fas fa-users"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="totalUsers">0</span>
+                            <span class="metric-label">Total de Clientes</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="card-icon icon-leads"><i class="fas fa-check-circle"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="activeSubscriptions">0</span>
+                            <span class="metric-label">Assinaturas Ativas</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="card-icon icon-ia"><i class="fas fa-sitemap"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="totalAffiliates">0</span>
+                            <span class="metric-label">Total de Afiliados</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3>Receita Mensal Recorrente (MRR)</h3>
+                        <div class="chart-container">
+                            <canvas id="mrrChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Novos Clientes por Mês</h3>
+                         <div class="chart-container">
+                            <canvas id="newClientsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Página de Gestão de Clientes -->
+            <div id="adminUsersPage" class="page-content">
+                <div class="page-header">
+                    <h2>Gerenciar Clientes (Usuários do App)</h2>
+                    <!-- O botão de novo cliente foi removido, a gestão será via edição -->
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Contato</th>
+                                <th>Empresa</th>
+                                <th>Plano</th>
+                                <th>Status</th>
+                                <th>Afiliado</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Conteúdo gerado via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Página de Gestão de Planos -->
+            <div id="adminPlansPage" class="page-content">
+                <div class="page-header">
+                    <h2>Gerenciar Planos</h2>
+                    <button class="btn btn-primary" id="openPlanModalBtn"><i class="fas fa-plus"></i> Novo Plano</button>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Nome do Plano</th>
+                                <th>Preço</th>
+                                <th>Limite de Conversas</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plansTableBody">
+                            <!-- Conteúdo gerado via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Página de Gestão de Afiliados -->
+            <div id="adminAffiliatesPage" class="page-content">
+                 <div class="page-header">
+                    <h2>Gerenciar Afiliados</h2>
+                    <button class="btn btn-primary" id="openAffiliateModalBtn"><i class="fas fa-plus"></i> Novo Afiliado</button>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Nome do Afiliado</th>
+                                <th>E-mail de Contato</th>
+                                <th>Data de Cadastro</th>
+                                <th>Comissão</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="affiliatesTableBody">
+                            <!-- Conteúdo gerado via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modais -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3 id="userModalTitle">Editar Cliente</h3>
+            </div>
+            <form id="userForm">
+                <input type="hidden" id="userId">
+                <input type="hidden" id="companyId">
+                <div class="input-group">
+                    <label for="userName">Nome do Contato</label>
+                    <input type="text" id="userName" readonly>
+                </div>
+                <div class="input-group">
+                    <label for="userEmail">Email de Login</label>
+                    <input type="email" id="userEmail" readonly>
+                </div>
+                <div class="input-group">
+                    <label for="userCompany">Empresa</label>
+                    <input type="text" id="userCompany" readonly>
+                </div>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="userPlan">Plano</label>
+                        <select id="userPlan" required></select>
+                    </div>
+                    <div class="input-group">
+                        <label for="userAffiliate">Afiliado</label>
+                        <select id="userAffiliate"></select>
+                    </div>
+                </div>
+                 <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="planModal">
+        <div class="modal-content">
+             <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3 id="planModalTitle">Novo Plano</h3>
+            </div>
+            <form id="planForm">
+                <input type="hidden" id="planId">
+                <div class="input-group">
+                    <label for="planName">Nome do Plano</label>
+                    <input type="text" id="planName" required>
+                </div>
+                <div class="input-group">
+                    <label for="planDescription">Descrição</label>
+                    <textarea id="planDescription" rows="3"></textarea>
+                </div>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="planPrice">Preço (R$)</label>
+                        <input type="number" step="0.01" id="planPrice" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="planChatLimit">Limite de Conversas/Mês</label>
+                        <input type="number" id="planChatLimit" required>
+                    </div>
+                </div>
+                 <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal de Afiliado -->
+    <div class="modal" id="affiliateModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3 id="affiliateModalTitle">Novo Afiliado</h3>
+            </div>
+            <form id="affiliateForm">
+                <input type="hidden" id="affiliateUserId">
+                
+                <div class="input-group">
+                    <label for="userSearch">Buscar Usuário</label>
+                    <input type="text" id="userSearch" placeholder="Digite nome ou e-mail do usuário...">
+                    <div id="userSearchResults"></div>
+                </div>
+
+                <div class="input-group">
+                    <label for="affiliateName">Nome do Afiliado (será preenchido ao selecionar)</label>
+                    <input type="text" id="affiliateName" readonly>
+                </div>
+                <div class="input-group">
+                    <label for="affiliateEmail">E-mail de Contato (será preenchido ao selecionar)</label>
+                    <input type="email" id="affiliateEmail" readonly>
+                </div>
+                <div class="input-group">
+                    <label for="affiliateCommission">Taxa de Comissão (%)</label>
+                    <input type="number" id="affiliateCommission" step="1" min="0" max="100" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar Afiliado</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="js/admin-helpers.js"></script>
+    <script type="module" src="js/admin-clientes.js"></script>
+    <script type="module" src="js/admin.js"></script>
+    <script type="module" src="js/affiliates.js"></script>
+</body>
+</html>
+
