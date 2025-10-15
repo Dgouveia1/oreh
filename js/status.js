@@ -24,16 +24,25 @@ function showFirstConnectionModal(companyId) {
         const fullPhoneNumber = countryCode + phoneNumber.replace(/\D/g, '');
 
         try {
-            const { data, error } = await supabaseClient.functions.invoke('oreh-onboarding', {
-                body: {
+            // ✅ CORREÇÃO: Trocando a chamada da Supabase Edge Function por um fetch direto para o webhook do n8n.
+            const webhookUrl = 'https://oreh-n8n.p7rc7g.easypanel.host/webhook/oreh-onboarding';
+            const response = await fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
                     telefone: fullPhoneNumber,
                     company_id: companyId
-                },
+                })
             });
 
-            if (error) throw error;
-            if (data.error) throw new Error(data.message);
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`O servidor de automação respondeu com um erro: ${response.status} - ${errorText}`);
+            }
 
+            // O webhook n8n responde com '200' se o fluxo for concluído com sucesso.
             showToast('Instância criada com sucesso! A carregar QR Code...', 'success');
             logEvent('INFO', `Primeira conexão criada para o número: ${fullPhoneNumber}`);
             modal.style.display = 'none';
@@ -162,7 +171,7 @@ export async function updateConnectionStatus() {
             }
 
             if (qrCodeData.qrcode) {
-                statusElement.textContent = 'A AGUARDAR CONEXÃO';
+                statusElement.textContent = 'A AGUARdar CONEXÃO';
                 // A Mega API já retorna o data URI completo
                 qrCodeOutput.innerHTML = `<img src="${qrCodeData.qrcode}" alt="QR Code para conexão">`;
             } else {
@@ -220,8 +229,8 @@ export async function disconnectInstance() {
       const apiKey = secrets.evolution_api_key;
       const instanceKey = secrets.evolution_instance_name;
 
-      // Endpoint de logout da Mega API
-      const disconnectUrl = `${apiUrl}/rest/instance/logout/${instanceKey}`;
+      // ✅ CORREÇÃO: URL ajustada para o formato correto da API (instance_key antes de logout).
+      const disconnectUrl = `${apiUrl}/rest/instance/${instanceKey}/logout`;
       
       const response = await fetch(disconnectUrl, {
         method: 'DELETE',
@@ -254,3 +263,4 @@ export async function disconnectInstance() {
       disconnectBtn.textContent = 'Desconectar';
     }
 }
+
