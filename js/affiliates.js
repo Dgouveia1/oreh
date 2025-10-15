@@ -13,7 +13,7 @@ export async function renderAffiliatesTable() {
         if (error) throw error;
         
         tableBody.innerHTML = '';
-        if(data.length === 0) {
+        if(!data || data.length === 0) {
              tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 40px;">Nenhum afiliado encontrado.</td></tr>`;
              return;
         }
@@ -22,8 +22,14 @@ export async function renderAffiliatesTable() {
             const row = document.createElement('tr');
             // Armazenar todos os dados do afiliado no dataset da linha
             Object.keys(affiliate).forEach(key => {
-                row.dataset[key] = affiliate[key];
+                 // Converte a taxa de comissão para percentagem para o dataset
+                if (key === 'commission_rate' && affiliate[key] !== null) {
+                    row.dataset[key] = affiliate[key] * 100;
+                } else {
+                    row.dataset[key] = affiliate[key];
+                }
             });
+
             const registrationDate = new Date(affiliate.registration_date).toLocaleDateString('pt-BR');
             row.innerHTML = `
                 <td>${affiliate.affiliate_name}</td>
@@ -43,87 +49,22 @@ export async function renderAffiliatesTable() {
     }
 }
 
-
-async function searchUsers(searchTerm) {
-    const { data, error } = await supabaseClient
-        .from('users')
-        .select('id, full_name, email, role')
-        .or(`full_name.ilike.%${searchTerm}%,email.ilike.%${searchTerm}%`)
-        .eq('role', 'app_user') // Apenas usuários que ainda não são afiliados ou admins
-        .limit(5);
-
-    if (error) {
-        console.error('Erro ao buscar usuários:', error);
-        return [];
-    }
-    return data;
-}
-
 function openAffiliateEditModal(affiliateData) {
     const modal = document.getElementById('affiliateModal');
     document.getElementById('affiliateModalTitle').textContent = 'Editar Afiliado';
     
-    // Preencher e desabilitar a busca
-    const userSearchInput = document.getElementById('userSearch');
-    userSearchInput.value = `${affiliateData.affiliate_name} (${affiliateData.contact_email})`;
-    userSearchInput.disabled = true;
-    document.getElementById('userSearchResults').innerHTML = '';
-
-
+    // Preenche os campos do formulário de edição
     document.getElementById('affiliateUserId').value = affiliateData.affiliate_id;
     document.getElementById('affiliateName').value = affiliateData.affiliate_name;
     document.getElementById('affiliateEmail').value = affiliateData.contact_email;
-    document.getElementById('affiliateCommission').value = affiliateData.commission_rate * 100;
+    document.getElementById('affiliateCommission').value = affiliateData.commission_rate; // Já está em percentagem no dataset
 
     modal.style.display = 'flex';
 }
 
 
 export function setupAffiliateModal() {
-    const openAffiliateModalBtn = document.getElementById('openAffiliateModalBtn');
-    const userSearchInput = document.getElementById('userSearch');
-    const userSearchResults = document.getElementById('userSearchResults');
-
-    openAffiliateModalBtn.addEventListener('click', () => {
-        const modal = document.getElementById('affiliateModal');
-        document.getElementById('affiliateModalTitle').textContent = 'Novo Afiliado';
-        document.getElementById('affiliateForm').reset();
-        userSearchInput.disabled = false;
-        userSearchResults.innerHTML = '';
-        modal.style.display = 'flex';
-    });
-
-    let debounceTimer;
-    userSearchInput.addEventListener('keyup', (e) => {
-        clearTimeout(debounceTimer);
-        const searchTerm = e.target.value;
-        if (searchTerm.length < 3) {
-            userSearchResults.innerHTML = '';
-            return;
-        }
-        debounceTimer = setTimeout(async () => {
-            const users = await searchUsers(searchTerm);
-            userSearchResults.innerHTML = '';
-            if (users.length > 0) {
-                users.forEach(user => {
-                    const item = document.createElement('div');
-                    item.className = 'user-search-item';
-                    item.innerHTML = `<strong>${user.full_name}</strong><small>${user.email}</small>`;
-                    item.addEventListener('click', () => {
-                        document.getElementById('affiliateUserId').value = user.id;
-                        document.getElementById('affiliateName').value = user.full_name;
-                        document.getElementById('affiliateEmail').value = user.email;
-                        userSearchInput.value = `${user.full_name} (${user.email})`;
-                        userSearchResults.innerHTML = '';
-                    });
-                    userSearchResults.appendChild(item);
-                });
-            } else {
-                userSearchResults.innerHTML = '<div class="user-search-item">Nenhum usuário encontrado.</div>';
-            }
-        }, 300);
-    });
-
+    // A criação agora é pública, então o modal é apenas para edição e deleção
     document.getElementById('affiliatesTableBody').addEventListener('click', (e) => {
         const button = e.target.closest('button[data-action]');
         if (!button) return;
@@ -132,14 +73,20 @@ export function setupAffiliateModal() {
         const action = button.dataset.action;
 
         if (action === 'edit-affiliate') {
+            // A função de edição agora só precisa dos dados da linha
             openAffiliateEditModal(row.dataset);
         } else if (action === 'delete-affiliate') {
             deleteAffiliate(row.dataset.affiliate_id, row.dataset.affiliate_name);
         }
     });
 
+    const affiliateForm = document.getElementById('affiliateForm');
+    if(affiliateForm) {
+        affiliateForm.addEventListener('submit', handleAffiliateFormSubmit);
+    }
 }
 
+// Função para lidar com a submissão do formulário de EDIÇÃO
 export async function handleAffiliateFormSubmit(event) {
     event.preventDefault();
     const form = event.target;
@@ -149,53 +96,32 @@ export async function handleAffiliateFormSubmit(event) {
 
     const userId = document.getElementById('affiliateUserId').value;
     const commissionRate = parseFloat(document.getElementById('affiliateCommission').value) / 100;
-    const affiliateName = document.getElementById('affiliateName').value;
-    const contactEmail = document.getElementById('affiliateEmail').value;
     
-    // Se userId está vazio, significa que é um novo afiliado e um usuário precisa ter sido selecionado
     if (!userId) {
-        showToast('Por favor, busque e selecione um usuário para promover.', 'error');
+        showToast('ID do afiliado não encontrado.', 'error');
         saveBtn.disabled = false;
-        saveBtn.textContent = 'Salvar Afiliado';
+        saveBtn.textContent = 'Salvar Alterações';
         return;
     }
 
     try {
-        // Inicia uma transação
-        // Passo 1: Inserir ou atualizar na tabela 'affiliates'
-        const { data: affiliateData, error: affiliateError } = await supabaseClient
+        const { error } = await supabaseClient
             .from('affiliates')
-            .upsert({ 
-                id: userId, 
-                name: affiliateName,
-                contact_email: contactEmail,
-                commission_rate: commissionRate 
-            }, { onConflict: 'id' })
-            .select()
-            .single();
-
-        if (affiliateError) throw affiliateError;
-
-        // Passo 2: Atualizar a role do usuário na tabela 'users' para 'admin'
-        const { error: userError } = await supabaseClient
-            .from('users')
-            .update({ role: 'admin' })
+            .update({ commission_rate: commissionRate })
             .eq('id', userId);
 
-        if (userError) throw userError;
+        if (error) throw error;
 
-        showToast('Afiliado salvo com sucesso!', 'success');
+        showToast('Comissão do afiliado atualizada com sucesso!', 'success');
         document.getElementById('affiliateModal').style.display = 'none';
-        form.reset();
-        renderAffiliatesTable(); // Atualiza a tabela
+        await renderAffiliatesTable(); // Atualiza a tabela
 
     } catch (error) {
-        console.error('Erro ao salvar afiliado:', error);
-        showToast(`Erro ao salvar afiliado: ${error.message}`, 'error');
-        // TODO: Implementar lógica de rollback se um dos passos falhar
+        console.error('Erro ao atualizar afiliado:', error);
+        showToast(`Erro ao atualizar afiliado: ${error.message}`, 'error');
     } finally {
         saveBtn.disabled = false;
-        saveBtn.textContent = 'Salvar Afiliado';
+        saveBtn.textContent = 'Salvar Alterações';
     }
 }
 
@@ -231,3 +157,4 @@ async function deleteAffiliate(affiliateId, affiliateName) {
         showToast(`Erro ao remover afiliado: ${error.message}`, 'error');
     }
 }
+

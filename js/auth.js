@@ -59,11 +59,15 @@ async function checkLoginState() {
             const companyStatus = userProfile.companies.status;
             console.log(`[Auth.js] Status da empresa: ${companyStatus}`);
 
+            // ALTERAÇÃO: Redirecionamento para onboarding foi removido para permitir o acesso
+            // ao painel principal mesmo com o onboarding incompleto.
+            /*
             if (companyStatus === 'onboarding') {
                 console.log('[Auth.js] Status é "onboarding". Redirecionando para /onboarding.html...');
                 window.location.replace('onboarding.html');
                 return; // Impede a execução do resto da função
             }
+            */
             
             // Para qualquer outro status ('active', 'payment_pending', etc), permite o acesso.
             console.log('[Auth.js] Acesso permitido. Mostrando a aplicação principal.');
@@ -217,3 +221,4 @@ async function signUp() {
 
 
 export { checkLoginState, login, logout, signUp };
+

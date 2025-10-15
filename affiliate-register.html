@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oreh - Cadastro de Afiliado</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="onboarding-body">
+    <div id="toast" class="toast hidden"></div>
+    <div class="onboarding-container">
+        <div class="onboarding-card">
+            <h1 class="logo-text">OREH</h1>
+            <h2>Cadastro de Afiliado</h2>
+            <p>Preencha os dados abaixo para se tornar um parceiro Oreh.</p>
+            <form id="affiliateRegisterForm">
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="input-group">
+                        <label for="fullName">Nome Completo</label>
+                        <input type="text" id="fullName" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="cpfCnpj">CPF ou CNPJ</label>
+                        <input type="text" id="cpfCnpj" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="phone">Telefone</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="email">E-mail de Acesso</label>
+                        <input type="email" id="email" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="paymentAccount">Chave PIX para Pagamento</label>
+                    <input type="text" id="paymentAccount" required>
+                </div>
+                 <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="input-group">
+                        <label for="password">Crie uma Senha</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="passwordConfirm">Confirme sua Senha</label>
+                        <input type="password" id="passwordConfirm" required>
+                    </div>
+                </div>
+                <div class="step-actions">
+                    <button type="submit" id="registerBtn" class="btn btn-primary">Finalizar Cadastro</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="js/affiliate-register.js"></script>
+
+</body>
+</html>

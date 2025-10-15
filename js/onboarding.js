@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h2>Escolha o plano que melhor se encaixa no seu negócio.</h2>
                 <p>Todos os planos começam com um período de 7 dias para você testar. A cobrança só virá após esse período.</p>
                 <div class="plans-grid" id="plansGridContainer">
-                    <p class="loading-message">A carregar planos...</p>
+                    <p class="loading-message">Carregando planos...</p>
                 </div>
             </div>
         `;
@@ -192,10 +192,11 @@ document.addEventListener('DOMContentLoaded', () => {
         stepContainer.innerHTML = `
             <div class="step-content active">
                 <h2>Quase lá!</h2>
-                <p>Estamos aguardando a confirmação do seu pagamento. A fatura foi aberta em uma nova guia para sua conveniência.</p>
-                <p>Assim que o sistema de pagamentos nos notificar, seu acesso será totalmente liberado. Você também pode verificar o status manualmente.</p>
-                <button id="checkPaymentBtn" class="btn btn-primary">Verificar Status do Pagamento</button>
-                <button id="logoutBtn" class="btn btn-secondary" style="margin-top: 10px;">Sair</button>
+                <p>O pagamento da sua assinatura foi aberta em uma nova guia</p>
+                <p>Liberado seu periodo de teste</p>
+                <p>Já pode começar a usar o Oreh</p>
+                <button id="checkPaymentBtn" class="btn btn-primary">Verificar Status da Assinatura</button>
+                <button id="logoutBtn" class="btn btn-secondary" style="margin-top: 10px;">Acessar o painel com 7 dias de teste</button>
             </div>
         `;
         document.getElementById('checkPaymentBtn').addEventListener('click', handleCheckPaymentStatus);

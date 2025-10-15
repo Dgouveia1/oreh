@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Superadmin - Oreh</title>
+    <title>Painel de Gestão - Oreh</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
@@ -20,11 +20,13 @@
     <div id="appContainer" class="app-container" style="display: block;">
         <div class="sidebar">
             <div class="sidebar-header">
+                <!-- O texto aqui será alterado dinamicamente via JS -->
                 <h1><i class="fas fa-user-shield"></i> <span>SUPERADMIN</span></h1>  
             </div>
             <ul class="nav-links">
                 <li><a href="#" class="nav-link active" data-page="adminDashboard"><i class="fas fa-chart-line"></i> <span>Visão Geral</span></a></li>
-                <li><a href="#" class="nav-link" data-page="adminUsers"><i class="fas fa-users-cog"></i> <span>Clientes</span></a></li>
+                <!-- O texto aqui será "Gestão de Clientes" para superadmin e "Meus Clientes" para afiliado -->
+                <li><a href="#" class="nav-link" data-page="adminUsers"><i class="fas fa-users-cog"></i> <span>Gestão de Clientes</span></a></li>
                 <li><a href="#" class="nav-link" data-page="adminPlans"><i class="fas fa-file-invoice-dollar"></i> <span>Planos</span></a></li>
                 <li><a href="#" class="nav-link" data-page="adminAffiliates"><i class="fas fa-sitemap"></i> <span>Afiliados</span></a></li>
                 <li><a href="index.html" class="nav-link"><i class="fas fa-arrow-left"></i> <span>Voltar para Oreh</span></a></li>
@@ -35,19 +37,20 @@
             <div class="topbar">
                 <h2 id="pageTitle">Visão Geral</h2>
                 <div class="user-info">
+                    <!-- O texto do avatar e nome será alterado dinamicamente via JS -->
                     <div class="user-avatar">SA</div>
                     <span>Super Admin</span>
                 </div>
             </div>
 
-            <!-- Página de Visão Geral (Dashboard do Superadmin) -->
+            <!-- Página de Visão Geral (Dashboard) -->
             <div id="adminDashboardPage" class="page-content active">
                 <div class="metrics-grid">
                     <div class="metric-card">
                         <div class="card-icon icon-valor"><i class="fas fa-hand-holding-usd"></i></div>
                         <div class="card-content">
                             <span class="metric-value" id="totalRevenue">R$ 0,00</span>
-                            <span class="metric-label">Receita Total (MRR)</span>
+                            <span class="metric-label" id="revenueLabel">Receita Total (MRR)</span>
                         </div>
                     </div>
                     <div class="metric-card">
@@ -61,10 +64,11 @@
                         <div class="card-icon icon-leads"><i class="fas fa-check-circle"></i></div>
                         <div class="card-content">
                             <span class="metric-value" id="activeSubscriptions">0</span>
-                            <span class="metric-label">Assinaturas Ativas</span>
+                            <span class="metric-label">Clientes Ativos</span>
                         </div>
                     </div>
-                    <div class="metric-card">
+                    <!-- Card de Total de Afiliados será escondido para a role 'admin' -->
+                    <div class="metric-card" id="totalAffiliatesCard">
                         <div class="card-icon icon-ia"><i class="fas fa-sitemap"></i></div>
                         <div class="card-content">
                             <span class="metric-value" id="totalAffiliates">0</span>
@@ -91,8 +95,8 @@
             <!-- Página de Gestão de Clientes -->
             <div id="adminUsersPage" class="page-content">
                 <div class="page-header">
-                    <h2>Gerenciar Clientes (Usuários do App)</h2>
-                    <!-- O botão de novo cliente foi removido, a gestão será via edição -->
+                    <!-- O Título aqui será alterado dinamicamente via JS -->
+                    <h2 id="clientsPageTitle">Gerenciar Clientes</h2>
                 </div>
                 <div class="table-container">
                     <table class="admin-table">
@@ -102,7 +106,7 @@
                                 <th>Empresa</th>
                                 <th>Plano</th>
                                 <th>Status</th>
-                                <th>Afiliado</th>
+                                <th id="affiliateColumnHeader">Afiliado</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -141,7 +145,7 @@
             <div id="adminAffiliatesPage" class="page-content">
                  <div class="page-header">
                     <h2>Gerenciar Afiliados</h2>
-                    <button class="btn btn-primary" id="openAffiliateModalBtn"><i class="fas fa-plus"></i> Novo Afiliado</button>
+                    <a href="affiliate-register.html" target="_blank" class="btn btn-primary"><i class="fas fa-plus"></i> Novo Afiliado</a>
                 </div>
                 <div class="table-container">
                     <table class="admin-table">
@@ -176,7 +180,7 @@
                 <input type="hidden" id="companyId">
                 <div class="input-group">
                     <label for="userName">Nome do Contato</label>
-                    <input type="text" id="userName" readonly>
+                    <input type="text" id="userName">
                 </div>
                 <div class="input-group">
                     <label for="userEmail">Email de Login</label>
@@ -184,7 +188,7 @@
                 </div>
                 <div class="input-group">
                     <label for="userCompany">Empresa</label>
-                    <input type="text" id="userCompany" readonly>
+                    <input type="text" id="userCompany">
                 </div>
                 <div class="form-grid">
                     <div class="input-group">
@@ -241,23 +245,17 @@
         <div class="modal-content">
             <button class="close-modal">&times;</button>
             <div class="modal-header">
-                <h3 id="affiliateModalTitle">Novo Afiliado</h3>
+                <h3 id="affiliateModalTitle">Editar Afiliado</h3>
             </div>
             <form id="affiliateForm">
                 <input type="hidden" id="affiliateUserId">
                 
                 <div class="input-group">
-                    <label for="userSearch">Buscar Usuário</label>
-                    <input type="text" id="userSearch" placeholder="Digite nome ou e-mail do usuário...">
-                    <div id="userSearchResults"></div>
-                </div>
-
-                <div class="input-group">
-                    <label for="affiliateName">Nome do Afiliado (será preenchido ao selecionar)</label>
+                    <label for="affiliateName">Nome do Afiliado</label>
                     <input type="text" id="affiliateName" readonly>
                 </div>
                 <div class="input-group">
-                    <label for="affiliateEmail">E-mail de Contato (será preenchido ao selecionar)</label>
+                    <label for="affiliateEmail">E-mail de Contato</label>
                     <input type="email" id="affiliateEmail" readonly>
                 </div>
                 <div class="input-group">
@@ -265,7 +263,7 @@
                     <input type="number" id="affiliateCommission" step="1" min="0" max="100" required>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Salvar Afiliado</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                 </div>
             </form>
         </div>
@@ -278,4 +276,3 @@
     <script type="module" src="js/affiliates.js"></script>
 </body>
 </html>
-
