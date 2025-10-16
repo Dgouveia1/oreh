@@ -2,18 +2,18 @@
 #atendimentosPage.active {
     display: grid;
     grid-template-rows: auto auto 1fr;
-    gap: 30px;
-    height: calc(100vh - 140px);
+    gap: 3rem;
+    height: calc(100vh - 14rem);
 }
 
 /* Seção de destaque para atendimento humano */
 .human-attention-section {
     background: linear-gradient(135deg, var(--card-bg), var(--bg-color));
-    border-radius: 20px;
-    padding: 25px 30px;
+    border-radius: 2rem;
+    padding: 2.5rem 3rem;
     box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
-    border-left: 6px solid var(--danger);
+    border: 0.1rem solid var(--border-color);
+    border-left: 0.6rem solid var(--danger);
     animation: fadeIn 0.5s ease;
     position: relative;
     overflow: hidden;
@@ -24,71 +24,71 @@
     position: absolute;
     top: 0;
     right: 0;
-    width: 100px;
-    height: 100px;
+    width: 10rem;
+    height: 10rem;
     background: radial-gradient(circle, rgba(231, 76, 60, 0.1) 0%, transparent 70%);
 }
 
 .human-attention-section h3 {
     color: var(--danger);
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 1.2rem;
 }
 
 .human-attention-section h3 i {
-    font-size: 24px;
+    font-size: 2.4rem;
 }
 
 .human-attention-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(min(30rem, 100%), 1fr));
+    gap: 2rem;
 }
 
 /* Cabeçalho do Funil */
 .page-header {
-    margin-bottom: -15px;
+    margin-bottom: -1.5rem;
 }
 
 .page-header h2 {
     font-weight: 800;
     color: var(--text-color);
-    font-size: 26px;
+    font-size: 2.6rem;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 1.2rem;
 }
 
 .page-header h2::before {
     content: '';
-    width: 6px;
-    height: 30px;
+    width: 0.6rem;
+    height: 3rem;
     background: linear-gradient(to bottom, var(--primary), var(--secondary));
-    border-radius: 3px;
+    border-radius: 0.3rem;
 }
 
 /* Estrutura do Kanban */
 .kanban-board {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 25px;
+    /* AJUSTE: Grid fluida que se adapta */
+    grid-template-columns: repeat(auto-fit, minmax(min(30rem, 100%), 1fr));
+    gap: 2.5rem;
     overflow-x: auto;
     min-height: 0;
-    padding-bottom: 10px;
+    padding-bottom: 1rem;
 }
 
 .kanban-column {
     background: linear-gradient(135deg, var(--bg-color), var(--card-bg));
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 20px;
+    border: 0.1rem solid var(--border-color);
+    border-radius: 1.6rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-    min-width: 300px;
     box-shadow: var(--shadow);
     transition: var(--transition);
     position: relative;
@@ -101,32 +101,32 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
+    height: 0.4rem;
     background: linear-gradient(90deg, var(--primary), var(--secondary));
 }
 
 .kanban-column:hover {
-    transform: translateY(-5px);
+    transform: translateY(-0.5rem);
     box-shadow: var(--shadow-lg);
 }
 
 .kanban-column-title {
     font-weight: 700;
-    font-size: 18px;
+    font-size: 1.8rem;
     color: var(--text-color);
-    padding-bottom: 18px;
-    margin-bottom: 18px;
-    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 1.8rem;
+    margin-bottom: 1.8rem;
+    border-bottom: 0.2rem solid var(--border-color);
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 1rem;
 }
 
 .kanban-column-title::before {
     content: '';
-    width: 12px;
-    height: 12px;
+    width: 1.2rem;
+    height: 1.2rem;
     border-radius: 50%;
     background: var(--primary);
 }
@@ -151,49 +151,24 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    min-height: 120px;
-    /* overflow-y: auto; */ /* ✅ REMOVIDO para empilhar */
-    /* padding-right: 10px; */ /* ✅ REMOVIDO espaçamento da barra de rolagem */
-}
-
-/* Estilização da barra de rolagem (mantido caso necessário em outros lugares) */
-.kanban-cards-container::-webkit-scrollbar {
-    width: 8px;
-}
-
-.kanban-cards-container::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 4px;
-}
-
-.kanban-cards-container::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 10px;
-}
-
-body.dark-mode .kanban-cards-container::-webkit-scrollbar-thumb {
-    background-color: #555;
-}
-
-.kanban-cards-container::-webkit-scrollbar-thumb:hover {
-    background-color: #aaa;
+    gap: 1.8rem;
+    min-height: 12rem;
 }
 
 /* Card de Chat */
 .chat-card {
     background-color: var(--card-bg);
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 1.2rem;
+    padding: 2rem;
     box-shadow: var(--shadow);
     cursor: grab;
     transition: var(--transition);
-    border-left: 5px solid var(--gray);
+    border-left: 0.5rem solid var(--gray);
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 130px;
+    min-height: 13rem;
     position: relative;
     overflow: hidden;
 }
@@ -204,14 +179,14 @@ body.dark-mode .kanban-cards-container::-webkit-scrollbar-thumb {
     top: 0;
     left: 0;
     right: 0;
-    height: 3px;
+    height: 0.3rem;
     background: linear-gradient(90deg, var(--primary), var(--secondary));
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
 .chat-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-0.5rem);
     box-shadow: var(--shadow-lg);
 }
 
@@ -224,7 +199,7 @@ body.dark-mode .kanban-cards-container::-webkit-scrollbar-thumb {
     opacity: 0.6;
     transform: scale(0.98) rotate(3deg);
     cursor: grabbing;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,0.3);
 }
 
 body.dragging-card {
@@ -233,12 +208,12 @@ body.dragging-card {
 
 .kanban-column.drag-over {
     background-color: rgba(255, 127, 64, 0.05);
-    border: 2px dashed var(--primary);
+    border: 0.2rem dashed var(--primary);
 }
 
 .kanban-column.drag-over .kanban-cards-container {
     background-color: rgba(255, 127, 64, 0.02);
-    border-radius: 8px;
+    border-radius: 0.8rem;
 }
 
 body.dark-mode .kanban-column.drag-over .kanban-cards-container {
@@ -247,25 +222,24 @@ body.dark-mode .kanban-column.drag-over .kanban-cards-container {
 
 /* Conteúdo do Card */
 .chat-info {
-    margin-bottom: 12px; /* Reduz margem para caber o nome do cliente */
+    margin-bottom: 1.2rem;
 }
 
 .customer-name {
     font-weight: 700;
     color: var(--text-color);
     font-size: 1.1em;
-    margin-bottom: 5px;
-    display: block; /* Garante que o nome do cliente fique em uma linha separada */
+    margin-bottom: 0.5rem;
+    display: block;
 }
 
-/* ✅ NOVO: Estilo para o nome do cliente vinculado */
 .linked-client-name {
     font-size: 0.85em;
     color: var(--text-color-light);
-    margin-bottom: 8px;
+    margin-bottom: 0.8rem;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 0.6rem;
 }
 
 .linked-client-name i {
@@ -288,7 +262,7 @@ body.dark-mode .kanban-column.drag-over .kanban-cards-container {
     align-items: center;
     font-size: 0.85em;
     color: var(--text-color-light);
-    margin-top: 15px;
+    margin-top: 1.5rem;
 }
 
 .lead-value {
@@ -297,91 +271,57 @@ body.dark-mode .kanban-column.drag-over .kanban-cards-container {
     color: var(--success);
     margin-bottom: 0;
     text-align: right;
-    border-top: 1px solid var(--border-color);
-    padding-top: 12px;
-    margin-top: 12px;
+    border-top: 0.1rem solid var(--border-color);
+    padding-top: 1.2rem;
+    margin-top: 1.2rem;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 8px;
+    gap: 0.8rem;
 }
 
 .lead-value::before {
     content: '💰';
-    font-size: 16px;
+    font-size: 1.6rem;
 }
 
 .status-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
+    padding: 0.6rem 1.2rem;
+    border-radius: 2rem;
     font-weight: 700;
     text-transform: capitalize;
     color: white;
     font-size: 0.8em;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 0.2rem 0.8rem rgba(0,0,0,0.15);
 }
 
-.status-badge[data-status="Aguardando"] { 
-    background: linear-gradient(135deg, #f39c12, #e67e22);
-}
-
-.status-badge[data-status="Em atendimento"] { 
-    background: linear-gradient(135deg, #3498db, #2980b9);
-}
-
-.status-badge[data-status="ATENDIMENTO_HUMANO"] { 
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-}
-
-.status-badge[data-status="Finalizado"] { 
-    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
-}
-
-.status-badge[data-status="N/A"] { 
-    background: linear-gradient(135deg, #bdc3c7, #95a5a6);
-}
+.status-badge[data-status="Aguardando"] { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.status-badge[data-status="Em atendimento"] { background: linear-gradient(135deg, #3498db, #2980b9); }
+.status-badge[data-status="ATENDIMENTO_HUMANO"] { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.status-badge[data-status="Finalizado"] { background: linear-gradient(135deg, #95a5a6, #7f8c8d); }
+.status-badge[data-status="N/A"] { background: linear-gradient(135deg, #bdc3c7, #95a5a6); }
 
 /* Mensagens de feedback */
 .loading-message {
     text-align: center;
-    padding: 30px;
+    padding: 3rem;
     color: var(--gray);
-    font-size: 16px;
+    font-size: 1.6rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 1.5rem;
 }
 
 .loading-message i {
-    font-size: 40px;
+    font-size: 4rem;
     color: var(--primary);
 }
 
-.loading-message.error {
-    color: var(--danger);
-}
-
-.loading-message.error i {
-    color: var(--danger);
-}
-
-@media (max-width: 1200px) {
-    .kanban-board {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
+.loading-message.error { color: var(--danger); }
+.loading-message.error i { color: var(--danger); }
 
 @media (max-width: 768px) {
-    .kanban-board {
-        grid-template-columns: 1fr;
-    }
-    
-    .human-attention-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .kanban-column {
-        min-width: auto;
-    }
+    .kanban-board, .human-attention-container { grid-template-columns: 1fr; }
+    .kanban-column { min-width: auto; }
 }

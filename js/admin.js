@@ -153,11 +153,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (error) throw error;
             tableBody.innerHTML = data.map(plan => `
                 <tr data-id="${plan.id}" data-name="${plan.name}" data-description="${plan.description || ''}" data-price="${plan.price}" data-monthly_chat_limit="${plan.monthly_chat_limit || ''}">
-                    <td>${plan.name}</td>
-                    <td>R$ ${plan.price.toFixed(2).replace('.', ',')}</td>
-                    <td>${plan.monthly_chat_limit || 'Ilimitado'}</td>
-                    <td><span class="status-badge-admin ${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Ativo' : 'Inativo'}</span></td>
-                    <td class="table-actions">
+                    <td data-label="Plano">${plan.name}</td>
+                    <td data-label="Preço">R$ ${plan.price.toFixed(2).replace('.', ',')}</td>
+                    <td data-label="Limite Conversas">${plan.monthly_chat_limit || 'Ilimitado'}</td>
+                    <td data-label="Status"><span class="status-badge-admin ${plan.is_active ? 'active' : 'inactive'}">${plan.is_active ? 'Ativo' : 'Inativo'}</span></td>
+                    <td class="table-actions" data-label="Ações">
                         <button class="btn btn-small btn-secondary" data-action="edit-plan"><i class="fas fa-edit"></i></button>
                         <button class="btn btn-small btn-danger" data-action="delete-plan"><i class="fas fa-trash"></i></button>
                     </td>

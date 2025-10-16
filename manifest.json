@@ -1,0 +1,22 @@
+{
+    "name": "Oreh",
+    "short_name": "Oreh",
+    "description": "Gestão de Atendimentos com Inteligência Artificial no WhatsApp.",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#FF7F40",
+    "theme_color": "#FF7F40",
+    "icons": [
+      {
+        "src": "favicon.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "favicon.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  

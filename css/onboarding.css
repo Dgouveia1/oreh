@@ -5,7 +5,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 20px;
+    padding: 2rem;
     position: relative;
     overflow: hidden;
 }
@@ -28,59 +28,59 @@
 
 .onboarding-container {
     width: 100%;
-    max-width: 700px;
+    max-width: 70rem;
     animation: fadeIn 0.5s ease;
     position: relative;
     z-index: 1;
 }
 
 .onboarding-header {
-    margin-bottom: 30px;
+    margin-bottom: 3rem;
     text-align: center;
 }
 
 .onboarding-header .logo-text {
     color: white;
-    font-size: 52px;
-    margin-bottom: 20px;
+    font-size: 5.2rem;
+    margin-bottom: 2rem;
     font-weight: 800;
-    text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    text-shadow: 0 0.4rem 1.2rem rgba(0,0,0,0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 1.5rem;
 }
 
 .onboarding-header .logo-text::before {
     content: '🚀';
-    font-size: 48px;
+    font-size: 4.8rem;
 }
 
 .progress-bar-container {
     width: 100%;
     background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 12px;
-    height: 12px;
+    border-radius: 1.2rem;
+    height: 1.2rem;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 0.2rem 0.8rem rgba(0,0,0,0.1);
 }
 
 .progress-bar {
     width: 0%;
     height: 100%;
     background: linear-gradient(90deg, white, #f0f0f0);
-    border-radius: 12px;
+    border-radius: 1.2rem;
     transition: width 0.4s ease-in-out;
-    box-shadow: 0 2px 8px rgba(255,255,255,0.3);
+    box-shadow: 0 0.2rem 0.8rem rgba(255,255,255,0.3);
 }
 
 .onboarding-card {
     background-color: var(--card-bg);
-    border-radius: 24px;
-    padding: 50px;
+    border-radius: 2.4rem;
+    padding: 5rem;
     box-shadow: var(--shadow-lg);
-    border: 1px solid rgba(255,255,255,0.1);
-    backdrop-filter: blur(10px);
+    border: 0.1rem solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(1rem);
 }
 
 .onboarding-card::before {
@@ -89,94 +89,69 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
+    height: 0.4rem;
     background: linear-gradient(90deg, var(--primary), var(--secondary));
-    border-radius: 24px 24px 0 0;
+    border-radius: 2.4rem 2.4rem 0 0;
 }
 
 /* Estilos das etapas */
-.step-content {
-    animation: fadeIn 0.4s ease;
-}
-
+.step-content { animation: fadeIn 0.4s ease; }
 .step-content h2 {
     color: var(--primary);
-    font-size: 28px;
-    margin-bottom: 15px;
+    font-size: 2.8rem;
+    margin-bottom: 1.5rem;
     font-weight: 800;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 1.2rem;
 }
 
 .step-content h2::before {
     content: '';
-    width: 6px;
-    height: 30px;
+    width: 0.6rem;
+    height: 3rem;
     background: linear-gradient(to bottom, var(--primary), var(--secondary));
-    border-radius: 3px;
+    border-radius: 0.3rem;
 }
 
-.step-content p.description {
+.step-content p, .step-content p.description {
     color: var(--text-color-light);
-    font-size: 17px;
+    font-size: 1.7rem;
     line-height: 1.7;
-    margin-bottom: 35px;
-    padding: 20px;
-    background-color: var(--bg-color);
-    border-radius: 12px;
-    border-left: 4px solid var(--primary);
+    margin-bottom: 3.5rem;
 }
 
 .step-actions {
-    margin-top: 35px;
+    margin-top: 3.5rem;
     text-align: right;
     display: flex;
-    gap: 15px;
+    gap: 1.5rem;
     justify-content: flex-end;
 }
 
 .step-actions .btn {
-    padding: 14px 32px;
+    padding: 1.4rem 3.2rem;
     font-weight: 600;
-    border-radius: 12px;
+    border-radius: 1.2rem;
     display: flex;
     align-items: center;
-    gap: 10px;
-    min-width: 120px;
+    gap: 1rem;
+    min-width: 12rem;
     justify-content: center;
 }
 
-.step-actions .btn-primary {
-    box-shadow: 0 4px 15px rgba(255, 105, 0, 0.3);
-}
-
-.step-actions .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(255, 105, 0, 0.4);
-}
-
-.step-actions .btn-secondary {
-    box-shadow: 0 4px 15px rgba(149, 165, 166, 0.3);
-}
-
-.step-actions .btn-secondary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(149, 165, 166, 0.4);
-}
-
 /* Estilos para a seleção de planos */
-.plans-grid-onboarding {
+.plans-grid, .plans-grid-onboarding {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 25px;
-    margin: 30px 0;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    gap: 2.5rem;
+    margin: 3rem 0;
 }
 
-.plan-card-onboarding {
-    border: 2px solid var(--border-color);
-    border-radius: 16px;
-    padding: 30px 25px;
+.plan-card, .plan-card-onboarding {
+    border: 0.2rem solid var(--border-color);
+    border-radius: 1.6rem;
+    padding: 3rem 2.5rem;
     text-align: center;
     cursor: pointer;
     transition: var(--transition);
@@ -186,99 +161,53 @@
     overflow: hidden;
 }
 
-.plan-card-onboarding::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary), var(--secondary));
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-}
-
 .plan-card-onboarding:hover {
-    transform: translateY(-8px);
+    transform: translateY(-0.8rem);
     box-shadow: var(--shadow-lg);
     border-color: var(--primary);
 }
 
-.plan-card-onboarding:hover::before {
-    transform: scaleX(1);
-}
-
 .plan-card-onboarding.selected {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(255, 127, 64, 0.4), var(--shadow-lg);
+    box-shadow: 0 0 0 0.3rem rgba(255, 127, 64, 0.4), var(--shadow-lg);
     background: linear-gradient(135deg, var(--card-bg), rgba(255, 127, 64, 0.05));
 }
 
-.plan-card-onboarding.selected::before {
-    transform: scaleX(1);
-}
-
 .plan-card-onboarding h4 {
-    font-size: 20px;
+    font-size: 2rem;
     color: var(--text-color);
-    margin-bottom: 15px;
+    margin-bottom: 1.5rem;
     font-weight: 700;
 }
 
 .plan-card-onboarding .price {
-    font-size: 36px;
+    font-size: 3.6rem;
     font-weight: 800;
     color: var(--primary);
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
     line-height: 1;
 }
 
 .plan-card-onboarding .price span {
-    font-size: 16px;
+    font-size: 1.6rem;
     font-weight: 600;
     color: var(--text-color-light);
 }
 
-.plan-card-onboarding .features {
-    text-align: left;
-    margin: 20px 0;
-}
-
-.plan-card-onboarding .features ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.plan-card-onboarding .features li {
-    padding: 8px 0;
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-}
-
-.plan-card-onboarding .features li::before {
-    content: '✓';
-    color: var(--success);
-    font-weight: bold;
-    font-size: 16px;
-}
-
 /* Spinner de carregamento */
-.loading-spinner {
+.loading-spinner, .loading-message {
     text-align: center;
-    padding: 50px;
+    padding: 5rem;
     color: var(--primary);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 2rem;
+    font-size: 1.6rem;
 }
 
 .loading-spinner i {
-    font-size: 48px;
+    font-size: 4.8rem;
     animation: spin 1.5s linear infinite;
 }
 
@@ -290,55 +219,23 @@
 .loading-spinner p {
     margin-top: 0;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 1.8rem;
 }
 
 /* Formulários no onboarding */
-.onboarding-card .input-group {
-    margin-bottom: 25px;
-}
-
-.onboarding-card .input-group label {
-    font-weight: 600;
-    color: var(--text-color);
-    margin-bottom: 10px;
-}
-
 .onboarding-card .input-group input,
-.onboarding-card .input-group select {
-    padding: 16px 20px;
-    border: 2px solid var(--border-color);
-    border-radius: 12px;
-    font-size: 16px;
-    transition: var(--transition);
-    background-color: var(--input-bg);
-}
-
-.onboarding-card .input-group input:focus,
-.onboarding-card .input-group select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(255, 127, 64, 0.2);
-    transform: translateY(-2px);
+.onboarding-card .input-group select,
+.onboarding-card .input-group textarea {
+    padding: 1.6rem 2rem;
+    border: 0.2rem solid var(--border-color);
+    border-radius: 1.2rem;
+    font-size: 1.6rem;
 }
 
 @media (max-width: 768px) {
-    .onboarding-card {
-        padding: 35px 25px;
-    }
-    
-    .onboarding-header .logo-text {
-        font-size: 42px;
-    }
-    
-    .plans-grid-onboarding {
-        grid-template-columns: 1fr;
-    }
-    
-    .step-actions {
-        flex-direction: column;
-    }
-    
-    .step-actions .btn {
-        width: 100%;
-    }
+    .onboarding-card { padding: 3.5rem 2.5rem; }
+    .onboarding-header .logo-text { font-size: 4.2rem; }
+    .plans-grid, .plans-grid-onboarding { grid-template-columns: 1fr; }
+    .step-actions { flex-direction: column; }
+    .step-actions .btn { width: 100%; }
 }

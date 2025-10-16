@@ -32,11 +32,11 @@ export async function renderAffiliatesTable() {
 
             const registrationDate = new Date(affiliate.registration_date).toLocaleDateString('pt-BR');
             row.innerHTML = `
-                <td>${affiliate.affiliate_name}</td>
-                <td>${affiliate.contact_email}</td>
-                <td>${registrationDate}</td>
-                <td>${(affiliate.commission_rate * 100).toFixed(0)}%</td>
-                <td class="table-actions">
+                <td data-label="Nome">${affiliate.affiliate_name}</td>
+                <td data-label="E-mail">${affiliate.contact_email}</td>
+                <td data-label="Data Cadastro">${registrationDate}</td>
+                <td data-label="Comissão">${(affiliate.commission_rate * 100).toFixed(0)}%</td>
+                <td class="table-actions" data-label="Ações">
                     <button class="btn btn-small btn-secondary" data-action="edit-affiliate"><i class="fas fa-edit"></i></button>
                     <button class="btn btn-small btn-danger" data-action="delete-affiliate"><i class="fas fa-trash"></i></button>
                 </td>

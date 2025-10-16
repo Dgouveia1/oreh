@@ -1,164 +1,164 @@
 categoria,objeto,detalhes
-1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: email | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: affiliate_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: affiliate_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: email | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: role | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: address | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: contact_email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: hotmart_code | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: cpf_cnpj | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: phone | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: payment_info | TIPO: jsonb | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: commission_rate | TIPO: numeric | NULÁVEL: YES | PADRÃO: 0.20 | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: cpf_cnpj | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: phone | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: payment_info | TIPO: jsonb | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: hotmart_code | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: contact_email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: flow_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: user_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: tokens_used | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: id | TIPO: bigint | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: tokens_used | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: user_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: message | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: level | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: user_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: id | TIPO: bigint | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: level | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: metadata | TIPO: jsonb | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: user_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: company_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: chats,COLUNA: updated_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: chats,COLUNA: status | TIPO: text | NULÁVEL: YES | PADRÃO: '''Atendimento''::text'::text | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: chats,COLUNA: customer_phone | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: chats,COLUNA: customer_name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: chats,COLUNA: temperatura | TIPO: text | NULÁVEL: YES | PADRÃO: 'TOPO DO FUNIL'::text | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: message | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: chats,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: chats,COLUNA: lead_value | TIPO: numeric | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: chats,COLUNA: last_message_summary | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: chats,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: chats,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: chats,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: clients,COLUNA: email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: chats,COLUNA: customer_phone | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: chats,COLUNA: status | TIPO: text | NULÁVEL: YES | PADRÃO: '''Atendimento''::text'::text | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: chats,COLUNA: temperatura | TIPO: text | NULÁVEL: YES | PADRÃO: 'TOPO DO FUNIL'::text | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: chats,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: chats,COLUNA: customer_name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: chats,COLUNA: updated_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: clients,COLUNA: phone | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: clients,COLUNA: name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: clients,COLUNA: status | TIPO: text | NULÁVEL: YES | PADRÃO: 'Lead'::text | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: clients,COLUNA: location | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: clients,COLUNA: origin | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: clients,COLUNA: email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: clients,COLUNA: notes | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: clients,COLUNA: status | TIPO: text | NULÁVEL: YES | PADRÃO: 'Lead'::text | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: clients,COLUNA: origin | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: clients,COLUNA: location | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: clients,COLUNA: name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: clients,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: gen_random_uuid() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: clients,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: clients,COLUNA: is_personal | TIPO: boolean | NULÁVEL: YES | PADRÃO: false | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: clients,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: clients,COLUNA: updated_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: cnpj | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: phone | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: companies,COLUNA: address | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: plan_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: affiliate_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Identifica o afiliado responsável pela empresa/cliente.
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: official_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: cnpj | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: companies,COLUNA: industry | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: companies,COLUNA: corporate_email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: plan_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: status | TIPO: text | NULÁVEL: YES | PADRÃO: 'onboarding'::text | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: asaas_subscription_id | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: phone | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: companies,COLUNA: asaas_customer_id | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: affiliate_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Identifica o afiliado responsável pela empresa/cliente.
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: official_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: is_ai_active | TIPO: boolean | NULÁVEL: YES | PADRÃO: true | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_agent_function | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: asaas_subscription_id | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: status | TIPO: text | NULÁVEL: YES | PADRÃO: 'onboarding'::text | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_language_complexity | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_tone_formality | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_dominant_traits | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_personality_style | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: evolution_instance_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: base_prompt | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: evolution_api_key | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: evolution_api_url | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_tone_formality | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: evolution_number | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: is_ai_active | TIPO: boolean | NULÁVEL: YES | PADRÃO: true | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_tone_adaptability | TIPO: boolean | NULÁVEL: YES | PADRÃO: true | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: business_info | TIPO: jsonb | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: evolution_number | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: documents,COLUNA: embedding | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: documents,COLUNA: content | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: evolution_api_key | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: base_prompt | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: evolution_instance_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_personality_style | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_dominant_traits | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_agent_function | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: documents,COLUNA: id | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: documents,COLUNA: file_path | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: documents,COLUNA: content | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: documents,COLUNA: embedding | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: documents,COLUNA: company_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: documents,COLUNA: file_path | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: documents,COLUNA: metadata | TIPO: jsonb | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: events,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: events,COLUNA: data | TIPO: date | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: events,COLUNA: hora_inicio | TIPO: time without time zone | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: events,COLUNA: hora_fim | TIPO: time without time zone | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: events,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: events,COLUNA: assunto | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: events,COLUNA: cliente | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: events,COLUNA: telefone | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: events,COLUNA: cliente | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: events,COLUNA: local | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: events,COLUNA: hora_inicio | TIPO: time without time zone | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: events,COLUNA: data | TIPO: date | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: events,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: events,COLUNA: hora_fim | TIPO: time without time zone | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: updated_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: company_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: id | TIPO: bigint | NULÁVEL: NO | PADRÃO: nextval('ingestion_queue_id_seq'::regclass) | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: status | TIPO: text | NULÁVEL: YES | PADRÃO: 'pending'::text | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: file_path | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: updated_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: id | TIPO: bigint | NULÁVEL: NO | PADRÃO: nextval('ingestion_queue_id_seq'::regclass) | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: company_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: leads,COLUNA: criado_em | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: Data e hora de criação do registro do lead.
-1. TABELAS E COLUNAS,TABELA: leads,COLUNA: ultima_interacao | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: Data e hora da última conversa ou contato.
-1. TABELAS E COLUNAS,TABELA: leads,"COLUNA: temperatura | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Nível de interesse do lead (Quente, Morno, Frio)."
 1. TABELAS E COLUNAS,TABELA: leads,"COLUNA: telefone | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: Número de telefone para contato, deve ser único."
 1. TABELAS E COLUNAS,TABELA: leads,COLUNA: nome | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: Nome completo do lead.
-1. TABELAS E COLUNAS,TABELA: leads,"COLUNA: resumo | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Um breve resumo sobre o lead, suas necessidades ou a última conversa."
+1. TABELAS E COLUNAS,TABELA: leads,COLUNA: criado_em | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: Data e hora de criação do registro do lead.
+1. TABELAS E COLUNAS,TABELA: leads,COLUNA: ultima_interacao | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: Data e hora da última conversa ou contato.
 1. TABELAS E COLUNAS,TABELA: leads,COLUNA: id | TIPO: bigint | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: n8n_chat_histories,COLUNA: message | TIPO: jsonb | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: n8n_chat_histories,COLUNA: session_id | TIPO: character varying(255) | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: leads,"COLUNA: temperatura | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Nível de interesse do lead (Quente, Morno, Frio)."
+1. TABELAS E COLUNAS,TABELA: leads,"COLUNA: resumo | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Um breve resumo sobre o lead, suas necessidades ou a última conversa."
 1. TABELAS E COLUNAS,TABELA: n8n_chat_histories,COLUNA: id | TIPO: integer | NULÁVEL: NO | PADRÃO: nextval('n8n_chat_histories_id_seq'::regclass) | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: n8n_chat_histories,COLUNA: session_id | TIPO: character varying(255) | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: n8n_chat_histories,COLUNA: message | TIPO: jsonb | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: onboarding_data,COLUNA: responses | TIPO: jsonb | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: onboarding_data,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: gen_random_uuid() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: onboarding_data,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: onboarding_data,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: plans,COLUNA: name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: plans,COLUNA: max_users | TIPO: integer | NULÁVEL: YES | PADRÃO: 1 | DESCRIÇÃO: Número máximo de usuários permitidos neste plano.
+1. TABELAS E COLUNAS,TABELA: onboarding_data,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: plans,COLUNA: is_active | TIPO: boolean | NULÁVEL: YES | PADRÃO: true | DESCRIÇÃO: Se o plano está ativo e pode ser selecionado.
 1. TABELAS E COLUNAS,TABELA: plans,COLUNA: price | TIPO: numeric | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: plans,COLUNA: monthly_chat_limit | TIPO: integer | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: plans,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: plans,COLUNA: description | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Descrição detalhada do que o plano inclui.
-1. TABELAS E COLUNAS,TABELA: products,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: gen_random_uuid() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: products,COLUNA: name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: products,COLUNA: description | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: products,COLUNA: purchase_link | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: plans,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: plans,COLUNA: max_users | TIPO: integer | NULÁVEL: YES | PADRÃO: 1 | DESCRIÇÃO: Número máximo de usuários permitidos neste plano.
+1. TABELAS E COLUNAS,TABELA: plans,COLUNA: name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: products,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: products,COLUNA: photo_urls | TIPO: jsonb | NULÁVEL: YES | PADRÃO: '[]'::jsonb | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: products,COLUNA: name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: products,COLUNA: value | TIPO: numeric | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: products,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: users,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: users,COLUNA: email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: users,COLUNA: full_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: users,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: users,COLUNA: userinitial | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: products,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: gen_random_uuid() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: products,COLUNA: photo_urls | TIPO: jsonb | NULÁVEL: YES | PADRÃO: '[]'::jsonb | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: products,COLUNA: description | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: products,COLUNA: purchase_link | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: users,COLUNA: company_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: users,COLUNA: email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: users,"COLUNA: role | TIPO: text | NULÁVEL: YES | PADRÃO: 'app_user'::text | DESCRIÇÃO: Define o perfil do usuário (ex: app_user, affiliate, admin)"
+1. TABELAS E COLUNAS,TABELA: users,COLUNA: userinitial | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: users,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: users,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: users,COLUNA: job_title | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: users,COLUNA: full_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 2. CONSTRAINTS (CHAVES),TABELA: admin_users,CONSTRAINT: admin_users_affiliate_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): affiliate_id | REFERENCIA: affiliates(id)
 2. CONSTRAINTS (CHAVES),TABELA: admin_users,CONSTRAINT: admin_users_email_key | TIPO: UNIQUE | COLUNA(S): email
 2. CONSTRAINTS (CHAVES),TABELA: admin_users,CONSTRAINT: admin_users_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: affiliates,CONSTRAINT: affiliates_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: affiliates,CONSTRAINT: affiliates_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): id | REFERENCIA: users(id)
+2. CONSTRAINTS (CHAVES),TABELA: ai_token_usage,CONSTRAINT: ai_token_usage_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
 2. CONSTRAINTS (CHAVES),TABELA: ai_token_usage,CONSTRAINT: ai_token_usage_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: ai_token_usage,null
-2. CONSTRAINTS (CHAVES),TABELA: ai_token_usage,CONSTRAINT: ai_token_usage_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
-2. CONSTRAINTS (CHAVES),TABELA: app_logs,CONSTRAINT: app_logs_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
 2. CONSTRAINTS (CHAVES),TABELA: app_logs,null
+2. CONSTRAINTS (CHAVES),TABELA: app_logs,CONSTRAINT: app_logs_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
 2. CONSTRAINTS (CHAVES),TABELA: app_logs,CONSTRAINT: app_logs_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
-2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
-2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_pkey | TIPO: PRIMARY KEY | COLUNA(S): customer_phone
 2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_pkey | TIPO: PRIMARY KEY | COLUNA(S): customer_phone
+2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
+2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_customer_phone_key | TIPO: UNIQUE | COLUNA(S): customer_phone
-2. CONSTRAINTS (CHAVES),TABELA: clients,CONSTRAINT: clients_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: clients,CONSTRAINT: clients_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
+2. CONSTRAINTS (CHAVES),TABELA: clients,CONSTRAINT: clients_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
+2. CONSTRAINTS (CHAVES),TABELA: companies,CONSTRAINT: companies_plan_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): plan_id | REFERENCIA: plans(id)
 2. CONSTRAINTS (CHAVES),TABELA: companies,CONSTRAINT: companies_affiliate_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): affiliate_id | REFERENCIA: affiliates(id)
 2. CONSTRAINTS (CHAVES),TABELA: companies,CONSTRAINT: companies_cnpj_key | TIPO: UNIQUE | COLUNA(S): cnpj
 2. CONSTRAINTS (CHAVES),TABELA: companies,CONSTRAINT: companies_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
-2. CONSTRAINTS (CHAVES),TABELA: companies,CONSTRAINT: companies_plan_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): plan_id | REFERENCIA: plans(id)
 2. CONSTRAINTS (CHAVES),TABELA: company_secrets,CONSTRAINT: company_secrets_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
 2. CONSTRAINTS (CHAVES),TABELA: company_secrets,CONSTRAINT: company_secrets_pkey | TIPO: PRIMARY KEY | COLUNA(S): company_id
 2. CONSTRAINTS (CHAVES),TABELA: documents,CONSTRAINT: documents_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
@@ -176,24 +176,24 @@ categoria,objeto,detalhes
 2. CONSTRAINTS (CHAVES),TABELA: products,CONSTRAINT: products_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: products,CONSTRAINT: products_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
 2. CONSTRAINTS (CHAVES),TABELA: users,CONSTRAINT: users_pkey1 | TIPO: PRIMARY KEY | COLUNA(S): id
-2. CONSTRAINTS (CHAVES),TABELA: users,null
 2. CONSTRAINTS (CHAVES),TABELA: users,CONSTRAINT: users_email_key1 | TIPO: UNIQUE | COLUNA(S): email
 2. CONSTRAINTS (CHAVES),TABELA: users,CONSTRAINT: users_company_id_fkey1 | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
-3. ÍNDICES,TABELA: admin_users,ÍNDICE: admin_users_email_key | DEFINIÇÃO: CREATE UNIQUE INDEX admin_users_email_key ON public.admin_users USING btree (email)
+2. CONSTRAINTS (CHAVES),TABELA: users,null
 3. ÍNDICES,TABELA: admin_users,ÍNDICE: admin_users_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX admin_users_pkey ON public.admin_users USING btree (id)
+3. ÍNDICES,TABELA: admin_users,ÍNDICE: admin_users_email_key | DEFINIÇÃO: CREATE UNIQUE INDEX admin_users_email_key ON public.admin_users USING btree (email)
 3. ÍNDICES,TABELA: affiliates,ÍNDICE: affiliates_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX affiliates_pkey ON public.affiliates USING btree (id)
 3. ÍNDICES,TABELA: ai_token_usage,ÍNDICE: ai_token_usage_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX ai_token_usage_pkey ON public.ai_token_usage USING btree (id)
 3. ÍNDICES,TABELA: app_logs,ÍNDICE: app_logs_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX app_logs_pkey ON public.app_logs USING btree (id)
-3. ÍNDICES,TABELA: chats,"ÍNDICE: chats_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX chats_pkey ON public.chats USING btree (id, customer_phone)"
 3. ÍNDICES,TABELA: chats,ÍNDICE: chats_customer_phone_key | DEFINIÇÃO: CREATE UNIQUE INDEX chats_customer_phone_key ON public.chats USING btree (customer_phone)
-3. ÍNDICES,TABELA: clients,ÍNDICE: clients_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX clients_pkey ON public.clients USING btree (id)
+3. ÍNDICES,TABELA: chats,"ÍNDICE: chats_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX chats_pkey ON public.chats USING btree (id, customer_phone)"
 3. ÍNDICES,TABELA: clients,ÍNDICE: clients_phone_key | DEFINIÇÃO: CREATE UNIQUE INDEX clients_phone_key ON public.clients USING btree (phone)
+3. ÍNDICES,TABELA: clients,ÍNDICE: clients_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX clients_pkey ON public.clients USING btree (id)
 3. ÍNDICES,TABELA: clients,ÍNDICE: clients_company_id_idx | DEFINIÇÃO: CREATE INDEX clients_company_id_idx ON public.clients USING btree (company_id)
-3. ÍNDICES,TABELA: companies,ÍNDICE: companies_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX companies_pkey ON public.companies USING btree (id)
 3. ÍNDICES,TABELA: companies,ÍNDICE: companies_cnpj_key | DEFINIÇÃO: CREATE UNIQUE INDEX companies_cnpj_key ON public.companies USING btree (cnpj)
+3. ÍNDICES,TABELA: companies,ÍNDICE: companies_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX companies_pkey ON public.companies USING btree (id)
 3. ÍNDICES,TABELA: company_secrets,ÍNDICE: company_secrets_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX company_secrets_pkey ON public.company_secrets USING btree (company_id)
-3. ÍNDICES,TABELA: documents,ÍNDICE: idx_documents_file_path | DEFINIÇÃO: CREATE INDEX idx_documents_file_path ON public.documents USING btree (file_path)
 3. ÍNDICES,TABELA: documents,ÍNDICE: documents_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX documents_pkey ON public.documents USING btree (id)
+3. ÍNDICES,TABELA: documents,ÍNDICE: idx_documents_file_path | DEFINIÇÃO: CREATE INDEX idx_documents_file_path ON public.documents USING btree (file_path)
 3. ÍNDICES,TABELA: events,ÍNDICE: events_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX events_pkey ON public.events USING btree (telefone)
 3. ÍNDICES,TABELA: ingestion_queue,ÍNDICE: ingestion_queue_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX ingestion_queue_pkey ON public.ingestion_queue USING btree (id)
 3. ÍNDICES,TABELA: leads,ÍNDICE: leads_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX leads_pkey ON public.leads USING btree (id)
@@ -202,20 +202,8 @@ categoria,objeto,detalhes
 3. ÍNDICES,TABELA: onboarding_data,ÍNDICE: onboarding_data_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX onboarding_data_pkey ON public.onboarding_data USING btree (id)
 3. ÍNDICES,TABELA: plans,ÍNDICE: plans_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX plans_pkey ON public.plans USING btree (id)
 3. ÍNDICES,TABELA: products,ÍNDICE: products_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX products_pkey ON public.products USING btree (id)
-3. ÍNDICES,TABELA: users,ÍNDICE: users_email_key1 | DEFINIÇÃO: CREATE UNIQUE INDEX users_email_key1 ON public.users USING btree (email)
 3. ÍNDICES,TABELA: users,ÍNDICE: users_pkey1 | DEFINIÇÃO: CREATE UNIQUE INDEX users_pkey1 ON public.users USING btree (id)
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(integer[], integer, boolean)
- RETURNS halfvec
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$array_to_halfvec$function$
-"
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(numeric[], integer, boolean)
- RETURNS halfvec
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$array_to_halfvec$function$
-"
+3. ÍNDICES,TABELA: users,ÍNDICE: users_email_key1 | DEFINIÇÃO: CREATE UNIQUE INDEX users_email_key1 ON public.users USING btree (email)
 4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(double precision[], integer, boolean)
  RETURNS halfvec
  LANGUAGE c
@@ -228,7 +216,19 @@ AS '$libdir/vector', $function$array_to_halfvec$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_halfvec$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(integer[], integer, boolean)
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(numeric[], integer, boolean)
+ RETURNS halfvec
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$array_to_halfvec$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(integer[], integer, boolean)
+ RETURNS halfvec
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$array_to_halfvec$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(double precision[], integer, boolean)
  RETURNS sparsevec
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
@@ -240,7 +240,7 @@ AS '$libdir/vector', $function$array_to_sparsevec$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_sparsevec$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(double precision[], integer, boolean)
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(integer[], integer, boolean)
  RETURNS sparsevec
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
@@ -252,6 +252,12 @@ AS '$libdir/vector', $function$array_to_sparsevec$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_sparsevec$function$
 "
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(numeric[], integer, boolean)
+ RETURNS vector
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$array_to_vector$function$
+"
 4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(double precision[], integer, boolean)
  RETURNS vector
  LANGUAGE c
@@ -259,12 +265,6 @@ AS '$libdir/vector', $function$array_to_sparsevec$function$
 AS '$libdir/vector', $function$array_to_vector$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(real[], integer, boolean)
- RETURNS vector
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$array_to_vector$function$
-"
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(numeric[], integer, boolean)
  RETURNS vector
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
@@ -288,12 +288,6 @@ AS '$libdir/vector', $function$binary_quantize$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_binary_quantize$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: cosine_distance,"CREATE OR REPLACE FUNCTION public.cosine_distance(sparsevec, sparsevec)
- RETURNS double precision
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$sparsevec_cosine_distance$function$
-"
 4. FUNÇÕES (RPC),FUNÇÃO: cosine_distance,"CREATE OR REPLACE FUNCTION public.cosine_distance(halfvec, halfvec)
  RETURNS double precision
  LANGUAGE c
@@ -305,6 +299,12 @@ AS '$libdir/vector', $function$halfvec_cosine_distance$function$
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$cosine_distance$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: cosine_distance,"CREATE OR REPLACE FUNCTION public.cosine_distance(sparsevec, sparsevec)
+ RETURNS double precision
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$sparsevec_cosine_distance$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: create_ingestion_job,"CREATE OR REPLACE FUNCTION public.create_ingestion_job()
  RETURNS trigger
@@ -343,6 +343,38 @@ BEGIN
   WHERE file_path = old.name; -- 'old.name' é o caminho completo (ex: 'company_id/documento.pdf')
 
   RETURN OLD;
+END;
+$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: get_affiliate_clients_details,"CREATE OR REPLACE FUNCTION public.get_affiliate_clients_details(p_affiliate_id uuid)
+ RETURNS TABLE(user_id uuid, contact_name text, contact_email text, company_id uuid, company_name text, plan_id uuid, plan_name text, affiliate_id uuid, affiliate_name text, company_status text)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT
+        u.id AS user_id,
+        u.full_name AS contact_name,
+        u.email AS contact_email,
+        c.id AS company_id,
+        c.name AS company_name,
+        c.plan_id,
+        p.name AS plan_name,
+        c.affiliate_id,
+        a.name AS affiliate_name,
+        c.status AS company_status
+    FROM
+        public.users u
+        -- CORREÇÃO: Utiliza LEFT JOIN e COALESCE para garantir que os usuários sejam encontrados
+        -- mesmo que a relação user -> company não esteja perfeitamente sincronizada,
+        -- espelhando a lógica da função 'get_app_users_details' que já funciona.
+        LEFT JOIN public.companies c ON c.id = COALESCE(u.company_id, u.id)
+        LEFT JOIN public.plans p ON c.plan_id = p.id
+        LEFT JOIN public.affiliates a ON c.affiliate_id = a.id
+    WHERE
+        -- A condição principal agora filtra corretamente os usuários que são 'app_user'
+        -- E que pertencem a empresas associadas ao ID do afiliado fornecido.
+        u.role = 'app_user' AND c.affiliate_id = p_affiliate_id;
 END;
 $function$
 "
@@ -802,17 +834,17 @@ AS '$libdir/vector', $function$hnswhandler$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$sparsevec_inner_product$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: inner_product,"CREATE OR REPLACE FUNCTION public.inner_product(vector, vector)
- RETURNS double precision
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$inner_product$function$
-"
 4. FUNÇÕES (RPC),FUNÇÃO: inner_product,"CREATE OR REPLACE FUNCTION public.inner_product(halfvec, halfvec)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_inner_product$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: inner_product,"CREATE OR REPLACE FUNCTION public.inner_product(vector, vector)
+ RETURNS double precision
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$inner_product$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: ivfflat_bit_support,"CREATE OR REPLACE FUNCTION public.ivfflat_bit_support(internal)
  RETURNS internal
@@ -835,11 +867,11 @@ AS '$libdir/vector', $function$ivfflathandler$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$jaccard_distance$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: l1_distance,"CREATE OR REPLACE FUNCTION public.l1_distance(sparsevec, sparsevec)
+4. FUNÇÕES (RPC),FUNÇÃO: l1_distance,"CREATE OR REPLACE FUNCTION public.l1_distance(halfvec, halfvec)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$sparsevec_l1_distance$function$
+AS '$libdir/vector', $function$halfvec_l1_distance$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: l1_distance,"CREATE OR REPLACE FUNCTION public.l1_distance(vector, vector)
  RETURNS double precision
@@ -847,17 +879,11 @@ AS '$libdir/vector', $function$sparsevec_l1_distance$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$l1_distance$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: l1_distance,"CREATE OR REPLACE FUNCTION public.l1_distance(halfvec, halfvec)
+4. FUNÇÕES (RPC),FUNÇÃO: l1_distance,"CREATE OR REPLACE FUNCTION public.l1_distance(sparsevec, sparsevec)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$halfvec_l1_distance$function$
-"
-4. FUNÇÕES (RPC),FUNÇÃO: l2_distance,"CREATE OR REPLACE FUNCTION public.l2_distance(sparsevec, sparsevec)
- RETURNS double precision
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$sparsevec_l2_distance$function$
+AS '$libdir/vector', $function$sparsevec_l1_distance$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: l2_distance,"CREATE OR REPLACE FUNCTION public.l2_distance(vector, vector)
  RETURNS double precision
@@ -871,11 +897,11 @@ AS '$libdir/vector', $function$l2_distance$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_l2_distance$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: l2_norm,"CREATE OR REPLACE FUNCTION public.l2_norm(sparsevec)
+4. FUNÇÕES (RPC),FUNÇÃO: l2_distance,"CREATE OR REPLACE FUNCTION public.l2_distance(sparsevec, sparsevec)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$sparsevec_l2_norm$function$
+AS '$libdir/vector', $function$sparsevec_l2_distance$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: l2_norm,"CREATE OR REPLACE FUNCTION public.l2_norm(halfvec)
  RETURNS double precision
@@ -883,11 +909,17 @@ AS '$libdir/vector', $function$sparsevec_l2_norm$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_l2_norm$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: l2_normalize,"CREATE OR REPLACE FUNCTION public.l2_normalize(halfvec)
- RETURNS halfvec
+4. FUNÇÕES (RPC),FUNÇÃO: l2_norm,"CREATE OR REPLACE FUNCTION public.l2_norm(sparsevec)
+ RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$halfvec_l2_normalize$function$
+AS '$libdir/vector', $function$sparsevec_l2_norm$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: l2_normalize,"CREATE OR REPLACE FUNCTION public.l2_normalize(sparsevec)
+ RETURNS sparsevec
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$sparsevec_l2_normalize$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: l2_normalize,"CREATE OR REPLACE FUNCTION public.l2_normalize(vector)
  RETURNS vector
@@ -895,11 +927,11 @@ AS '$libdir/vector', $function$halfvec_l2_normalize$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$l2_normalize$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: l2_normalize,"CREATE OR REPLACE FUNCTION public.l2_normalize(sparsevec)
- RETURNS sparsevec
+4. FUNÇÕES (RPC),FUNÇÃO: l2_normalize,"CREATE OR REPLACE FUNCTION public.l2_normalize(halfvec)
+ RETURNS halfvec
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$sparsevec_l2_normalize$function$
+AS '$libdir/vector', $function$halfvec_l2_normalize$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: login,"CREATE OR REPLACE FUNCTION public.login(email_param text, password_param text)
  RETURNS json
@@ -953,6 +985,26 @@ begin
   order by documents.embedding <=> query_embedding
   limit match_count;
 end;
+$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: set_affiliate_role,"CREATE OR REPLACE FUNCTION public.set_affiliate_role()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$
+BEGIN
+  -- Esta função é acionada por um trigger 'AFTER INSERT' na tabela 'affiliates'.
+  -- 'NEW.id' contém o ID do novo afiliado que foi inserido, que corresponde ao 'user.id'.
+
+  -- Atualiza a coluna 'role' na tabela 'users' para 'admin'
+  -- para o usuário cujo ID corresponde ao do novo afiliado.
+  UPDATE public.users
+  SET role = 'admin'
+  WHERE id = NEW.id;
+
+  -- Retorna NEW, que é a prática padrão para triggers de INSERT/UPDATE.
+  RETURN NEW;
+END;
 $function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: sparsevec,"CREATE OR REPLACE FUNCTION public.sparsevec(sparsevec, integer, boolean)
@@ -1057,17 +1109,17 @@ AS '$libdir/vector', $function$sparsevec_to_vector$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$sparsevec_typmod_in$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: subvector,"CREATE OR REPLACE FUNCTION public.subvector(vector, integer, integer)
- RETURNS vector
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$subvector$function$
-"
 4. FUNÇÕES (RPC),FUNÇÃO: subvector,"CREATE OR REPLACE FUNCTION public.subvector(halfvec, integer, integer)
  RETURNS halfvec
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_subvector$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: subvector,"CREATE OR REPLACE FUNCTION public.subvector(vector, integer, integer)
+ RETURNS vector
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$subvector$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: update_company_details_as_admin,"CREATE OR REPLACE FUNCTION public.update_company_details_as_admin(p_company_id uuid, p_user_id uuid, p_contact_name text, p_plan_id uuid, p_affiliate_id uuid)
  RETURNS void
@@ -1271,6 +1323,7 @@ AS '$libdir/vector', $function$vector_to_sparsevec$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$vector_typmod_in$function$
 "
+5. GATILHOS (TRIGGERS),TABELA: affiliates,GATILHO: on_affiliate_insert_set_role | EVENTO: INSERT | QUANDO: AFTER | EXECUTA: EXECUTE FUNCTION set_affiliate_role()
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow super_admins to delete affiliates | COMANDO: DELETE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): N/A"

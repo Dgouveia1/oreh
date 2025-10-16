@@ -57,7 +57,6 @@ export async function saveEvent(event) {
         if (error) throw error;
 
         showToast('Evento criado com sucesso!', 'success');
-        // ✅ LOG DE SUCESSO
         logEvent('INFO', `Evento '${newEvent.assunto}' criado na agenda.`);
         document.getElementById('eventFormModal').style.display = 'none';
         document.getElementById('eventForm').reset();
@@ -65,7 +64,6 @@ export async function saveEvent(event) {
     } catch (error) {
         console.error('Erro ao salvar evento:', error);
         showToast(error.message, 'error');
-        // ✅ LOG DE ERRO
         logEvent('ERROR', `Falha ao criar evento '${newEvent.assunto}'`, { errorMessage: error.message, stack: error.stack });
     }
 }
@@ -111,7 +109,6 @@ export async function loadAgenda() {
         console.error("Erro ao carregar a agenda:", error);
         showToast("Falha ao carregar os eventos da agenda.", 'error');
         if (agendaBody) agendaBody.innerHTML = `<p class="loading-message error">${error.message}</p>`;
-        // ✅ LOG DE ERRO
         logEvent('ERROR', 'Falha ao carregar eventos da agenda', { errorMessage: error.message, stack: error.stack });
     }
 }
@@ -177,8 +174,11 @@ function renderSchedule(events) {
                 const endTotalMinutes = (endHour * 60) + endMinute;
                 const durationInMinutes = Math.max(30, endTotalMinutes - startTotalMinutes);
                 
-                eventCard.style.top = `${startMinutesSinceStart}px`;
-                eventCard.style.height = `${durationInMinutes}px`;
+                // CORREÇÃO: Convertendo minutos para 'rem' para escalar com o layout.
+                // 1 hora = 6rem (definido no CSS), então 1 minuto = 0.1rem.
+                const minuteToRem = 0.1;
+                eventCard.style.top = `${startMinutesSinceStart * minuteToRem}rem`;
+                eventCard.style.height = `${durationInMinutes * minuteToRem}rem`;
 
                 event.formatted_date = new Date(`${event.data}T00:00:00`).toLocaleDateString('pt-BR', {timeZone: 'UTC'});
                 Object.keys(event).forEach(key => {
@@ -192,6 +192,8 @@ function renderSchedule(events) {
         const noEventsMessage = document.createElement('p');
         noEventsMessage.className = 'loading-message';
         noEventsMessage.textContent = 'Nenhum evento para esta semana.';
+        // Garante que a mensagem não quebre o layout
+        noEventsMessage.style.gridColumn = '1 / -1';
         body.appendChild(noEventsMessage);
     }
 

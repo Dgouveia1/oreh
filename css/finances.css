@@ -2,138 +2,120 @@
 .subscription-container {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 3rem;
     animation: fadeIn 0.6s ease;
 }
 
 #currentSubscriptionInfo {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+    gap: 2.5rem;
     align-items: stretch;
 }
 
 .subscription-detail {
-    padding: 20px;
+    padding: 2rem;
     background: linear-gradient(135deg, var(--bg-color), var(--card-bg));
-    border-radius: 16px;
-    border-left: 4px solid var(--primary);
+    border-radius: 1.6rem;
+    border-left: 0.4rem solid var(--primary);
     transition: var(--transition);
     box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 0.8rem;
 }
 
 .subscription-detail:hover {
-    transform: translateY(-5px);
+    transform: translateY(-0.5rem);
     box-shadow: var(--shadow-lg);
-    border-left: 4px solid var(--secondary);
+    border-left: 0.4rem solid var(--secondary);
 }
 
 .subscription-detail strong {
     display: block;
-    font-size: 13px;
+    font-size: 1.3rem;
     color: var(--text-color-light);
     margin-bottom: 0;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05rem;
     font-weight: 600;
 }
 
 .subscription-detail span {
-    font-size: 20px;
+    font-size: 2rem;
     font-weight: 700;
     color: var(--text-color);
 }
 
 .status-badge-subscription {
-    padding: 8px 16px;
-    border-radius: 20px;
+    padding: 0.8rem 1.6rem;
+    border-radius: 2rem;
     font-weight: 700;
     color: white;
     text-transform: capitalize;
-    font-size: 14px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    font-size: 1.4rem !important;
+    box-shadow: 0 0.2rem 0.8rem rgba(0,0,0,0.15);
     display: inline-block;
     width: fit-content;
 }
 
-.status-badge-subscription[data-status="ACTIVE"] { 
-    background: linear-gradient(135deg, #27ae60, #2ecc71);
-}
-
-.status-badge-subscription[data-status="PENDING"] { 
-    background: linear-gradient(135deg, #f39c12, #e67e22);
-}
-
-.status-badge-subscription[data-status="OVERDUE"] { 
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-}
-
-.status-badge-subscription[data-status="CANCELED"] { 
-    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
-}
+.status-badge-subscription[data-status="ACTIVE"] { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+.status-badge-subscription[data-status="PENDING"] { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.status-badge-subscription[data-status="OVERDUE"] { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.status-badge-subscription[data-status="CANCELED"] { background: linear-gradient(135deg, #95a5a6, #7f8c8d); }
 
 .subscription-actions {
     grid-column: 1 / -1;
-    margin-top: 20px;
+    margin-top: 2rem;
     display: flex;
-    gap: 15px;
+    gap: 1.5rem;
     flex-wrap: wrap;
 }
 
+.subscription-actions p {
+    font-size: 1.6rem;
+    flex-basis: 100%;
+}
+
+
 .subscription-actions .btn {
-    padding: 14px 28px;
+    padding: 1.4rem 2.8rem;
     font-weight: 600;
-    border-radius: 12px;
+    border-radius: 1.2rem;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 1rem;
 }
 
-.subscription-actions .btn-primary {
-    box-shadow: 0 4px 15px rgba(255, 105, 0, 0.3);
-}
-
-.subscription-actions .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(255, 105, 0, 0.4);
-}
-
-.subscription-actions .btn-danger {
-    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
-}
-
-.subscription-actions .btn-danger:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
-}
+.subscription-actions .btn-primary { box-shadow: 0 0.4rem 1.5rem rgba(255, 105, 0, 0.3); }
+.subscription-actions .btn-primary:hover { transform: translateY(-0.3rem); box-shadow: 0 0.6rem 2rem rgba(255, 105, 0, 0.4); }
+.subscription-actions .btn-danger { box-shadow: 0 0.4rem 1.5rem rgba(231, 76, 60, 0.3); }
+.subscription-actions .btn-danger:hover { transform: translateY(-0.3rem); box-shadow: 0 0.6rem 2rem rgba(231, 76, 60, 0.4); }
 
 p.description {
-    font-size: 16px;
+    font-size: 1.6rem;
     color: var(--text-color-light);
-    margin-top: -10px;
-    margin-bottom: 25px;
+    margin-top: -1rem;
+    margin-bottom: 2.5rem;
     line-height: 1.6;
-    padding: 15px 20px;
+    padding: 1.5rem 2rem;
     background-color: var(--bg-color);
-    border-radius: 12px;
-    border-left: 4px solid var(--primary);
+    border-radius: 1.2rem;
+    border-left: 0.4rem solid var(--primary);
 }
 
 /* Cards de plano */
 .plans-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+    gap: 3rem;
     text-align: center;
 }
 
 .plan-card {
-    border: 2px solid var(--border-color);
-    border-radius: 20px;
-    padding: 30px 25px;
+    border: 0.2rem solid var(--border-color);
+    border-radius: 1.8rem;
+    padding: 3rem 2.5rem;
     transition: var(--transition);
     position: relative;
     overflow: hidden;
@@ -149,33 +131,27 @@ p.description {
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
+    height: 0.4rem;
     background: linear-gradient(90deg, var(--primary), var(--secondary));
     transform: scaleX(0);
     transition: transform 0.3s ease;
 }
 
 .plan-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-0.8rem);
     box-shadow: var(--shadow-lg);
     border-color: var(--primary);
 }
 
-.plan-card:hover::before {
-    transform: scaleX(1);
-}
-
+.plan-card:hover::before { transform: scaleX(1); }
 .plan-card.recommended {
     border-color: var(--primary);
     background: linear-gradient(135deg, var(--card-bg), rgba(255, 127, 64, 0.05));
 }
-
-/* ✅ NOVO: Estilo para o plano ativo */
 .plan-card.active-plan {
     border-color: var(--success);
     background: linear-gradient(135deg, var(--card-bg), rgba(46, 204, 113, 0.05));
 }
-
 .plan-card.active-plan::before {
     background: linear-gradient(90deg, var(--success), #27ae60);
     transform: scaleX(1);
@@ -183,126 +159,64 @@ p.description {
 
 .recommended-badge {
     position: absolute;
-    top: 20px;
-    right: -35px;
+    top: 2rem;
+    right: -3.5rem;
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
-    padding: 8px 40px;
+    padding: 0.8rem 4rem;
     transform: rotate(45deg);
-    font-size: 12px;
+    font-size: 1.2rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    letter-spacing: 0.05rem;
+    box-shadow: 0 0.2rem 0.8rem rgba(0,0,0,0.2);
 }
 
 .plan-card h4 {
-    font-size: 22px;
+    font-size: 2.2rem;
     color: var(--text-color);
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
     font-weight: 800;
 }
 
 .plan-card .price {
-    font-size: 42px;
+    font-size: 4.2rem;
     font-weight: 800;
     color: var(--primary);
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
     line-height: 1;
 }
 
 .plan-card .price span {
-    font-size: 16px;
+    font-size: 1.6rem;
     font-weight: 600;
     color: var(--text-color-light);
 }
 
 .plan-card p {
     color: var(--text-color-light);
-    margin-bottom: 30px;
+    margin-bottom: 3rem;
     flex-grow: 1;
     line-height: 1.6;
+    font-size: 1.5rem;
 }
 
 .plan-card .btn {
     width: 100%;
-    padding: 16px;
+    padding: 1.6rem;
     font-weight: 700;
-    border-radius: 12px;
+    border-radius: 1.2rem;
     margin-top: auto;
 }
 
-/* ✅ NOVO: Estilo para o botão do plano atual */
 .plan-card .btn[disabled] {
     background: linear-gradient(135deg, var(--success), #27ae60);
     cursor: not-allowed;
     opacity: 1;
     color: white;
-    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    box-shadow: 0 0.4rem 1.5rem rgba(46, 204, 113, 0.3);
 }
 
 .plan-card .btn[disabled]:hover {
     transform: none;
-    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
-}
-
-/* Recursos do plano */
-.plan-features {
-    text-align: left;
-    margin: 20px 0;
-    flex-grow: 1;
-}
-
-.plan-features ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.plan-features li {
-    padding: 8px 0;
-    color: var(--text-color);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-}
-
-.plan-features li::before {
-    content: '✓';
-    color: var(--success);
-    font-weight: bold;
-    font-size: 16px;
-}
-
-.plan-features li.disabled {
-    color: var(--text-color-light);
-    text-decoration: line-through;
-}
-
-.plan-features li.disabled::before {
-    content: '✗';
-    color: var(--danger);
-}
-
-@media (max-width: 768px) {
-    #currentSubscriptionInfo {
-        grid-template-columns: 1fr;
-    }
-    
-    .subscription-actions {
-        flex-direction: column;
-    }
-    
-    .subscription-actions .btn {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .plans-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .plan-card {
-        padding: 25px 20px;
-    }
+    box-shadow: 0 0.4rem 1.5rem rgba(46, 204, 113, 0.3);
 }

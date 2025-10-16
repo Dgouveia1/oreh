@@ -71,7 +71,7 @@ function renderProductsTable(products) {
             : 'N/A';
 
         row.innerHTML = `
-            <td>
+            <td data-label="Produto">
                 <div class="product-info">
                     <div class="product-media-cell">${filesHtml || '<div class="no-image-placeholder"></div>'}</div>
                     <div>
@@ -79,10 +79,10 @@ function renderProductsTable(products) {
                     </div>
                 </div>
             </td>
-            <td>${product.description || 'N/A'}</td>
-            <td>R$ ${parseFloat(product.value || 0).toFixed(2).replace('.', ',')}</td>
-            <td>${purchaseLinkHtml}</td>
-            <td class="product-actions">
+            <td data-label="Descrição">${product.description || 'N/A'}</td>
+            <td data-label="Valor">R$ ${parseFloat(product.value || 0).toFixed(2).replace('.', ',')}</td>
+            <td data-label="Link">${purchaseLinkHtml}</td>
+            <td class="product-actions" data-label="Ações">
                 <button class="btn btn-sm btn-edit" data-action="edit"><i class="fas fa-pencil-alt"></i></button>
                 <button class="btn btn-sm btn-delete" data-action="delete"><i class="fas fa-trash"></i></button>
             </td>

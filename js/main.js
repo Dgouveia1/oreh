@@ -3,7 +3,7 @@ import { setupNavigation, setupModals, setupUploadModal, setupThemeToggle } from
 import { saveAiSettings } from './ia.js';
 import { disconnectInstance } from './status.js';
 import { saveEvent, changeDay } from './agenda.js';
-import { descartarLead, takeOverChat } from './atendimentos.js'; // ✅ Importa takeOverChat
+import { descartarLead, takeOverChat } from './atendimentos.js'; 
 import { uploadFile, deleteFile } from './drive.js';
 import { saveUserSettings, saveCompanySettings } from './settings.js';
 import { handleProductFormSubmit, deleteProduct, openEditModal as openEditProductModal, setupProductEventListeners } from './produtos.js';
@@ -12,6 +12,29 @@ import './finances.js';
 
 
 console.log('[OREH] Módulo principal carregado.');
+
+// --- LÓGICA DO SERVICE WORKER E SPLASH SCREEN ---
+
+function registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('Service Worker registrado com sucesso:', registration);
+                })
+                .catch(error => {
+                    console.log('Falha ao registrar Service Worker:', error);
+                });
+        });
+    }
+}
+
+function hideSplashScreen() {
+    const splashScreen = document.getElementById('splashScreen');
+    if (splashScreen) {
+        splashScreen.classList.add('hidden');
+    }
+}
 
 function setupEventListeners() {
     console.log('[OREH] Configurando listeners de eventos globais...');
@@ -80,7 +103,6 @@ function setupEventListeners() {
         });
     }
     
-    // ✅ NOVO: Listener para cards de atendimento humano
     const humanAttentionContainer = document.getElementById('humanAttentionContainer');
     if (humanAttentionContainer) {
         humanAttentionContainer.addEventListener('click', (e) => {
@@ -118,7 +140,6 @@ function setupEventListeners() {
         });
     }
     
-    // ✅ NOVO: Listener para o botão de assumir atendimento
     const takeOverBtn = document.getElementById('takeOverBtn');
     if(takeOverBtn) {
         takeOverBtn.addEventListener('click', (e) => {
@@ -128,7 +149,6 @@ function setupEventListeners() {
             }
         });
     }
-
 
     const descartarLeadBtn = document.getElementById('descartarLeadBtn');
     if (descartarLeadBtn) {
@@ -204,6 +224,25 @@ function setupEventListeners() {
     }
 
     // Produtos
+    setupProductEventListeners();
+
+    // Clientes
+    setupClientTableListeners(); 
+
+    // Formulários
+    const productForm = document.getElementById('productForm');
+    if (productForm) productForm.addEventListener('submit', handleProductFormSubmit);
+
+    const clientForm = document.getElementById('clientForm');
+    if (clientForm) clientForm.addEventListener('submit', handleClientFormSubmit);
+
+    const userSettingsForm = document.getElementById('userSettingsForm');
+    if (userSettingsForm) userSettingsForm.addEventListener('submit', saveUserSettings);
+
+    const companySettingsForm = document.getElementById('companySettingsForm');
+    if (companySettingsForm) companySettingsForm.addEventListener('submit', saveCompanySettings);
+
+    // Modais de Criação
     const openProductModalBtn = document.getElementById('openProductModalBtn');
     if (openProductModalBtn) {
         openProductModalBtn.addEventListener('click', () => {
@@ -216,36 +255,7 @@ function setupEventListeners() {
             document.getElementById('productFormModal').style.display = 'flex';
         });
     }
-
-    const productForm = document.getElementById('productForm');
-    if (productForm) {
-        productForm.addEventListener('submit', handleProductFormSubmit);
-    }
     
-    const productTableContainer = document.getElementById('productTableContainer');
-    if(productTableContainer) {
-        productTableContainer.addEventListener('click', (e) => {
-            const button = e.target.closest('button');
-            if (!button) return;
-            
-            const action = button.dataset.action;
-            const row = button.closest('tr');
-            if (!row) return;
-
-            const productId = row.dataset.productId;
-
-            if (action === 'delete') {
-                deleteProduct(productId);
-            }
-            
-            if (action === 'edit') {
-                const productData = { ...row.dataset }; 
-                openEditProductModal(productData);
-            }
-        });
-    }
-
-    // Clientes
     const openClientModalBtn = document.getElementById('openClientModalBtn');
     if (openClientModalBtn) {
         openClientModalBtn.addEventListener('click', () => {
@@ -256,26 +266,6 @@ function setupEventListeners() {
             document.getElementById('clientFormModal').style.display = 'flex';
             document.getElementById('isPersonal').checked = false; 
         });
-    }
-    
-    const clientForm = document.getElementById('clientForm');
-    if (clientForm) {
-        clientForm.addEventListener('submit', handleClientFormSubmit);
-    }
-
-    setupClientTableListeners(); 
-
-    setupProductEventListeners();
-
-    // Listeners para os formulários de Configurações
-    const userSettingsForm = document.getElementById('userSettingsForm');
-    if (userSettingsForm) {
-        userSettingsForm.addEventListener('submit', saveUserSettings);
-    }
-
-    const companySettingsForm = document.getElementById('companySettingsForm');
-    if (companySettingsForm) {
-        companySettingsForm.addEventListener('submit', saveCompanySettings);
     }
 
     // Cadastro (SignUp)
@@ -294,16 +284,19 @@ function setupEventListeners() {
             signUp();
         });
     }
-
+    
     console.log('[OREH] Listeners configurados.');
 }
 
 // --- INICIALIZAÇÃO DA APLICAÇÃO ---
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    registerServiceWorker();
     setupNavigation();
     setupModals();
     setupUploadModal();
     setupEventListeners();
     setupThemeToggle();
-    checkLoginState();
+    await checkLoginState();
+    // A splash screen é escondida após a verificação de login
+    hideSplashScreen();
 });

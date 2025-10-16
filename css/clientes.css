@@ -3,59 +3,59 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding-bottom: 20px;
+    padding-bottom: 2rem;
 }
 
 #clientesPage .page-header h2 {
     font-weight: 800;
     color: var(--text-color);
-    font-size: 26px;
+    font-size: 2.6rem;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 1.2rem;
 }
 
 #clientesPage .page-header h2::before {
     content: '';
-    width: 6px;
-    height: 30px;
+    width: 0.6rem;
+    height: 3rem;
     background: linear-gradient(to bottom, var(--primary), var(--secondary));
-    border-radius: 3px;
+    border-radius: 0.3rem;
 }
 
 #clientesPage .page-header p {
     color: var(--text-color-light);
-    font-size: 16px;
-    margin-top: 5px;
+    font-size: 1.6rem;
+    margin-top: 0.5rem;
 }
 
 /* Reutilizando métricas e ajustando ícones */
 #clientesPage .metrics-grid {
-    margin-bottom: 30px;
+    margin-bottom: 3rem;
 }
 
 #clientesPage .metric-card {
     align-items: center;
-    padding: 20px;
-    gap: 15px;
-    border-left: 4px solid var(--primary);
+    padding: 2rem;
+    gap: 1.5rem;
+    border-left: 0.4rem solid var(--primary);
 }
 
 .metric-card .card-icon {
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
-    border-radius: 12px;
+    width: 5rem;
+    height: 5rem;
+    font-size: 2.4rem;
+    border-radius: 1.2rem;
 }
 
 /* Barra de Busca Estilizada */
 .search-bar-container {
     background-color: var(--card-bg);
-    border-radius: 20px;
-    padding: 20px 30px;
+    border-radius: 2rem;
+    padding: 2rem 3rem;
     box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
-    margin-bottom: 30px;
+    border: 0.1rem solid var(--border-color);
+    margin-bottom: 3rem;
 }
 
 .search-bar-container .input-group {
@@ -65,26 +65,26 @@
 
 .search-bar-container .input-group i {
     position: absolute;
-    left: 20px;
+    left: 2rem;
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-color-light);
-    font-size: 18px;
+    font-size: 1.8rem;
 }
 
 #clientSearchInput {
-    padding-left: 55px !important;
-    border-radius: 10px;
+    padding-left: 5.5rem !important;
+    border-radius: 1rem;
 }
 
 /* Tabela de Clientes */
 .list-title {
     font-weight: 700;
-    font-size: 20px;
+    font-size: 2rem;
     color: var(--text-color);
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
     display: block;
-    padding-left: 10px;
+    padding-left: 1rem;
 }
 
 .client-table {
@@ -94,24 +94,25 @@
 
 .client-table th,
 .client-table td {
-    padding: 18px 20px;
+    padding: 1.8rem 2rem;
     text-align: left;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 0.1rem solid var(--border-color);
     vertical-align: middle;
 }
 
 .client-table th {
     background: linear-gradient(135deg, var(--bg-color), var(--card-bg));
     font-weight: 700;
-    font-size: 14px;
+    font-size: 1.4rem;
     text-transform: uppercase;
     color: var(--text-color-light);
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05rem;
     position: relative;
 }
 
 .client-table td strong {
     font-weight: 600;
+    font-size: 1.5rem;
 }
 
 .client-table tbody tr:hover {
@@ -119,73 +120,100 @@
 }
 
 .client-actions .btn {
-    padding: 8px 14px;
-    font-size: 14px;
-    margin-right: 8px;
+    padding: 0.8rem 1.4rem;
+    font-size: 1.4rem;
+    margin-right: 0.8rem;
 }
 
 .status-cliente {
-    padding: 4px 10px;
-    border-radius: 8px;
+    padding: 0.4rem 1rem;
+    border-radius: 0.8rem;
     font-weight: 600;
-    font-size: 0.9em;
+    font-size: 1.3rem;
     color: white;
     text-align: center;
 }
 
-.status-cliente[data-status="Ativo"] {
-    background-color: var(--success);
-}
+.status-cliente[data-status="Ativo"] { background-color: var(--success); }
+.status-cliente[data-status="Inativo"] { background-color: var(--danger); }
+.status-cliente[data-status="Lead"] { background-color: var(--primary); }
 
-.status-cliente[data-status="Inativo"] {
-    background-color: var(--danger);
-}
-
-.status-cliente[data-status="Lead"] {
-    background-color: var(--primary);
-}
-
-/* Responsividade da Tabela - Mobile First */
+/* Responsividade da Tabela - CARD LAYOUT */
 @media (max-width: 768px) {
     #clientesPage .page-header {
         flex-direction: column;
         align-items: flex-start;
     }
-    
-    .search-bar-container {
-        padding: 15px;
-    }
+    .search-bar-container { padding: 1.5rem; }
 
-    .client-table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
+    /* Esconde o cabeçalho da tabela */
     .client-table thead {
         display: none;
     }
-
-    .client-table tbody tr {
-        display: flex;
-        flex-direction: column;
-        padding: 15px 0;
-        border-bottom: 1px solid var(--border-color);
+    
+    .client-table, .client-table tbody, .client-table tr, .client-table td {
+        display: block;
+        width: 100%;
     }
     
-    .client-table td {
-        padding: 8px 10px;
-        border: none;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    .client-table {
+        min-width: 0; /* Reseta o min-width */
     }
 
+    /* Transforma cada linha em um card */
+    .client-table tr {
+        display: block;
+        margin-bottom: 2rem;
+        border-radius: 1.6rem;
+        box-shadow: var(--shadow);
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        padding: 2rem;
+    }
+
+    /* Transforma cada célula em uma linha dentro do card */
+    .client-table td {
+        display: block;
+        text-align: right; /* Alinha o valor à direita */
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--border-color);
+        position: relative;
+    }
+    
+    .client-table td:last-child {
+        border-bottom: none;
+    }
+
+    /* Adiciona o label da coluna antes do conteúdo da célula */
     .client-table td::before {
         content: attr(data-label);
+        float: left; /* Alinha o label à esquerda */
         font-weight: 700;
-        color: var(--text-color-light);
-        min-width: 100px;
+        color: var(--text-color);
+    }
+    
+    /* Células especiais */
+    .client-table .client-name-cell {
+        font-size: 1.8rem;
+        padding-top: 0;
         text-align: left;
+    }
+    
+    .client-table .client-name-cell::before {
+        display: none; /* Não precisa de label "Nome" */
+    }
+    
+    .client-table .client-name-cell strong {
+        text-align: left;
+        display: block;
+    }
+
+    .client-actions {
+        text-align: center !important; /* Centraliza os botões */
+        padding-top: 1.5rem;
+    }
+    
+    .client-actions::before {
+        display: none; /* Sem label para ações */
     }
 }

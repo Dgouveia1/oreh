@@ -1,20 +1,21 @@
 /* Grid de Métricas */
 .metrics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-    margin-bottom: 30px;
+    /* AJUSTE: Grid fluida que se adapta ao espaço disponível */
+    grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr));
+    gap: clamp(1.5rem, 3vw, 3rem);
+    margin-bottom: 3rem;
 }
 
 .metric-card {
     background-color: var(--card-bg);
-    border-radius: 20px;
-    padding: 30px;
+    border-radius: 2rem;
+    padding: 3rem;
     box-shadow: var(--shadow);
     display: flex;
     align-items: center;
-    gap: 25px;
-    border: 1px solid var(--border-color);
+    gap: 2.5rem;
+    border: 0.1rem solid var(--border-color);
     transition: var(--transition);
     position: relative;
     overflow: hidden;
@@ -25,27 +26,27 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 6px;
+    width: 0.6rem;
     height: 100%;
     background: linear-gradient(to bottom, var(--primary), var(--secondary));
 }
 
 .metric-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-0.8rem);
     box-shadow: var(--shadow-lg);
 }
 
 .card-icon {
-    font-size: 32px;
-    width: 70px;
-    height: 70px;
-    border-radius: 18px;
+    font-size: 3.2rem;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 1.8rem;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
     flex-shrink: 0;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 0.6rem 1.5rem rgba(0,0,0,0.1);
     transition: var(--transition);
 }
 
@@ -64,14 +65,14 @@
 }
 
 .metric-value {
-    font-size: 32px;
+    font-size: 3.2rem;
     font-weight: 800;
     color: var(--text-color);
-    margin-bottom: 5px;
+    margin-bottom: 0.5rem;
 }
 
 .metric-label {
-    font-size: 15px;
+    font-size: 1.5rem;
     color: var(--text-color-light);
     font-weight: 500;
 }
@@ -79,17 +80,19 @@
 /* Grid de Gráficos */
 .charts-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    height: 420px;
+    /* AJUSTE: Grid fluida que se adapta */
+    grid-template-columns: repeat(auto-fit, minmax(min(35rem, 100%), 1fr));
+    gap: clamp(1.5rem, 3vw, 3rem);
+    /* AJUSTE: Altura automática para melhor responsividade */
+    min-height: 35rem; 
 }
 
 .chart-card {
     background-color: var(--card-bg);
-    border-radius: 20px;
-    padding: 30px;
+    border-radius: 2rem;
+    padding: 3rem;
     box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
+    border: 0.1rem solid var(--border-color);
     display: flex;
     flex-direction: column;
     transition: var(--transition);
@@ -102,39 +105,39 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 6px;
+    width: 0.6rem;
     height: 100%;
     background: linear-gradient(to bottom, var(--primary), var(--secondary));
 }
 
 .chart-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-0.5rem);
     box-shadow: var(--shadow-lg);
 }
 
 .chart-card h3 {
-    margin-bottom: 25px;
-    font-size: 20px;
+    margin-bottom: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
     color: var(--text-color);
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 1rem;
 }
 
 .chart-card h3::before {
     content: '';
-    width: 6px;
-    height: 20px;
+    width: 0.6rem;
+    height: 2rem;
     background: linear-gradient(to bottom, var(--primary), var(--secondary));
-    border-radius: 3px;
+    border-radius: 0.3rem;
 }
 
 .chart-container {
     position: relative;
     flex-grow: 1;
-    min-height: 0;
+    min-height: 25rem; /* Altura mínima para garantir visibilidade */
 }
 
 .chart-container canvas {
@@ -146,37 +149,25 @@
 }
 
 /* Responsividade */
-@media (max-width: 1200px) {
-    .charts-grid {
-        grid-template-columns: 1fr;
-        height: auto;
-        grid-template-rows: 380px 380px;
-    }
-}
-
 @media (max-width: 768px) {
     .metric-card {
         flex-direction: column;
         align-items: flex-start;
         text-align: left;
-        padding: 25px;
+        padding: 2.5rem;
     }
     
     .card-icon {
-        width: 60px;
-        height: 60px;
-        font-size: 28px;
+        width: 6rem;
+        height: 6rem;
+        font-size: 2.8rem;
     }
     
     .metric-value {
-        font-size: 28px;
-    }
-    
-    .charts-grid {
-        grid-template-rows: 320px 320px;
+        font-size: 2.8rem;
     }
     
     .chart-card {
-        padding: 20px;
+        padding: 2rem;
     }
 }

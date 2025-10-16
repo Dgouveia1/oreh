@@ -2,17 +2,41 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Viewport otimizado para mobile, impedindo zoom do usuário -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Oreh - Gestão de Atendimentos com IA</title>
+    
+    <!-- Ícone do App -->
     <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Meta tags para PWA (Progressive Web App) -->
+    <meta name="theme-color" content="#FF7F40">
+    <link rel="manifest" href="manifest.webmanifest">
+
+    <!-- Meta tags para experiência de App em tela cheia no iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Oreh">
+    <link rel="apple-touch-icon" href="favicon.png"> <!-- Ícone para tela inicial do iOS -->
+
+    <!-- Fontes e Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="css/responsive.css">
+
+    <!-- Folhas de Estilo -->
+    <link rel="stylesheet" href="style.css"> <!-- style.css importa todos os outros -->
+    <link rel="stylesheet" href="responsive-fixes.css"> <!-- Correções responsivas carregadas por último -->
 </head>
 <body>
+    <!-- Tela de Splash -->
+    <div id="splashScreen" class="splash-screen">
+        <div class="logo-text">OREH</div>
+        <i class="fas fa-circle-notch fa-spin"></i>
+    </div>
+
     <div id="toast" class="toast hidden" role="alert" aria-live="assertive"></div>
+    
     <div id="loginPage" class="login-container">
         <div class="login-card">
             <div class="logo-text">OREH</div>
@@ -31,23 +55,29 @@
         </div>
     </div>
 
-
     <div id="appContainer" class="app-container">
+        <!-- O sidebar se transforma em barra de navegação inferior no mobile -->
         <div class="sidebar">
             <div class="sidebar-header">
                 <h1><i class="fas fa-cloud"></i> <span>OREH</span></h1>  
             </div>
             <ul class="nav-links">
+                <!-- Itens principais visíveis na barra móvel e no desktop -->
                 <li><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
-                <li><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i> <span>Status de Conexão</span></a></li>
-                <li><a href="#" class="nav-link" data-page="agenda"><i class="fas fa-calendar"></i> <span>Agenda</span></a></li>
                 <li><a href="#" class="nav-link" data-page="atendimentos"><i class="fas fa-comments"></i> <span>Atendimentos</span></a></li>
-                <li><a href="#" class="nav-link" data-page="clients"><i class="fas fa-users"></i> <span>Clientes</span></a></li> <!-- NOVO LINK CLIENTES -->
-                <li><a href="#" class="nav-link" data-page="produtos"><i class="fas fa-box-open"></i> <span>Produtos</span></a></li>
-                <li><a href="#" class="nav-link" data-page="drive"><i class="fas fa-book"></i> <span>Biblioteca de Conhecimento</span></a></li>
-                <li><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de IA</span></a></li>
-                <li><a href="#" class="nav-link" data-page="finances"><i class="fas fa-money-bill"></i> <span>Assinatura</span></a></li>  
-                <li><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> <span>Configurações</span></a></li>  
+                <li><a href="#" class="nav-link" data-page="clients"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
+                <li><a href="#" class="nav-link" data-page="agenda"><i class="fas fa-calendar"></i> <span>Agenda</span></a></li>
+
+                <!-- Botão "Mais" que aparece apenas no mobile -->
+                <li class="mobile-only"><a href="#" id="moreMenuBtn" class="nav-link" data-page="more"><i class="fas fa-ellipsis-h"></i> <span>Mais</span></a></li>
+                
+                <!-- Itens que aparecem no menu lateral do desktop e dentro do menu "Mais" no mobile -->
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i> <span>Conexão</span></a></li>
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="produtos"><i class="fas fa-box-open"></i> <span>Produtos</span></a></li>
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="drive"><i class="fas fa-book"></i> <span>Biblioteca</span></a></li>
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de IA</span></a></li>
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="finances"><i class="fas fa-money-bill"></i> <span>Assinatura</span></a></li>  
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> <span>Config.</span></a></li>  
             </ul>
         </div>
 
@@ -69,7 +99,9 @@
                 </div>
             </div>
 
-            <div id="dashboardPage" class="page-content active">
+            <!-- Conteúdo das Páginas -->
+            <!-- O restante do seu HTML das páginas (dashboardPage, statusPage, etc.) continua aqui sem alterações... -->
+             <div id="dashboardPage" class="page-content active">
                 <div class="metrics-grid">
                     <div class="metric-card">
                         <div class="card-icon icon-atendimentos"><i class="fas fa-comment-dots"></i></div>
@@ -171,49 +203,6 @@
                         <div class="agenda-body" id="agendaBody"></div>
                     </div>
                 </div>
-                <div class="modal" id="eventFormModal">
-                    <div class="modal-content">
-                        <button class="close-modal">&times;</button>
-                        <div class="modal-header">
-                            <h3>Criar Novo Evento</h3>
-                        </div>
-                        <form id="eventForm">
-                            <div class="input-group">
-                                <label for="eventAssunto">Assunto</label>
-                                <input type="text" id="eventAssunto" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="eventCliente">Cliente</label>
-                                <input type="text" id="eventCliente">
-                            </div>
-                            <div class="input-group">
-                                <label for="eventTelefone">Telefone</label>
-                                <input type="tel" id="eventTelefone" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="eventLocal">Local</label>
-                                <input type="text" id="eventLocal">
-                            </div>
-                            <div class="form-grid">
-                                <div class="input-group">
-                                    <label for="eventData">Data</label>
-                                    <input type="date" id="eventData" required>
-                                </div>
-                                <div class="input-group">
-                                    <label for="eventHoraInicio">Hora de Início</label>
-                                    <input type="time" id="eventHoraInicio" required>
-                                </div>
-                                <div class="input-group">
-                                    <label for="eventHoraFim">Hora de Fim</label>
-                                    <input type="time" id="eventHoraFim" required>
-                                </div>
-                            </div>
-                            <div class="ia-card-footer">
-                                <button type="submit" class="btn btn-primary">Salvar Evento</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
             </div>
 
             <div id="atendimentosPage" class="page-content">
@@ -246,7 +235,6 @@
                 </div>
             </div>
 
-            <!-- ✅ NOVA PÁGINA CLIENTES -->
             <div id="clientsPage" class="page-content">
                 <div class="page-header">
                     <h2>Clientes</h2>
@@ -303,9 +291,7 @@
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="clientTableBody">
-                            <!-- Linhas de clientes serão inseridas aqui via JS -->
-                        </tbody>
+                        <tbody id="clientTableBody"></tbody>
                     </table>
                 </div>
 
@@ -321,13 +307,10 @@
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="personalClientTableBody">
-                            <!-- Linhas de contatos pessoais serão inseridas aqui via JS -->
-                        </tbody>
+                        <tbody id="personalClientTableBody"></tbody>
                     </table>
                 </div>
             </div>
-
 
             <div id="produtosPage" class="page-content">
                 <div class="page-header">
@@ -345,13 +328,10 @@
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="productTableBody">
-                            <!-- Linhas de produtos serão inseridas aqui via JS -->
-                        </tbody>
+                        <tbody id="productTableBody"></tbody>
                     </table>
                 </div>
             </div>
-
 
             <div id="drivePage" class="page-content">
                 <div class="drive-header">
@@ -362,23 +342,6 @@
                     <button class="btn btn-primary" id="openUploadModalBtn"><i class="fas fa-plus"></i> Adicionar Arquivo</button>
                 </div>
                 <div id="fileGrid" class="file-grid"></div>
-                <div class="modal" id="uploadModal">
-                    <div class="modal-content">
-                        <button class="close-modal">&times;</button>
-                        <div class="modal-header">
-                            <h3>Adicionar Novo Arquivo</h3>
-                        </div>
-                        <form id="uploadForm">
-                            <div class="input-group">
-                                <label for="fileInput">Selecione o arquivo</label>
-                                <input type="file" id="fileInput" required accept=".pdf,.txt,.md,.csv">
-                            </div>
-                            <div class="ia-card-footer">
-                                <button type="submit" class="btn btn-primary">Enviar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
             </div>
             
             <div id="iaPage" class="page-content">
@@ -569,11 +532,26 @@
                     </form>
                     </div>
             </div>
-        
         </div>
     </div>
     
-    <!-- Modais Genéricos -->
+    <!-- Modais -->
+    <div class="modal mobile-only" id="moreMenuModal">
+        <div class="modal-content modal-content-bottom">
+            <div class="modal-header">
+                <h3>Mais Opções</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <ul class="more-menu-links">
+                <li><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i> <span>Conexão</span></a></li>
+                <li><a href="#" class="nav-link" data-page="produtos"><i class="fas fa-box-open"></i> <span>Produtos</span></a></li>
+                <li><a href="#" class="nav-link" data-page="drive"><i class="fas fa-book"></i> <span>Biblioteca</span></a></li>
+                <li><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de IA</span></a></li>
+                <li><a href="#" class="nav-link" data-page="finances"><i class="fas fa-money-bill"></i> <span>Assinatura</span></a></li>
+                <li><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> <span>Configurações</span></a></li>
+            </ul>
+        </div>
+    </div>
     <div class="modal" id="eventDetailModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -589,7 +567,49 @@
             </div>
         </div>
     </div>
-    
+    <div class="modal" id="eventFormModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3>Criar Novo Evento</h3>
+            </div>
+            <form id="eventForm">
+                <div class="input-group">
+                    <label for="eventAssunto">Assunto</label>
+                    <input type="text" id="eventAssunto" required>
+                </div>
+                <div class="input-group">
+                    <label for="eventCliente">Cliente</label>
+                    <input type="text" id="eventCliente">
+                </div>
+                <div class="input-group">
+                    <label for="eventTelefone">Telefone</label>
+                    <input type="tel" id="eventTelefone" required>
+                </div>
+                <div class="input-group">
+                    <label for="eventLocal">Local</label>
+                    <input type="text" id="eventLocal">
+                </div>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="eventData">Data</label>
+                        <input type="date" id="eventData" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="eventHoraInicio">Hora de Início</label>
+                        <input type="time" id="eventHoraInicio" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="eventHoraFim">Hora de Fim</label>
+                        <input type="time" id="eventHoraFim" required>
+                    </div>
+                </div>
+                <div class="ia-card-footer">
+                    <button type="submit" class="btn btn-primary">Salvar Evento</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="modal" id="chatDetailModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -609,8 +629,6 @@
             </div>
         </div>
     </div>
-
-    <!-- ✅ NOVO MODAL PARA ATENDIMENTO HUMANO -->
     <div class="modal" id="humanAttentionDetailModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -630,7 +648,6 @@
             </div>
         </div>
     </div>
-
     <div class="modal" id="signUpModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -664,8 +681,6 @@
             </form>
         </div>
     </div>
-    
-    <!-- Modal de Produtos -->
     <div class="modal" id="productFormModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -703,8 +718,6 @@
             </form>
         </div>
     </div>
-    
-    <!-- Modal de Clientes -->
     <div class="modal" id="clientFormModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -760,8 +773,6 @@
             </form>
         </div>
     </div>
-    
-    <!-- Modal de Assinatura em Atraso -->
     <div class="modal" id="overdueSubscriptionModal">
         <div class="modal-content" style="max-width: 450px;">
             <button class="close-modal">&times;</button>
@@ -784,20 +795,26 @@
             </div>
         </div>
     </div>
-
-    <!-- ✅ NOVO: Elemento de áudio para notificação -->
-    <audio id="notificationSound" src=notification.mp3 preload="auto"></audio>
-
-    <!-- Botão de Suporte WhatsApp -->
-    <div class="whatsapp-container">
-        <a href="https://wa.me/5511973247174" class="whatsapp-support" target="_blank" rel="noopener noreferrer">
-            <i class="fab fa-whatsapp"></i>
-        </a>
-        <span class="whatsapp-text">Duvidas? Converse com a gente!</span>
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3>Adicionar Novo Arquivo</h3>
+            </div>
+            <form id="uploadForm">
+                <div class="input-group">
+                    <label for="fileInput">Selecione o arquivo</label>
+                    <input type="file" id="fileInput" required accept=".pdf,.txt,.md,.csv">
+                </div>
+                <div class="ia-card-footer">
+                    <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+            </form>
+        </div>
     </div>
+    <audio id="notificationSound" src="notification.mp3" preload="auto"></audio>
     
     <script type="module" src="js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
-

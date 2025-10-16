@@ -121,7 +121,7 @@ export async function takeOverChat(chatId) {
         const { error } = await supabaseClient
             .from('chats')
             .update({ 
-                status: 'Em atendimento', 
+                status: 'ATENDIMENTO_ASSUMIDO', 
                 temperatura: 'Atendimento', 
                 updated_at: new Date().toISOString() 
             })

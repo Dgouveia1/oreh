@@ -45,22 +45,22 @@ export async function renderUsersTable(userRole, affiliateId = null) {
         tableBody.innerHTML = data.map(user => {
             // A célula do afiliado só é renderizada se o usuário for super_admin.
             const affiliateCell = userRole === 'super_admin' 
-                ? `<td>${user.affiliate_name || 'Nenhum'}</td>`
+                ? `<td data-label="Afiliado">${user.affiliate_name || 'Nenhum'}</td>`
                 : ''; 
 
             const totalColumns = userRole === 'super_admin' ? 6 : 5;
 
             return `
                 <tr data-user_id="${user.user_id}" data-contact_name="${user.contact_name || ''}" data-contact_email="${user.contact_email || ''}" data-company_id="${user.company_id || ''}" data-company_name="${user.company_name || ''}" data-plan_id="${user.plan_id || ''}" data-plan_name="${user.plan_name || ''}" data-affiliate_id="${user.affiliate_id || ''}" data-affiliate_name="${user.affiliate_name || ''}" data-company_status="${user.company_status || ''}">
-                    <td>
+                    <td data-label="Contato">
                         <div>${user.contact_name || 'N/A'}</div>
                         <small style="color: var(--text-color-light);">${user.contact_email || ''}</small>
                     </td>
-                    <td>${user.company_name || 'N/A'}</td>
-                    <td>${user.plan_name || 'Nenhum'}</td>
-                    <td><span class="status-badge-admin ${user.company_status === 'active' ? 'active' : 'inactive'}">${user.company_status || 'N/A'}</span></td>
+                    <td data-label="Empresa">${user.company_name || 'N/A'}</td>
+                    <td data-label="Plano">${user.plan_name || 'Nenhum'}</td>
+                    <td data-label="Status"><span class="status-badge-admin ${user.company_status === 'active' ? 'active' : 'inactive'}">${user.company_status || 'N/A'}</span></td>
                     ${affiliateCell}
-                    <td class="table-actions">
+                    <td class="table-actions" data-label="Ações">
                         <button class="btn btn-small btn-secondary" data-action="edit-user"><i class="fas fa-edit"></i></button>
                     </td>
                 </tr>

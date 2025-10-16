@@ -1,0 +1,285 @@
+/* ==========================================================================
+   ARQUIVO ÚNICO DE RESPONSIVIDADE - OREH APP
+   ========================================================================== */
+
+/* ===== VIEWPORT E AJUSTES GLOBAIS ===== */
+html {
+    font-size: 62.5%; /* 1rem = 10px, para facilitar os cálculos */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    max-width: 100vw;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    /* Impede o "puxar para recarregar" e a rolagem da página quando um modal está aberto */
+    overscroll-behavior-y: contain;
+}
+
+img, video, canvas, svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Splash Screen Styles */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    color: white;
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+.splash-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+.splash-screen .logo-text {
+    font-size: 6rem;
+    margin-bottom: 2rem;
+}
+.splash-screen .fa-spin {
+    font-size: 3rem;
+}
+
+/* Classes para controlar visibilidade em desktop/mobile */
+.mobile-only {
+    display: none;
+}
+
+
+/* ==========================================================================
+   MEDIA QUERIES (Mobile First Approach)
+   ========================================================================== */
+
+/* Estilos base para mobile (até 768px) */
+@media (max-width: 48em) {
+    .app-container {
+        display: block; 
+    }
+
+    /* Transforma a sidebar em uma barra de navegação inferior fixa */
+    .sidebar {
+        width: 100%;
+        height: calc(7rem + env(safe-area-inset-bottom)); /* Altura + área segura do iPhone */
+        bottom: 0;
+        top: auto;
+        left: 0;
+        flex-direction: row;
+        background-color: var(--card-bg);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        padding: 0.5rem 0;
+        border-top: 1px solid var(--border-color);
+        padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+        z-index: 2000;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .sidebar.sidebar--hidden {
+        transform: translateY(100%);
+    }
+
+    .nav-links {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        padding: 0;
+    }
+
+    .nav-links li {
+        flex: 1;
+    }
+
+    .nav-links a {
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.8rem 0.5rem;
+        font-size: 1.2rem;
+    }
+    
+    .nav-links a span {
+        display: inline;
+    }
+
+    .sidebar .desktop-only {
+        display: none;
+    }
+
+    .mobile-only {
+        display: flex;
+    }
+
+    .sidebar-header {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+        width: 100%;
+        height: calc(100vh - (8rem + env(safe-area-inset-bottom))); /* Altura para scroll */
+        overflow-y: auto; /* Habilita scroll no conteúdo principal */
+        /* Adiciona padding para safe-area em todas as direções */
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        padding-top: 1.5rem;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        /* Espaço para a barra inferior não cobrir o conteúdo */
+        padding-bottom: calc(8rem + env(safe-area-inset-bottom));
+        margin-bottom: 0;
+    }
+
+    .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+    
+    .topbar .user-info {
+        align-self: flex-end;
+    }
+
+    /* Força grids para uma única coluna */
+    .metrics-grid, .charts-grid, .ia-grid, .plans-grid, .human-attention-container, .responsive-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .kanban-board {
+        grid-auto-flow: column;
+        grid-auto-columns: 85%;
+        overflow-x: auto;
+        padding: 1rem;
+        scroll-snap-type: x mandatory;
+    }
+    .kanban-column {
+        scroll-snap-align: start;
+    }
+
+    /* Modais em tela cheia */
+    .modal {
+        align-items: flex-end; /* Alinha o modal na parte inferior */
+        padding-top: env(safe-area-inset-top);
+    }
+    .modal-content {
+        width: 100%;
+        max-width: 100%;
+        max-height: 90vh;
+        border-radius: 2rem 2rem 0 0;
+        border: none;
+        overflow-y: auto;
+    }
+    .modal-content-bottom {
+        animation: slideUp 0.3s ease-out;
+    }
+    @keyframes slideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+    
+    .more-menu-links {
+        list-style: none;
+        padding: 1rem 0 2rem;
+    }
+
+    .more-menu-links li a {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 2rem;
+        padding: 1.5rem 2.5rem;
+        font-size: 1.6rem;
+        border-radius: 1rem;
+        color: var(--text-color);
+        background-color: transparent;
+        transform: none; /* Reseta transform do hover de desktop */
+    }
+
+    .more-menu-links li a:hover,
+    .more-menu-links li a.active {
+        background-color: rgba(0,0,0,0.05);
+        color: var(--primary);
+    }
+
+    body.dark-mode .more-menu-links li a:hover,
+    body.dark-mode .more-menu-links li a.active {
+        background-color: rgba(255,255,255,0.08);
+    }
+
+    .more-menu-links li a i {
+        width: 2.5rem;
+        text-align: center;
+        font-size: 1.8rem;
+        color: var(--primary);
+    }
+
+    /* TABELAS RESPONSIVAS (CARD LAYOUT) */
+    .table-container { overflow-x: visible; }
+    .client-table, .product-table, .admin-table { min-width: 0; border: none; }
+    .client-table thead, .product-table thead, .admin-table thead { display: none; }
+    .client-table tbody, .product-table tbody, .admin-table tbody { display: flex; flex-direction: column; gap: 2rem; }
+    .client-table tr, .product-table tr, .admin-table tr { display: block; border-radius: 1.6rem; box-shadow: var(--shadow); background: var(--card-bg); border: 1px solid var(--border-color); padding: 2rem; margin-bottom: 0; }
+    
+    body.dark-mode .client-table tr,
+    body.dark-mode .product-table tr,
+    body.dark-mode .admin-table tr { background: #2d3748; border-color: #4a5568; }
+
+    .client-table td, .product-table td, .admin-table td { display: flex; justify-content: space-between; align-items: center; text-align: right; padding: 1.2rem 0; border-bottom: 1px solid var(--border-color); }
+    
+    body.dark-mode .client-table td,
+    body.dark-mode .product-table td,
+    body.dark-mode .admin-table td { border-color: #4a5568; }
+
+    .client-table tr td:last-child, .product-table tr td:last-child, .admin-table tr td:last-child { border-bottom: none; }
+    .client-table td[data-label]::before, .product-table td[data-label]::before, .admin-table td[data-label]::before { content: attr(data-label); font-weight: 700; color: var(--text-color); text-align: left; margin-right: 1rem; }
+    
+    .client-table .client-name-cell, .product-info { font-size: 1.8rem; padding-top: 0; justify-content: flex-start; flex-direction: column; align-items: flex-start; }
+    .client-table .client-name-cell::before, .product-info::before { display: none; }
+    .product-actions, .client-actions, .table-actions { justify-content: center !important; padding-top: 1.5rem; }
+    .product-actions::before, .client-actions::before, .table-actions::before { display: none; }
+}
+
+/* Telas muito pequenas (até 576px) */
+@media (max-width: 36em) {
+    html { font-size: 58%; }
+    .main-content { padding: 1rem; padding-bottom: calc(8rem + env(safe-area-inset-bottom)); }
+}
+
+/* Tablets (de 769px a 992px) */
+@media (min-width: 48.0625em) and (max-width: 62em) {
+    .sidebar {
+        width: 8rem;
+    }
+    .sidebar .nav-links span,
+    .sidebar .sidebar-header h1 span {
+        display: none;
+    }
+    .main-content {
+        margin-left: 8rem;
+        width: calc(100% - 8rem);
+    }
+}
+
+/* Desktops e telas maiores (acima de 992px) */
+@media (min-width: 62.0625em) {
+    .sidebar {
+        width: 25rem;
+    }
+    .main-content {
+        margin-left: 25rem;
+        width: calc(100% - 25rem);
+    }
+    .responsive-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+}

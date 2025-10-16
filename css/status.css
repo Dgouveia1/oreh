@@ -3,18 +3,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 30px 0;
+    padding: 3rem 0;
     animation: fadeIn 0.6s ease;
-    gap: 30px;
+    gap: 3rem;
 }
 
 .status-card {
     width: 100%;
-    max-width: 550px;
+    max-width: 55rem;
     background: linear-gradient(135deg, var(--secondary), var(--primary));
     color: white;
-    border-radius: 20px;
-    padding: 35px;
+    border-radius: 2rem;
+    padding: 3.5rem;
     text-align: center;
     margin-bottom: 0;
     box-shadow: var(--shadow-lg);
@@ -40,27 +40,27 @@
 }
 
 .status-card h3 {
-    font-size: 28px;
-    margin-bottom: 25px;
+    font-size: 2.8rem;
+    margin-bottom: 2.5rem;
     font-weight: 700;
     position: relative;
     z-index: 1;
 }
 
 .status {
-    font-size: 32px;
+    font-size: 3.2rem;
     font-weight: 800;
-    padding: 20px;
-    border-radius: 16px;
+    padding: 2rem;
+    border-radius: 1.6rem;
     background-color: rgba(255, 255, 255, 0.15);
-    margin-top: 20px;
-    min-height: 70px;
-    letter-spacing: 1px;
+    margin-top: 2rem;
+    min-height: 7rem;
+    letter-spacing: 0.1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(1rem);
+    border: 0.1rem solid rgba(255, 255, 255, 0.2);
     position: relative;
     z-index: 1;
     transition: var(--transition);
@@ -73,35 +73,35 @@
 
 .qrcode-container {
     background-color: var(--card-bg);
-    border-radius: 20px;
-    padding: 35px;
+    border-radius: 2rem;
+    padding: 3.5rem;
     box-shadow: var(--shadow-lg);
     width: 100%;
-    max-width: 550px;
+    max-width: 55rem;
     text-align: center;
     animation: fadeIn 0.8s ease;
-    border: 1px solid var(--border-color);
+    border: 0.1rem solid var(--border-color);
     transition: var(--transition);
 }
 
 .qrcode-container:hover {
-    transform: translateY(-5px);
+    transform: translateY(-0.5rem);
     box-shadow: var(--shadow-lg);
 }
 
 .qrcode-placeholder {
-    width: 280px;
-    height: 280px;
+    width: 28rem;
+    height: 28rem;
     margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: var(--bg-color);
-    border-radius: 16px;
-    border: 2px dashed var(--border-color);
-    font-size: 15px;
+    border-radius: 1.6rem;
+    border: 0.2rem dashed var(--border-color);
+    font-size: 1.5rem;
     color: var(--text-color-light);
-    padding: 25px;
+    padding: 2.5rem;
     transition: var(--transition);
     position: relative;
     overflow: hidden;
@@ -129,67 +129,67 @@
 }
 
 .qrcode-container p {
-    margin-top: 25px;
-    font-size: 17px;
-    color: var(--dark);
+    margin-top: 2.5rem;
+    font-size: 1.7rem;
+    color: var(--text-color);
     font-weight: 600;
 }
 
 .qrcode-placeholder img {
     max-width: 100%;
     height: auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border-radius: 1.2rem;
+    box-shadow: 0 0.4rem 1.5rem rgba(0,0,0,0.1);
 }
 
 #disconnectBtn {
     position: relative;
     z-index: 1;
-    margin-top: 20px;
-    padding: 14px 28px;
+    margin-top: 2rem;
+    padding: 1.4rem 2.8rem;
     font-weight: 600;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+    border-radius: 1.2rem;
+    box-shadow: 0 0.4rem 1.5rem rgba(231, 76, 60, 0.3);
 }
 
 #disconnectBtn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+    transform: translateY(-0.3rem);
+    box-shadow: 0 0.6rem 2rem rgba(231, 76, 60, 0.4);
 }
 
 /* Modal de primeira conexão */
 #firstConnectionModal .modal-content {
-    max-width: 500px;
+    max-width: 50rem;
 }
 
 #firstConnectionModal .modal-header h3 {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 1.2rem;
 }
 
 #firstConnectionModal .modal-header h3::before {
     content: '🔗';
-    font-size: 24px;
+    font-size: 2.4rem;
 }
 
 @media (max-width: 768px) {
     .status-card, .qrcode-container {
         max-width: 100%;
-        padding: 25px;
+        padding: 2.5rem;
     }
     
     .qrcode-placeholder {
-        width: 220px;
-        height: 220px;
+        width: 22rem;
+        height: 22rem;
     }
     
     .status-card h3 {
-        font-size: 24px;
+        font-size: 2.4rem;
     }
     
     .status {
-        font-size: 26px;
-        min-height: 60px;
+        font-size: 2.6rem;
+        min-height: 6rem;
     }
 }

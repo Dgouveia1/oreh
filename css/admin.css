@@ -3,21 +3,21 @@
 /* Variáveis específicas do admin */
 :root {
     --sidebar-admin-bg: linear-gradient(180deg, #1e293b 0%, #334155 100%);
-    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    --card-hover-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --card-shadow: 0 0.4rem 2rem rgba(0, 0, 0, 0.08);
+    --card-hover-shadow: 0 0.8rem 3rem rgba(0, 0, 0, 0.12);
     --metric-icon-bg: rgba(255, 255, 255, 0.9);
 }
 
 /* Sidebar melhorado */
 .sidebar {
     background: var(--sidebar-admin-bg);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+    border-right: 0.1rem solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(1rem);
 }
 
 .sidebar-header {
-    padding: 25px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2.5rem 2rem;
+    border-bottom: 0.1rem solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-header h1 {
@@ -25,7 +25,7 @@
     font-size: 1.1rem;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 1rem;
 }
 
 .sidebar-header h1 i {
@@ -34,17 +34,17 @@
 }
 
 .nav-links {
-    padding: 20px 0;
+    padding: 2rem 0;
 }
 
 .nav-link {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 20px;
+    gap: 1.2rem;
+    padding: 1.4rem 2rem;
     color: rgba(255, 255, 255, 0.8);
     transition: all 0.3s ease;
-    border-left: 3px solid transparent;
+    border-left: 0.3rem solid transparent;
 }
 
 .nav-link:hover, .nav-link.active {
@@ -54,7 +54,7 @@
 }
 
 .nav-link i {
-    width: 20px;
+    width: 2rem;
     text-align: center;
     font-size: 1.1rem;
 }
@@ -62,28 +62,28 @@
 /* Topbar melhorada */
 .topbar {
     background: white;
-    border-bottom: 1px solid var(--border-color);
-    padding: 18px 30px;
+    border-bottom: 0.1rem solid var(--border-color);
+    padding: 1.8rem 3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0.2rem 1.5rem rgba(0, 0, 0, 0.05);
 }
 
 .user-info {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 8px 16px;
+    gap: 1.2rem;
+    padding: 0.8rem 1.6rem;
     background: var(--bg-color);
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
+    border-radius: 1.2rem;
+    border: 0.1rem solid var(--border-color);
 }
 
 .user-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    width: 3.6rem;
+    height: 3.6rem;
+    border-radius: 1rem;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     align-items: center;
@@ -96,38 +96,38 @@
 /* Cards de métricas melhorados */
 .metrics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
 }
 
 .metric-card {
     background: white;
-    padding: 25px;
-    border-radius: 16px;
+    padding: 2.5rem;
+    border-radius: 1.6rem;
     box-shadow: var(--card-shadow);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 0.1rem solid rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 2rem;
 }
 
 .metric-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-0.5rem);
     box-shadow: var(--card-hover-shadow);
 }
 
 .card-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 14px;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 1.4rem;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
     background: var(--metric-icon-bg);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0.4rem 1.5rem rgba(0, 0, 0, 0.1);
 }
 
 .card-icon.icon-valor { background: linear-gradient(135deg, #ffd89b, #19547b); color: white; }
@@ -152,38 +152,38 @@
 /* Gráficos melhorados */
 .charts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 25px;
-    margin-bottom: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(40rem, 1fr));
+    gap: 2.5rem;
+    margin-bottom: 3rem;
 }
 
 .chart-card {
     background: white;
-    padding: 25px;
-    border-radius: 16px;
+    padding: 2.5rem;
+    border-radius: 1.6rem;
     box-shadow: var(--card-shadow);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 0.1rem solid rgba(0, 0, 0, 0.05);
 }
 
 .chart-card h3 {
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
     color: var(--text-color);
     font-size: 1.1rem;
     font-weight: 600;
 }
 
 .chart-container {
-    height: 250px;
+    height: 25rem;
     position: relative;
 }
 
 /* Tabelas melhoradas */
 .table-container {
     background: white;
-    border-radius: 16px;
+    border-radius: 1.6rem;
     box-shadow: var(--card-shadow);
     overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 0.1rem solid rgba(0, 0, 0, 0.05);
 }
 
 .admin-table {
@@ -193,18 +193,18 @@
 
 .admin-table th {
     background: #f8fafc;
-    padding: 18px 20px;
+    padding: 1.8rem 2rem;
     font-weight: 600;
     color: var(--text-color-light);
     font-size: 0.8rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid var(--border-color);
+    letter-spacing: 0.05rem;
+    border-bottom: 0.1rem solid var(--border-color);
 }
 
 .admin-table td {
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border-color);
+    padding: 1.6rem 2rem;
+    border-bottom: 0.1rem solid var(--border-color);
     color: var(--text-color);
 }
 
@@ -218,11 +218,11 @@
 
 /* Status badges melhorados */
 .status-badge-admin {
-    padding: 6px 14px;
-    border-radius: 20px;
+    padding: 0.6rem 1.4rem;
+    border-radius: 2rem;
     font-size: 0.75rem;
     font-weight: 600;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.03rem;
     text-transform: uppercase;
 }
 
@@ -240,14 +240,14 @@
 /* Modais melhorados */
 .modal-content {
     background: white;
-    border-radius: 20px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 2rem;
+    box-shadow: 0 2.5rem 5rem rgba(0, 0, 0, 0.15);
+    border: 0.1rem solid rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
 .modal-header {
-    padding: 25px 30px 0;
+    padding: 2.5rem 3rem 0;
     border-bottom: none;
 }
 
@@ -258,8 +258,8 @@
 
 .close-modal {
     position: absolute;
-    top: 20px;
-    right: 25px;
+    top: 2rem;
+    right: 2.5rem;
     background: none;
     border: none;
     font-size: 1.5rem;
@@ -274,7 +274,7 @@
 
 /* Botões melhorados */
 .btn {
-    border-radius: 10px;
+    border-radius: 1rem;
     font-weight: 500;
     transition: all 0.3s ease;
     border: none;
@@ -287,27 +287,27 @@
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    transform: translateY(-0.2rem);
+    box-shadow: 0 0.5rem 1.5rem rgba(102, 126, 234, 0.4);
 }
 
 /* Estilos para a busca de usuários no modal de afiliados */
 #userSearchResults {
     position: absolute;
     background: white;
-    border: 1px solid #ddd;
+    border: 0.1rem solid #ddd;
     border-top: none;
-    border-radius: 0 0 12px 12px;
-    width: calc(100% - 2px);
-    max-height: 200px;
+    border-radius: 0 0 1.2rem 1.2rem;
+    width: calc(100% - 0.2rem);
+    max-height: 20rem;
     overflow-y: auto;
     z-index: 1050; /* Garante que fique sobre outros elementos do modal */
 }
 
 .user-search-item {
-    padding: 12px 15px;
+    padding: 1.2rem 1.5rem;
     cursor: pointer;
-    border-bottom: 1px solid #eee;
+    border-bottom: 0.1rem solid #eee;
 }
 
 .user-search-item:last-child {
@@ -380,17 +380,69 @@ body.dark-mode .close-modal:hover {
     }
     
     .metric-card {
-        padding: 20px;
+        padding: 2rem;
     }
     
     .topbar {
-        padding: 15px 20px;
+        padding: 1.5rem 2rem;
         flex-direction: column;
-        gap: 15px;
+        gap: 1.5rem;
         align-items: flex-start;
     }
     
     .user-info {
         align-self: flex-end;
+    }
+
+    /* Responsividade para Tabelas do Admin */
+    .admin-table thead {
+        display: none;
+    }
+
+    .admin-table tr {
+        display: block;
+        margin-bottom: 2rem;
+        padding: 2rem;
+        background: white;
+        border-radius: 1.6rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+    }
+    
+    body.dark-mode .admin-table tr {
+        background: #2d3748;
+        border-color: #4a5568;
+    }
+
+    .admin-table td {
+        display: block;
+        text-align: right;
+        padding: 1.2rem 0.5rem;
+        border-bottom: 1px solid var(--border-color);
+        position: relative;
+    }
+    
+    body.dark-mode .admin-table td {
+        border-color: #4a5568;
+    }
+
+    .admin-table td:last-child {
+        border-bottom: none;
+    }
+
+    .admin-table td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: 600;
+        color: var(--text-color);
+    }
+
+    .admin-table .table-actions {
+        text-align: center !important;
+        padding-top: 1.5rem;
+    }
+
+    .admin-table .table-actions::before {
+        display: none;
     }
 }

@@ -25,69 +25,118 @@ export function showToast(message, type = 'info') {
 }
 
 export function setupNavigation() {
-    const navLinks = document.querySelectorAll('.nav-link');
+    const navLinks = document.querySelectorAll('.sidebar .nav-links > li > .nav-link');
     const pageContents = document.querySelectorAll('.page-content');
     const pageTitle = document.getElementById('pageTitle');
+    const moreMenuBtn = document.getElementById('moreMenuBtn');
+    const moreMenuModal = document.getElementById('moreMenuModal');
+    const moreMenuLinks = document.querySelectorAll('.more-menu-links .nav-link');
 
+    // Função auxiliar para navegar entre as páginas
+    const navigateToPage = (targetPage, linkElement) => {
+        // Limpa subscrições/intervalos da página anterior
+        cleanupDashboard();
+        cleanupAtendimentos();
+        cleanupProducts();
+        cleanupClients();
+        if (targetPage !== 'status') {
+            stopStatusPolling();
+        }
+
+        // Mostra a página correta
+        pageContents.forEach(page => {
+            page.classList.toggle('active', page.id === `${targetPage}Page`);
+        });
+
+        // Atualiza o título da página
+        pageTitle.textContent = linkElement.querySelector('span')?.textContent || 'Dashboard';
+
+        // Carrega os dados da nova página
+        switch (targetPage) {
+            case 'dashboard': loadDashboard(); break;
+            case 'clients': loadClients(); break;
+            case 'status': updateConnectionStatus(); break;
+            case 'agenda': loadAgenda(); break;
+            case 'atendimentos': loadAtendimentos(); break;
+            case 'produtos': loadProducts(); break;
+            case 'drive': loadDriveFiles(); break;
+            case 'ia': loadAiSettings(); break;
+            case 'finances': loadFinancesPage(); break;
+            case 'settings': loadSettings(); break;
+        }
+    };
+
+    // Adiciona listeners para os links principais de navegação
     navLinks.forEach(link => {
-        link.addEventListener('click', function (e) {
+        if (link.id === 'moreMenuBtn') return; // Ignora o botão "Mais" por enquanto
+        
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetPage = this.getAttribute('data-page');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+            navigateToPage(targetPage, this);
+        });
+    });
+
+    // Listener para o botão "Mais" abrir o modal
+    if (moreMenuBtn && moreMenuModal) {
+        moreMenuBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            moreMenuModal.style.display = 'flex';
+        });
+    }
+
+    // Listeners para os links dentro do modal "Mais"
+    moreMenuLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
             e.preventDefault();
             const targetPage = this.getAttribute('data-page');
 
-            // Limpa subscrições de páginas anteriores para evitar vazamentos de memória
-            cleanupDashboard();
-            cleanupAtendimentos();
-            cleanupProducts();
-            cleanupClients(); // ✅ NOVO CLEANUP
-            if (targetPage !== 'status') {
-                stopStatusPolling();
-            }
-
-            navLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-
-            pageContents.forEach(page => {
-                page.classList.toggle('active', page.id === `${targetPage}Page`);
-            });
-
-            pageTitle.textContent = this.querySelector('span')?.textContent || 'Dashboard';
-
-            // Carrega o conteúdo da página clicada
-            switch (targetPage) {
-                case 'dashboard':
-                    loadDashboard();
-                    break;
-                case 'clients': // ✅ CORREÇÃO: Alterado de 'clientes' para 'clients' para corresponder ao HTML
-                    loadClients();
-                    break;
-                case 'status':
-                    updateConnectionStatus();
-                    break;
-                case 'agenda':
-                    loadAgenda();
-                    break;
-                case 'atendimentos':
-                    loadAtendimentos();
-                    break;
-                case 'produtos':
-                    loadProducts();
-                    break;
-                case 'drive':
-                    loadDriveFiles();
-                    break;
-                case 'ia':
-                    loadAiSettings();
-                    break;
-                case 'finances':
-                    loadFinancesPage();
-                    break;
-                case 'settings':
-                    loadSettings();
-                    break;
-            }
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            if (moreMenuBtn) moreMenuBtn.classList.add('active');
+            
+            navigateToPage(targetPage, this);
+            moreMenuModal.style.display = 'none'; // Fecha o modal
         });
     });
+
+    setupScrollListener();
 }
+
+function setupScrollListener() {
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    if (!sidebar || !mainContent) return;
+
+    let lastScrollY = mainContent.scrollTop;
+    
+    const handleScroll = () => {
+        if (window.innerWidth > 768) { // Apenas em telas móveis
+            sidebar.classList.remove('sidebar--hidden');
+            return;
+        }
+        const currentScrollY = mainContent.scrollTop;
+        if (currentScrollY > lastScrollY && currentScrollY > 80) { // Rolando para baixo
+            sidebar.classList.add('sidebar--hidden');
+        } else { // Rolando para cima
+            sidebar.classList.remove('sidebar--hidden');
+        }
+        lastScrollY = currentScrollY;
+    };
+
+    let isThrottled = false;
+    mainContent.addEventListener('scroll', () => {
+        if (!isThrottled) {
+            window.requestAnimationFrame(() => {
+                handleScroll();
+                isThrottled = false;
+            });
+            isThrottled = true;
+        }
+    });
+}
+
 export function setupUploadModal() {
     const openUploadModalBtn = document.getElementById('openUploadModalBtn');
     const uploadModal = document.getElementById('uploadModal');
@@ -111,11 +160,15 @@ export function setupModals() {
     window.addEventListener('click', (event) => {
         modals.forEach(modal => {
             if (event.target === modal) {
-                modal.style.display = 'none';
+                // Para modais que deslizam de baixo, permite fechar clicando no fundo
+                if (!event.target.querySelector('.modal-content-bottom')) {
+                    modal.style.display = 'none';
+                }
             }
         });
     });
 }
+
 
 export function updateUserInfo(name, initial) {
     const userNameDisplay = document.getElementById('userNameDisplay');

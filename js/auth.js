@@ -99,7 +99,7 @@ async function login() {
     const loginBtn = document.getElementById('loginBtn');
 
     loginBtn.disabled = true;
-    loginBtn.textContent = 'A entrar...';
+    loginBtn.textContent = 'Acessando Oreh...';
 
     try {
         const { data, error } = await supabaseClient.auth.signInWithPassword({

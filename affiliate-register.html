@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive-fixes.css">
 </head>
 <body class="onboarding-body">
     <div id="toast" class="toast hidden"></div>
@@ -17,7 +18,8 @@
             <h2>Cadastro de Afiliado</h2>
             <p>Preencha os dados abaixo para se tornar um parceiro Oreh.</p>
             <form id="affiliateRegisterForm">
-                <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- A classe 'responsive-grid' será usada para controle no CSS -->
+                <div class="responsive-grid">
                     <div class="input-group">
                         <label for="fullName">Nome Completo</label>
                         <input type="text" id="fullName" required>
@@ -39,7 +41,7 @@
                     <label for="paymentAccount">Chave PIX para Pagamento</label>
                     <input type="text" id="paymentAccount" required>
                 </div>
-                 <div class="form-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+                 <div class="responsive-grid">
                     <div class="input-group">
                         <label for="password">Crie uma Senha</label>
                         <input type="password" id="password" required>
@@ -57,6 +59,7 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="js/api.js"></script>
     <script type="module" src="js/affiliate-register.js"></script>
 
 </body>

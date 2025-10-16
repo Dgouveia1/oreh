@@ -4,18 +4,18 @@
     align-items: center;
     justify-content: center;
     width: auto;
-    padding: 16px 32px;
+    padding: 1.6rem 3.2rem;
     border: none;
-    border-radius: 12px;
-    font-size: 16px;
+    border-radius: 1.2rem;
+    font-size: 1.6rem;
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition);
     text-align: center;
     position: relative;
     overflow: hidden;
-    gap: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    gap: 1rem;
+    box-shadow: 0 0.4rem 1.2rem rgba(0,0,0,0.1);
 }
 
 .btn::before {
@@ -36,13 +36,13 @@
 .btn-primary {
     background: linear-gradient(135deg, var(--secondary), var(--primary));
     color: white;
-    box-shadow: 0 6px 20px rgba(255, 105, 0, 0.3);
+    box-shadow: 0 0.6rem 2rem rgba(255, 105, 0, 0.3);
 }
 
 .btn-primary:hover {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255, 105, 0, 0.4);
+    transform: translateY(-0.3rem);
+    box-shadow: 0 0.8rem 2.5rem rgba(255, 105, 0, 0.4);
 }
 
 .btn-secondary {
@@ -52,8 +52,8 @@
 
 .btn-secondary:hover {
     background: linear-gradient(135deg, #95a5a6, #7f8c8d);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(149, 165, 166, 0.4);
+    transform: translateY(-0.3rem);
+    box-shadow: 0 0.6rem 1.5rem rgba(149, 165, 166, 0.4);
 }
 
 .btn-danger {
@@ -63,13 +63,13 @@
 
 .btn-danger:hover {
     background: linear-gradient(135deg, #e74c3c, #c0392b);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4);
+    transform: translateY(-0.3rem);
+    box-shadow: 0 0.6rem 1.5rem rgba(231, 76, 60, 0.4);
 }
 
 .btn-small {
-    padding: 12px 20px;
-    font-size: 14px;
+    padding: 1.2rem 2rem;
+    font-size: 1.4rem;
 }
 
 .logout-btn {
@@ -77,51 +77,51 @@
     border: none;
     color: var(--danger);
     cursor: pointer;
-    font-size: 18px;
+    font-size: 1.8rem;
     transition: var(--transition);
-    padding: 10px;
-    border-radius: 10px;
-    width: 44px;
-    height: 44px;
+    padding: 1rem;
+    border-radius: 1rem;
+    width: 4.4rem;
+    height: 4.4rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 0.2rem 0.8rem rgba(0,0,0,0.1);
 }
 
 .logout-btn:hover {
     background-color: rgba(231, 76, 60, 0.1);
     transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
+    box-shadow: 0 0.4rem 1.2rem rgba(231, 76, 60, 0.2);
 }
 
 /* FORMULÁRIOS */
 .input-group {
-    margin-bottom: 25px;
+    margin-bottom: 2.5rem;
     text-align: left;
 }
 
 .input-group label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
     font-weight: 600;
     color: var(--dark);
-    font-size: 15px;
+    font-size: 1.5rem;
 }
 
 .input-group input,
 .input-group select,
 .input-group textarea {
     width: 100%;
-    padding: 16px 20px;
-    border: 2px solid var(--border-color);
-    border-radius: 12px;
-    font-size: 16px;
+    padding: 1.6rem 2rem;
+    border: 0.2rem solid var(--border-color);
+    border-radius: 1.2rem;
+    font-size: 1.6rem;
     transition: var(--transition);
     background-color: var(--input-bg);
     color: var(--text-color);
     font-family: inherit;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 0.2rem 0.8rem rgba(0,0,0,0.05);
 }
 
 .input-group input:focus,
@@ -129,28 +129,29 @@
 .input-group textarea:focus {
     border-color: var(--primary);
     outline: none;
-    box-shadow: 0 0 0 4px rgba(255, 127, 64, 0.2), 0 4px 12px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
+    box-shadow: 0 0 0 0.4rem rgba(255, 127, 64, 0.2), 0 0.4rem 1.2rem rgba(0,0,0,0.1);
+    transform: translateY(-0.2rem);
 }
 
 /* TOAST NOTIFICATIONS */
 .toast {
     position: fixed;
-    top: 30px;
-    right: 30px;
-    padding: 16px 24px;
-    border-radius: 12px;
+    top: 3rem;
+    right: 3rem;
+    padding: 1.6rem 2.4rem;
+    border-radius: 1.2rem;
     background-color: var(--dark);
     color: #fff;
     box-shadow: var(--shadow-lg);
     opacity: 0;
     transition: opacity 0.3s ease, transform 0.3s ease;
-    transform: translateY(-20px);
+    transform: translateY(-2rem);
     z-index: 9999;
     display: flex;
     align-items: center;
-    gap: 12px;
-    max-width: 400px;
+    gap: 1.2rem;
+    max-width: 40rem;
+    font-size: 1.5rem;
 }
 
 .toast.show {
@@ -171,7 +172,7 @@
 }
 
 .toast i {
-    font-size: 20px;
+    font-size: 2rem;
 }
 
 /* ESTILOS DE MODAL */
@@ -187,16 +188,16 @@
     justify-content: center;
     align-items: center;
     animation: fadeIn 0.3s;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(0.5rem);
 }
 
 .modal-content {
     background-color: var(--card-bg);
-    padding: 30px;
-    border: 1px solid var(--border-color);
+    padding: 3rem;
+    border: 0.1rem solid var(--border-color);
     width: 90%;
-    max-width: 550px;
-    border-radius: 20px;
+    max-width: 55rem;
+    border-radius: 2rem;
     position: relative;
     box-shadow: var(--shadow-lg);
     animation: slideIn 0.3s ease;
@@ -207,15 +208,15 @@
 .close-modal {
     color: #aaa;
     position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 28px;
+    top: 1.5rem;
+    right: 2rem;
+    font-size: 2.8rem;
     font-weight: bold;
     background: none;
     border: none;
     cursor: pointer;
-    width: 40px;
-    height: 40px;
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -229,27 +230,27 @@
 }
 
 .modal-header {
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 20px;
-    margin-bottom: 25px;
+    border-bottom: 0.1rem solid var(--border-color);
+    padding-bottom: 2rem;
+    margin-bottom: 2.5rem;
 }
 
 .modal-header h3 {
     color: var(--primary);
-    font-size: 24px;
+    font-size: 2.4rem;
     font-weight: 700;
 }
 
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 2rem;
 }
 
 .form-grid-columns {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    gap: 20px;
+    gap: 2rem;
     align-items: flex-end;
 }
 
@@ -259,7 +260,7 @@
 
 .modal-footer {
     text-align: right;
-    margin-top: 25px;
-    padding-top: 25px;
-    border-top: 1px solid var(--border-color);
+    margin-top: 2.5rem;
+    padding-top: 2.5rem;
+    border-top: 0.1rem solid var(--border-color);
 }

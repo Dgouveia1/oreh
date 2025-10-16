@@ -3,8 +3,8 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 20px 0 30px;
-    gap: 20px;
+    padding: 2rem 0 3rem;
+    gap: 2rem;
 }
 
 .drive-header > div {
@@ -14,63 +14,64 @@
 .drive-header h2 {
     color: var(--primary);
     font-weight: 800;
-    font-size: 26px;
-    margin-bottom: 8px;
+    font-size: 2.6rem;
+    margin-bottom: 0.8rem;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 1.2rem;
 }
 
 .drive-header h2::before {
     content: '📚';
-    font-size: 28px;
+    font-size: 2.8rem;
 }
 
 .drive-header p {
-    margin-top: 5px;
+    margin-top: 0.5rem;
     color: var(--text-color-light);
-    font-size: 16px;
+    font-size: 1.6rem;
     line-height: 1.6;
-    max-width: 600px;
+    max-width: 60rem;
 }
 
 #openUploadModalBtn {
-    padding: 16px 32px;
+    padding: 1.6rem 3.2rem;
     font-weight: 600;
-    border-radius: 12px;
+    border-radius: 1.2rem;
     display: flex;
     align-items: center;
-    gap: 12px;
-    box-shadow: 0 4px 15px rgba(255, 105, 0, 0.3);
+    gap: 1.2rem;
+    box-shadow: 0 0.4rem 1.5rem rgba(255, 105, 0, 0.3);
     white-space: nowrap;
 }
 
 #openUploadModalBtn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(255, 105, 0, 0.4);
+    transform: translateY(-0.3rem);
+    box-shadow: 0 0.6rem 2rem rgba(255, 105, 0, 0.4);
 }
 
 #fileGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
-    padding: 20px 0;
+    /* AJUSTE: Grid mais fluida para os arquivos */
+    grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
+    gap: clamp(1.5rem, 2vw, 2rem);
+    padding: 2rem 0;
 }
 
 .file-card {
     background-color: var(--card-bg);
-    border-radius: 16px;
-    padding: 25px 20px;
+    border-radius: 1.6rem;
+    padding: 2.5rem 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-height: 140px;
+    min-height: 14rem;
     position: relative;
     transition: var(--transition);
     box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
+    border: 0.1rem solid var(--border-color);
     overflow: hidden;
 }
 
@@ -80,14 +81,14 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
+    height: 0.4rem;
     background: linear-gradient(90deg, var(--primary), var(--secondary));
     transform: scaleX(0);
     transition: transform 0.3s ease;
 }
 
 .file-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-0.8rem);
     box-shadow: var(--shadow-lg);
 }
 
@@ -104,7 +105,7 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    gap: 15px;
+    gap: 1.5rem;
 }
 
 .file-icon {
@@ -120,7 +121,7 @@
 }
 
 .file-name {
-    font-size: 0.95em;
+    font-size: 1.4rem;
     word-break: break-word;
     font-weight: 600;
     line-height: 1.4;
@@ -131,29 +132,29 @@
 }
 
 .file-size {
-    font-size: 0.8em;
+    font-size: 1.2rem;
     color: var(--text-color-light);
-    margin-top: 5px;
+    margin-top: 0.5rem;
 }
 
 .delete-file-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 1rem;
+    right: 1rem;
     background: linear-gradient(135deg, var(--danger), #c0392b);
     color: white;
     border: none;
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    width: 3.2rem;
+    height: 3.2rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.9em;
+    font-size: 1.4rem;
     cursor: pointer;
     opacity: 0;
     transition: var(--transition);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 0.2rem 0.8rem rgba(0,0,0,0.2);
     z-index: 2;
 }
 
@@ -165,29 +166,29 @@
 .delete-file-btn:hover {
     background: linear-gradient(135deg, #c0392b, #a93226);
     transform: scale(1.2);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    box-shadow: 0 0.3rem 1rem rgba(0,0,0,0.3);
 }
 
 /* Modal de upload */
 #uploadModal .modal-content {
-    max-width: 500px;
+    max-width: 50rem;
 }
 
 #uploadModal .modal-header h3 {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 1.2rem;
 }
 
 #uploadModal .modal-header h3::before {
     content: '📤';
-    font-size: 24px;
+    font-size: 2.4rem;
 }
 
 #fileInput {
-    padding: 16px;
-    border: 2px dashed var(--border-color);
-    border-radius: 12px;
+    padding: 1.6rem;
+    border: 0.2rem dashed var(--border-color);
+    border-radius: 1.2rem;
     transition: var(--transition);
     background-color: var(--bg-color);
 }
@@ -199,53 +200,7 @@
 
 #fileInput:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(255, 127, 64, 0.2);
-}
-
-/* Tipos de arquivo com cores diferentes */
-.file-card[data-type="pdf"] .file-icon {
-    color: #e74c3c;
-}
-
-.file-card[data-type="doc"] .file-icon,
-.file-card[data-type="docx"] .file-icon {
-    color: #3498db;
-}
-
-.file-card[data-type="txt"] .file-icon,
-.file-card[data-type="md"] .file-icon {
-    color: #95a5a6;
-}
-
-.file-card[data-type="csv"] .file-icon {
-    color: #27ae60;
-}
-
-.file-card[data-type="xls"] .file-icon,
-.file-card[data-type="xlsx"] .file-icon {
-    color: #2ecc71;
-}
-
-/* Estado de carregamento */
-.file-card.uploading {
-    opacity: 0.7;
-    pointer-events: none;
-}
-
-.file-card.uploading::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
+    box-shadow: 0 0 0 0.4rem rgba(255, 127, 64, 0.2);
 }
 
 @media (max-width: 768px) {
@@ -257,19 +212,5 @@
     #openUploadModalBtn {
         width: 100%;
         justify-content: center;
-    }
-    
-    #fileGrid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 15px;
-    }
-    
-    .file-card {
-        padding: 20px 15px;
-        min-height: 120px;
-    }
-    
-    .file-icon {
-        font-size: 2em;
     }
 }
