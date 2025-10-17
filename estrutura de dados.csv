@@ -148,8 +148,8 @@ categoria,objeto,detalhes
 2. CONSTRAINTS (CHAVES),TABELA: app_logs,CONSTRAINT: app_logs_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
 2. CONSTRAINTS (CHAVES),TABELA: app_logs,CONSTRAINT: app_logs_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
-2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_pkey | TIPO: PRIMARY KEY | COLUNA(S): customer_phone
-2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_pkey | TIPO: PRIMARY KEY | COLUNA(S): customer_phone
+2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_pkey | TIPO: PRIMARY KEY | COLUNA(S): company_id
+2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_pkey | TIPO: PRIMARY KEY | COLUNA(S): company_id
 2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_customer_phone_key | TIPO: UNIQUE | COLUNA(S): customer_phone
@@ -185,7 +185,7 @@ categoria,objeto,detalhes
 3. ÍNDICES,TABELA: ai_token_usage,ÍNDICE: ai_token_usage_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX ai_token_usage_pkey ON public.ai_token_usage USING btree (id)
 3. ÍNDICES,TABELA: app_logs,ÍNDICE: app_logs_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX app_logs_pkey ON public.app_logs USING btree (id)
 3. ÍNDICES,TABELA: chats,ÍNDICE: chats_customer_phone_key | DEFINIÇÃO: CREATE UNIQUE INDEX chats_customer_phone_key ON public.chats USING btree (customer_phone)
-3. ÍNDICES,TABELA: chats,"ÍNDICE: chats_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX chats_pkey ON public.chats USING btree (id, customer_phone)"
+3. ÍNDICES,TABELA: chats,"ÍNDICE: chats_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX chats_pkey ON public.chats USING btree (id, company_id)"
 3. ÍNDICES,TABELA: clients,ÍNDICE: clients_phone_key | DEFINIÇÃO: CREATE UNIQUE INDEX clients_phone_key ON public.clients USING btree (phone)
 3. ÍNDICES,TABELA: clients,ÍNDICE: clients_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX clients_pkey ON public.clients USING btree (id)
 3. ÍNDICES,TABELA: clients,ÍNDICE: clients_company_id_idx | DEFINIÇÃO: CREATE INDEX clients_company_id_idx ON public.clients USING btree (company_id)

@@ -123,18 +123,34 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const { data: metrics, error } = await supabaseClient.rpc('get_super_admin_metrics');
                 if (error) throw error;
                 document.getElementById('totalRevenue').textContent = `R$ ${metrics.total_revenue.toFixed(2).replace('.', ',')}`;
-                document.getElementById('totalUsers').textContent = metrics.total_clients;
+                
+                // Card total de clientes deve contar 'app_users'
+                const { count: appUserCount, error: countError } = await supabaseClient
+                    .from('users')
+                    .select('*', { count: 'exact', head: true })
+                    .eq('role', 'app_user');
+                if (countError) throw countError;
+                document.getElementById('totalUsers').textContent = appUserCount;
+
                 document.getElementById('totalAffiliates').textContent = metrics.total_affiliates;
 
                 const { count } = await supabaseClient.from('companies').select('*', { count: 'exact' }).eq('status', 'active');
                 document.getElementById('activeSubscriptions').textContent = count || 0;
-                // Lógica para carregar gráficos do superadmin...
                 
             } else if (userRole === 'admin') {
                 const { data: metrics, error } = await supabaseClient.rpc('get_affiliate_metrics', { p_affiliate_id: affiliateId });
                 if (error) throw error;
                 document.getElementById('totalRevenue').textContent = `R$ ${metrics.total_revenue.toFixed(2).replace('.', ',')}`;
-                document.getElementById('totalUsers').textContent = metrics.total_clients;
+                
+                // Card total de clientes deve contar 'app_users' ligados ao afiliado
+                const { count: affiliateUserCount, error: countError } = await supabaseClient
+                    .from('companies')
+                    .select('users!inner(id)', { count: 'exact', head: true })
+                    .eq('affiliate_id', affiliateId)
+                    .eq('users.role', 'app_user');
+                if(countError) throw countError;
+                document.getElementById('totalUsers').textContent = affiliateUserCount || 0;
+
                 document.getElementById('activeSubscriptions').textContent = metrics.active_clients;
             }
         } catch (error) {
@@ -142,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             showToast("Falha ao carregar dados do dashboard.", "error");
         }
     }
-
+    
     // --- LÓGICA DAS TABELAS (Planos) ---
     async function renderPlansTable() {
         console.log('[Admin] A renderizar a tabela de planos...');
@@ -237,7 +253,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         });
 
-        document.getElementById('userForm').addEventListener('submit', (event) => handleUserFormSubmit(event, userRole));
+        document.getElementById('userForm').addEventListener('submit', (event) => handleUserFormSubmit(event, userRole, affiliateId));
         document.getElementById('planForm').addEventListener('submit', handlePlanFormSubmit);
 
         document.getElementById('usersTableBody').addEventListener('click', async (e) => {
@@ -271,3 +287,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadAdminDashboard();
     setupModalListeners();
 });
+
