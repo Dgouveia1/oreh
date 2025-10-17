@@ -1,218 +1,184 @@
-import { supabaseClient, logEvent } from './api.js';
-import { showToast } from './ui.js';
+/* oreh/css/agenda.css */
 
-const agendaStartHour = 7;
-const agendaEndHour = 22;
-let currentScheduleDate = new Date();
-
-// --- FUNÇÕES DE CONTROLO ---
-
-function changeDay(offset) {
-    currentScheduleDate.setDate(currentScheduleDate.getDate() + offset);
-    loadAgenda();
+/* ESTILOS DA PÁGINA DE AGENDA - V3 MODERNA */
+#agendaPage.active {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 14rem); /* Ajusta a altura para preencher a tela */
+    gap: 2rem;
 }
 
-function updateDateDisplay() {
-    const display = document.getElementById('currentDateDisplay');
-    if (!display) return;
-
-    const startOfWeek = new Date(currentScheduleDate);
-    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6);
-
-    const startMonth = startOfWeek.toLocaleString('pt-BR', { month: 'short' });
-    const endMonth = endOfWeek.toLocaleString('pt-BR', { month: 'short' });
-
-    if (startMonth === endMonth) {
-        display.textContent = `${startOfWeek.getDate()} - ${endOfWeek.getDate()} de ${startOfWeek.toLocaleString('pt-BR', { month: 'long' })}`;
-    } else {
-        display.textContent = `${startOfWeek.getDate()} de ${startMonth} - ${endOfWeek.getDate()} de ${endMonth}`;
-    }
+.agenda-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 0.5rem;
+    background-color: var(--card-bg);
+    border-radius: 1.6rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
 }
 
-
-// --- LÓGICA DE DADOS (SUPABASE) ---
-
-export async function saveEvent(event) {
-    event.preventDefault();
-    const newEvent = {
-        assunto: document.getElementById('eventAssunto').value,
-        cliente: document.getElementById('eventCliente').value,
-        telefone: document.getElementById('eventTelefone').value,
-        local: document.getElementById('eventLocal').value,
-        data: document.getElementById('eventData').value,
-        hora_inicio: document.getElementById('eventHoraInicio').value,
-        hora_fim: document.getElementById('eventHoraFim').value,
-    };
-
-    try {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if (!user) throw new Error("Utilizador não autenticado.");
-        const { data: profile } = await supabaseClient.from('users').select('company_id').eq('id', user.id).single();
-        if (!profile) throw new Error("Perfil do utilizador não encontrado.");
-        newEvent.company_id = profile.company_id;
-
-        const { error } = await supabaseClient.from('events').insert([newEvent]);
-        if (error) throw error;
-
-        showToast('Evento criado com sucesso!', 'success');
-        // ✅ LOG DE SUCESSO
-        logEvent('INFO', `Evento '${newEvent.assunto}' criado na agenda.`);
-        document.getElementById('eventFormModal').style.display = 'none';
-        document.getElementById('eventForm').reset();
-        loadAgenda();
-    } catch (error) {
-        console.error('Erro ao salvar evento:', error);
-        showToast(error.message, 'error');
-        // ✅ LOG DE ERRO
-        logEvent('ERROR', `Falha ao criar evento '${newEvent.assunto}'`, { errorMessage: error.message, stack: error.stack });
-    }
+.date-navigation {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
-export async function loadAgenda() {
-    console.log("[OREH] Carregando a agenda do Supabase...");
-    
-    const agendaBody = document.getElementById('agendaBody');
-    if (agendaBody) {
-        agendaBody.innerHTML = '<p class="loading-message">Carregando agenda...</p>';
-    } else {
-        console.error("O corpo da agenda ('agendaBody') não foi encontrado!");
-        return;
-    }
-
-    try {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if (!user) throw new Error("Utilizador não autenticado.");
-
-        const { data: profile } = await supabaseClient.from('users').select('company_id').eq('id', user.id).single();
-        if (!profile) throw new Error("Perfil do utilizador não encontrado.");
-
-        const startOfWeek = new Date(currentScheduleDate);
-        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay());
-        startOfWeek.setHours(0, 0, 0, 0);
-
-        const endOfWeek = new Date(startOfWeek);
-        endOfWeek.setDate(startOfWeek.getDate() + 6);
-        endOfWeek.setHours(23, 59, 59, 999);
-
-        const { data: events, error } = await supabaseClient
-            .from('events')
-            .select('*')
-            .eq('company_id', profile.company_id)
-            .gte('data', startOfWeek.toISOString().split('T')[0])
-            .lte('data', endOfWeek.toISOString().split('T')[0]);
-
-        if (error) throw error;
-        
-        renderSchedule(events || []);
-
-    } catch (error) {
-        console.error("Erro ao carregar a agenda:", error);
-        showToast("Falha ao carregar os eventos da agenda.", 'error');
-        if (agendaBody) agendaBody.innerHTML = `<p class="loading-message error">${error.message}</p>`;
-        // ✅ LOG DE ERRO
-        logEvent('ERROR', 'Falha ao carregar eventos da agenda', { errorMessage: error.message, stack: error.stack });
-    }
+.date-navigation h3 {
+    font-size: 1.8rem;
+    color: var(--text-color);
+    font-weight: 600;
+    min-width: 25rem;
+    text-align: center;
 }
 
-
-// --- RENDERIZAÇÃO DA GRELHA E EVENTOS ---
-
-function renderSchedule(events) {
-    const timeline = document.getElementById('agendaTimeline');
-    const header = document.getElementById('agendaHeader');
-    const body = document.getElementById('agendaBody');
-    const gridContainer = document.getElementById('agendaGridContainer');
-
-    if (!timeline || !header || !body || !gridContainer) {
-        console.error("Elementos essenciais da agenda não encontrados para renderização.");
-        return;
-    }
-
-    timeline.innerHTML = '';
-    header.innerHTML = '';
-    body.innerHTML = '';
-
-    for (let hour = agendaStartHour; hour <= agendaEndHour; hour++) {
-        const timeSlot = document.createElement('div');
-        timeSlot.className = 'time-slot';
-        const timeSpan = document.createElement('span');
-        timeSpan.textContent = `${hour.toString().padStart(2, '0')}:00`;
-        timeSlot.appendChild(timeSpan);
-        timeline.appendChild(timeSlot);
-    }
-    
-    for (let i = 0; i < 7; i++) {
-        const dayDate = new Date(currentScheduleDate);
-        dayDate.setDate(currentScheduleDate.getDate() - currentScheduleDate.getDay() + i);
-
-        const dayHeader = document.createElement('div');
-        dayHeader.className = 'day-header';
-        const dayName = dayDate.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '').toUpperCase();
-        const dayNumber = dayDate.getDate();
-        dayHeader.innerHTML = `${dayName} <strong>${dayNumber}</strong>`;
-        header.appendChild(dayHeader);
-
-        const dayColumn = document.createElement('div');
-        dayColumn.className = 'day-column';
-        dayColumn.dataset.date = dayDate.toISOString().split('T')[0];
-        body.appendChild(dayColumn);
-    }
-    
-    if (events.length > 0) {
-        events.forEach(event => {
-            const targetColumn = body.querySelector(`.day-column[data-date="${event.data}"]`);
-            if (targetColumn) {
-                const eventCard = document.createElement('div');
-                eventCard.className = 'event-card';
-                eventCard.innerHTML = `<strong>${event.assunto}</strong><small>${event.cliente || ''}</small>`;
-
-                const [startHour, startMinute] = event.hora_inicio.split(':').map(Number);
-                const [endHour, endMinute] = event.hora_fim.split(':').map(Number);
-
-                const startMinutesSinceStart = ((startHour - agendaStartHour) * 60) + startMinute;
-                
-                const startTotalMinutes = (startHour * 60) + startMinute;
-                const endTotalMinutes = (endHour * 60) + endMinute;
-                const durationInMinutes = Math.max(30, endTotalMinutes - startTotalMinutes);
-                
-                // AJUSTE: Converte minutos para 'rem' para escalar com o zoom.
-                // 1 hora = 6rem (definido no CSS), então 1 minuto = 0.1rem.
-                const minuteToRem = 0.1;
-                eventCard.style.top = `${startMinutesSinceStart * minuteToRem}rem`;
-                eventCard.style.height = `${durationInMinutes * minuteToRem}rem`;
-
-
-                event.formatted_date = new Date(`${event.data}T00:00:00`).toLocaleDateString('pt-BR', {timeZone: 'UTC'});
-                Object.keys(event).forEach(key => {
-                    if(event[key] !== null) eventCard.dataset[key] = event[key];
-                });
-
-                targetColumn.appendChild(eventCard);
-            }
-        });
-    } else {
-        const noEventsMessage = document.createElement('p');
-        noEventsMessage.className = 'loading-message';
-        noEventsMessage.textContent = 'Nenhum evento para esta semana.';
-        body.appendChild(noEventsMessage);
-    }
-
-    requestAnimationFrame(() => {
-        const headerHeight = header.offsetHeight;
-        timeline.style.paddingTop = `${headerHeight}px`;
-    });
-
-    if (timeline.syncScrollListener) {
-        gridContainer.removeEventListener('scroll', timeline.syncScrollListener);
-    }
-    timeline.syncScrollListener = () => {
-        timeline.scrollTop = gridContainer.scrollTop;
-    };
-    gridContainer.addEventListener('scroll', timeline.syncScrollListener);
-
-    updateDateDisplay();
+.agenda-wrapper {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: 8rem 1fr; /* Coluna para a timeline e o restante para a grade */
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border-color);
+    border-radius: 1.6rem;
+    background-color: var(--card-bg);
 }
 
-export { changeDay };
+.agenda-timeline {
+    padding-top: 5rem; /* Espaço para o cabeçalho dos dias */
+    overflow: hidden;
+    position: relative;
+    border-right: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+}
+
+.time-slot {
+    height: var(--agenda-hour-height);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-top: 0.5rem;
+    color: var(--text-color-light);
+    font-size: 1.2rem;
+    position: relative;
+}
+
+.time-slot:last-child {
+    border-bottom: none;
+}
+
+.agenda-grid-container {
+    overflow: auto;
+    position: relative;
+}
+
+.agenda-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background-color: var(--card-bg);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.day-header {
+    text-align: center;
+    padding: 1.5rem 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-color);
+    border-right: 1px solid var(--border-color);
+}
+
+.day-header strong {
+    display: block;
+    font-size: 1.8rem;
+    margin-top: 0.2rem;
+    color: var(--primary);
+}
+
+.day-header:last-child {
+    border-right: none;
+}
+
+.agenda-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    position: relative;
+    background-image: 
+        repeating-linear-gradient(var(--border-color) 0 1px, transparent 1px 100%),
+        repeating-linear-gradient(90deg, var(--border-color) 0 1px, transparent 1px 100%);
+    background-size: calc(100% / 7) var(--agenda-hour-height);
+}
+
+.day-column {
+    position: relative;
+    min-height: calc(var(--agenda-hour-height) * (var(--agenda-end-hour) - var(--agenda-start-hour) + 1));
+}
+
+.event-card {
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 1rem;
+    border-radius: 0.8rem;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 1;
+}
+
+.event-card:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-lg);
+    z-index: 3;
+}
+
+.event-card strong {
+    font-size: 1.4rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.event-card small {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+.modal-content .event-details p {
+    font-size: 1.6rem;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.modal-content .event-details i {
+    color: var(--primary);
+    width: 2rem;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .agenda-wrapper {
+        grid-template-columns: 6rem 1fr;
+    }
+    .date-navigation h3 {
+        min-width: auto;
+        font-size: 1.6rem;
+    }
+    .agenda-controls {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+}

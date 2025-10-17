@@ -17,6 +17,13 @@
     animation: fadeIn 0.5s ease;
     position: relative;
     overflow: hidden;
+    transition: var(--transition); /* Adiciona transição para o efeito de drag-over */
+}
+
+/* Adiciona estilo para quando um card é arrastado sobre a seção */
+.human-attention-section.drag-over {
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.05), rgba(231, 76, 60, 0.1));
+    border-color: var(--danger);
 }
 
 .human-attention-section::before {
@@ -74,8 +81,8 @@
 /* Estrutura do Kanban */
 .kanban-board {
     display: grid;
-    /* AJUSTE: Grid fluida que se adapta */
-    grid-template-columns: repeat(auto-fit, minmax(min(30rem, 100%), 1fr));
+    /* AJUSTE: Força 4 colunas e permite scroll horizontal para garantir o alinhamento lado a lado */
+    grid-template-columns: repeat(4, minmax(30rem, 1fr));
     gap: 2.5rem;
     overflow-x: auto;
     min-height: 0;
@@ -293,13 +300,27 @@ body.dark-mode .kanban-column.drag-over .kanban-cards-container {
     color: white;
     font-size: 0.8em;
     box-shadow: 0 0.2rem 0.8rem rgba(0,0,0,0.15);
+    background-color: var(--gray); /* Fallback for any unhandled status */
 }
 
-.status-badge[data-status="Aguardando"] { background: linear-gradient(135deg, #f39c12, #e67e22); }
-.status-badge[data-status="Em atendimento"] { background: linear-gradient(135deg, #3498db, #2980b9); }
+.status-badge[data-status="Aguardando"],
+.status-badge[data-status="INTERESSADO"],
+.status-badge[data-status="EM DÚVIDA"] { background: linear-gradient(135deg, #f39c12, #e67e22); }
+
+.status-badge[data-status="Em atendimento"],
+.status-badge[data-status="Atendimento"],
+.status-badge[data-status="ATENDIMENTO_ASSUMIDO"] { background: linear-gradient(135deg, #3498db, #2980b9); }
+
 .status-badge[data-status="ATENDIMENTO_HUMANO"] { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-.status-badge[data-status="Finalizado"] { background: linear-gradient(135deg, #95a5a6, #7f8c8d); }
+
+.status-badge[data-status="POTENCIAL VENDA"],
+.status-badge[data-status="PRONTO PARA FECHAR"] { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+
+.status-badge[data-status="Finalizado"],
+.status-badge[data-status="SEM INTERESSE"] { background: linear-gradient(135deg, #95a5a6, #7f8c8d); }
+
 .status-badge[data-status="N/A"] { background: linear-gradient(135deg, #bdc3c7, #95a5a6); }
+
 
 /* Mensagens de feedback */
 .loading-message {
@@ -325,3 +346,4 @@ body.dark-mode .kanban-column.drag-over .kanban-cards-container {
     .kanban-board, .human-attention-container { grid-template-columns: 1fr; }
     .kanban-column { min-width: auto; }
 }
+

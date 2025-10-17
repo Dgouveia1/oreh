@@ -36,6 +36,10 @@ function updateDateDisplay() {
 
 export async function saveEvent(event) {
     event.preventDefault();
+    const saveBtn = event.target.querySelector('button[type="submit"]');
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Salvando...';
+
     const newEvent = {
         assunto: document.getElementById('eventAssunto').value,
         cliente: document.getElementById('eventCliente').value,
@@ -65,6 +69,9 @@ export async function saveEvent(event) {
         console.error('Erro ao salvar evento:', error);
         showToast(error.message, 'error');
         logEvent('ERROR', `Falha ao criar evento '${newEvent.assunto}'`, { errorMessage: error.message, stack: error.stack });
+    } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Salvar Evento';
     }
 }
 
@@ -73,7 +80,7 @@ export async function loadAgenda() {
     
     const agendaBody = document.getElementById('agendaBody');
     if (agendaBody) {
-        agendaBody.innerHTML = '<p class="loading-message">Carregando agenda...</p>';
+        agendaBody.innerHTML = ''; // Limpa o corpo para reconstrução
     } else {
         console.error("O corpo da agenda ('agendaBody') não foi encontrado!");
         return;
@@ -120,30 +127,30 @@ function renderSchedule(events) {
     const timeline = document.getElementById('agendaTimeline');
     const header = document.getElementById('agendaHeader');
     const body = document.getElementById('agendaBody');
-    const gridContainer = document.getElementById('agendaGridContainer');
 
-    if (!timeline || !header || !body || !gridContainer) {
+    if (!timeline || !header || !body) {
         console.error("Elementos essenciais da agenda não encontrados para renderização.");
         return;
     }
 
     timeline.innerHTML = '';
     header.innerHTML = '';
-    body.innerHTML = '';
+    body.innerHTML = ''; // Limpa o corpo da agenda
 
+    // Cria a linha do tempo (horas)
     for (let hour = agendaStartHour; hour <= agendaEndHour; hour++) {
         const timeSlot = document.createElement('div');
         timeSlot.className = 'time-slot';
-        const timeSpan = document.createElement('span');
-        timeSpan.textContent = `${hour.toString().padStart(2, '0')}:00`;
-        timeSlot.appendChild(timeSpan);
+        timeSlot.textContent = `${hour.toString().padStart(2, '0')}:00`;
         timeline.appendChild(timeSlot);
     }
     
+    // Cria o cabeçalho e as colunas dos dias
     for (let i = 0; i < 7; i++) {
         const dayDate = new Date(currentScheduleDate);
         dayDate.setDate(currentScheduleDate.getDate() - currentScheduleDate.getDay() + i);
 
+        // Cabeçalho
         const dayHeader = document.createElement('div');
         dayHeader.className = 'day-header';
         const dayName = dayDate.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '').toUpperCase();
@@ -151,12 +158,14 @@ function renderSchedule(events) {
         dayHeader.innerHTML = `${dayName} <strong>${dayNumber}</strong>`;
         header.appendChild(dayHeader);
 
+        // Coluna do corpo
         const dayColumn = document.createElement('div');
         dayColumn.className = 'day-column';
         dayColumn.dataset.date = dayDate.toISOString().split('T')[0];
         body.appendChild(dayColumn);
     }
     
+    // Renderiza os eventos nas colunas corretas
     if (events.length > 0) {
         events.forEach(event => {
             const targetColumn = body.querySelector(`.day-column[data-date="${event.data}"]`);
@@ -174,9 +183,8 @@ function renderSchedule(events) {
                 const endTotalMinutes = (endHour * 60) + endMinute;
                 const durationInMinutes = Math.max(30, endTotalMinutes - startTotalMinutes);
                 
-                // CORREÇÃO: Convertendo minutos para 'rem' para escalar com o layout.
-                // 1 hora = 6rem (definido no CSS), então 1 minuto = 0.1rem.
-                const minuteToRem = 0.1;
+                // 1 hora = 6rem, então 1 minuto = 0.1rem.
+                const minuteToRem = 6 / 60; 
                 eventCard.style.top = `${startMinutesSinceStart * minuteToRem}rem`;
                 eventCard.style.height = `${durationInMinutes * minuteToRem}rem`;
 
@@ -188,27 +196,7 @@ function renderSchedule(events) {
                 targetColumn.appendChild(eventCard);
             }
         });
-    } else {
-        const noEventsMessage = document.createElement('p');
-        noEventsMessage.className = 'loading-message';
-        noEventsMessage.textContent = 'Nenhum evento para esta semana.';
-        // Garante que a mensagem não quebre o layout
-        noEventsMessage.style.gridColumn = '1 / -1';
-        body.appendChild(noEventsMessage);
     }
-
-    requestAnimationFrame(() => {
-        const headerHeight = header.offsetHeight;
-        timeline.style.paddingTop = `${headerHeight}px`;
-    });
-
-    if (timeline.syncScrollListener) {
-        gridContainer.removeEventListener('scroll', timeline.syncScrollListener);
-    }
-    timeline.syncScrollListener = () => {
-        timeline.scrollTop = gridContainer.scrollTop;
-    };
-    gridContainer.addEventListener('scroll', timeline.syncScrollListener);
 
     updateDateDisplay();
 }
