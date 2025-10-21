@@ -101,32 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- FUNÇÕES DE CONTROLE DE PROGRESSO VISUAL ---
-
-    function updateProgress(currentStepName) {
-        const steps = document.querySelectorAll('.progress-step');
-        const stepOrder = ['welcome', 'personal-data', 'ai-config', 'business-questions', 'plans', 'payment-pending'];
-        const currentIndex = stepOrder.indexOf(currentStepName);
-
-        steps.forEach((step, index) => {
-            step.classList.remove('is-active', 'is-complete');
-            if (index < currentIndex) {
-                step.classList.add('is-complete');
-            } else if (index === currentIndex) {
-                step.classList.add('is-active');
-            }
-        });
-
-        const backButton = document.getElementById('backButton');
-        if (backButton) {
-            if (currentIndex > 0 && currentStepName !== 'payment-pending') {
-                backButton.style.display = 'inline-flex';
-            } else {
-                backButton.style.display = 'none';
-            }
-        }
-    }
-
 
     // --- FUNÇÕES DE RENDERIZAÇÃO DAS ETAPAS ---
 
@@ -315,7 +289,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function renderStep(step) {
         currentStep = step;
-        updateProgress(step); // Atualiza o stepper visual
         switch (step) {
             case 'welcome': renderWelcomeStep(); break;
             case 'personal-data': renderPersonalDataStep(); break;
@@ -327,7 +300,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // As funções handle... (handleCreateAccount, etc.) permanecem as mesmas, com a adição da lógica de cupom em handleSelectPlan
     async function handleCreateAccount() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
@@ -449,10 +421,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const description = coupon ? `${planName} (Cupom: ${coupon.code})` : planName;
             const subscription = await createSubscription(asaasCustomerId, finalValue, description);
             
-            await supabaseClient.from('companies').update({
+            // Prepara os dados para a atualização da empresa
+            const companyUpdateData = {
                 asaas_subscription_id: subscription.id,
                 plan_id: planId
-            }).eq('id', companyId);
+            };
+    
+            // Se um cupom foi aplicado, adiciona seu ID aos dados de atualização
+            if (coupon) {
+                companyUpdateData.used_coupon_id = coupon.id;
+            }
+
+            await supabaseClient.from('companies').update(companyUpdateData).eq('id', companyId);
 
             if (coupon) {
                 const { error: incrementError } = await supabaseClient.rpc('increment_coupon_usage', { p_coupon_id: coupon.id });
@@ -537,18 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderStep('welcome');
         }
     }
-    
-    // Botão de voltar
-    const backButton = document.getElementById('backButton');
-    if (backButton) {
-        backButton.addEventListener('click', () => {
-            const stepOrder = ['welcome', 'personal-data', 'ai-config', 'business-questions', 'plans'];
-            const currentIndex = stepOrder.indexOf(currentStep);
-            if (currentIndex > 0) {
-                renderStep(stepOrder[currentIndex - 1]);
-            }
-        });
-    }
 
     initializeOnboardingState();
 });
+
