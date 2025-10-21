@@ -1,5 +1,6 @@
-import { renderUsersTable } from './admin-clientes.js';
+import { renderUsersTable, handleUserFormSubmit, openUserEditModal } from './admin-clientes.js';
 import { renderAffiliatesTable, setupAffiliateModal } from './affiliates.js';
+import { renderCouponsTable, setupCouponModalListeners } from './admin-cupons.js';
 import { supabaseClient } from './api.js';
 import { showToast, setTableLoading, setAllPlans, setAllAffiliates, getAllPlans, getAllAffiliates } from './admin-helpers.js';
 
@@ -54,6 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (role === 'admin') { // Visão do Afiliado
             document.querySelector('.nav-link[data-page="adminPlans"]').style.display = 'none';
             document.querySelector('.nav-link[data-page="adminAffiliates"]').style.display = 'none';
+            document.querySelector('.nav-link[data-page="adminCoupons"]').style.display = 'none';
             document.getElementById('totalAffiliatesCard').style.display = 'none';
             document.querySelector('.charts-grid').style.display = 'none'; // Esconde gráficos por padrão
             document.getElementById('affiliateColumnHeader').style.display = 'none'; // Esconde coluna de afiliado na tabela de clientes
@@ -110,6 +112,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 case 'adminDashboard': loadAdminDashboard(); break;
                 case 'adminUsers': renderUsersTable(userRole, affiliateId); break; // Passa a role e o ID
                 case 'adminPlans': renderPlansTable(); break;
+                case 'adminCoupons': renderCouponsTable(); break;
                 case 'adminAffiliates': renderAffiliatesTable(); break;
             }
         });
@@ -280,6 +283,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         setupAffiliateModal(); // Configura os listeners para a tabela de afiliados
+        setupCouponModalListeners(); // Configura os listeners para a tabela de cupons
     }
 
     // --- INICIALIZAÇÃO DA PÁGINA ---
@@ -287,4 +291,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadAdminDashboard();
     setupModalListeners();
 });
-

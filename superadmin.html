@@ -29,6 +29,7 @@
                 <!-- O texto aqui será "Gestão de Clientes" para superadmin e "Meus Clientes" para afiliado -->
                 <li><a href="#" class="nav-link" data-page="adminUsers"><i class="fas fa-users-cog"></i> <span>Gestão de Clientes</span></a></li>
                 <li><a href="#" class="nav-link" data-page="adminPlans"><i class="fas fa-file-invoice-dollar"></i> <span>Planos</span></a></li>
+                <li><a href="#" class="nav-link" data-page="adminCoupons"><i class="fas fa-tags"></i> <span>Cupons</span></a></li>
                 <li><a href="#" class="nav-link" data-page="adminAffiliates"><i class="fas fa-sitemap"></i> <span>Afiliados</span></a></li>
                 <li><a href="index.html" class="nav-link"><i class="fas fa-arrow-left"></i> <span>Voltar para Oreh</span></a></li>
             </ul>
@@ -136,6 +137,33 @@
                             </tr>
                         </thead>
                         <tbody id="plansTableBody">
+                            <!-- Conteúdo gerado via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Página de Gestão de Cupons -->
+            <div id="adminCouponsPage" class="page-content">
+                <div class="page-header">
+                    <h2>Gerenciar Cupons de Desconto</h2>
+                    <button class="btn btn-primary" id="openCouponModalBtn"><i class="fas fa-plus"></i> Novo Cupom</button>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Campanha</th>
+                                <th>Código</th>
+                                <th>Desconto</th>
+                                <th>Plano</th>
+                                <th>Uso</th>
+                                <th>Expira em</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="couponsTableBody">
                             <!-- Conteúdo gerado via JS -->
                         </tbody>
                     </table>
@@ -273,10 +301,69 @@
             </form>
         </div>
     </div>
+
+    <!-- Modal de Cupom -->
+    <div class="modal" id="couponModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3 id="couponModalTitle">Novo Cupom</h3>
+            </div>
+            <form id="couponForm">
+                <input type="hidden" id="couponId">
+                <div class="input-group">
+                    <label for="couponCampaignName">Nome da Campanha</label>
+                    <input type="text" id="couponCampaignName" required>
+                </div>
+                <div class="input-group">
+                    <label for="couponCode">Código do Cupom (Ex: NATAL20)</label>
+                    <input type="text" id="couponCode" required>
+                </div>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="couponDiscountType">Tipo de Desconto</label>
+                        <select id="couponDiscountType" required>
+                            <option value="percentage">Porcentagem (%)</option>
+                            <option value="fixed">Valor Fixo (R$)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="couponDiscountValue">Valor do Desconto</label>
+                        <input type="number" step="0.01" id="couponDiscountValue" required>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="couponUsageLimit">Limite de Usos (em branco para ilimitado)</label>
+                        <input type="number" id="couponUsageLimit" placeholder="Ex: 100">
+                    </div>
+                    <div class="input-group">
+                        <label for="couponExpiresAt">Data de Expiração (opcional)</label>
+                        <input type="date" id="couponExpiresAt">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="couponApplicablePlan">Aplicar ao Plano</label>
+                    <select id="couponApplicablePlan"></select>
+                </div>
+                 <div class="form-group form-group-toggle" style="align-items: center; border-bottom: none; padding-bottom: 0;">
+                    <label for="couponIsActive">Cupom Ativo</label>
+                    <div class="toggle-switch" style="margin-top: 0;">
+                        <input type="checkbox" id="couponIsActive" class="toggle-input" checked>
+                        <label for="couponIsActive" class="toggle-label"></label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar Cupom</button>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="js/admin-helpers.js"></script>
     <script type="module" src="js/admin-clientes.js"></script>
+    <script type="module" src="js/admin-cupons.js"></script>
     <script type="module" src="js/admin.js"></script>
     <script type="module" src="js/affiliates.js"></script>
 </body>

@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let onboardingState = {
         user: null,
         company: null,
+        appliedCoupon: null // Armazena os dados do cupom válido
     };
 
     function showToast(message, type = 'info') {
@@ -20,8 +21,90 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- FUNÇÕES DE LÓGICA DE CUPOM ---
+
+    async function applyCoupon() {
+        const codeInput = document.getElementById('couponCode');
+        const feedbackEl = document.getElementById('couponFeedback');
+        const applyBtn = document.getElementById('applyCouponBtn');
+        const code = codeInput.value.trim().toUpperCase();
+
+        if (!code) {
+            showToast('Por favor, insira um código de cupom.', 'error');
+            return;
+        }
+
+        applyBtn.disabled = true;
+        applyBtn.textContent = 'Verificando...';
+        feedbackEl.textContent = '';
+        onboardingState.appliedCoupon = null; // Reseta o cupom anterior
+        resetPlanPrices(); // Volta os preços para o original
+
+        try {
+            const { data: result, error } = await supabaseClient.rpc('validate_coupon', { coupon_code: code });
+
+            if (error) throw error;
+            if (result.error) throw new Error(result.error);
+            
+            onboardingState.appliedCoupon = result;
+            showToast('Cupom aplicado com sucesso!', 'success');
+            feedbackEl.textContent = `Cupom "${result.code}" aplicado!`;
+            feedbackEl.style.color = 'var(--success)';
+            updatePlanPrices();
+
+        } catch (e) {
+            showToast(e.message, 'error');
+            feedbackEl.textContent = e.message;
+            feedbackEl.style.color = 'var(--danger)';
+        } finally {
+            applyBtn.disabled = false;
+            applyBtn.textContent = 'Aplicar';
+        }
+    }
+
+    function updatePlanPrices() {
+        const coupon = onboardingState.appliedCoupon;
+        if (!coupon) return;
+
+        document.querySelectorAll('.plan-card').forEach(card => {
+            const planId = card.dataset.planId;
+            const originalPrice = parseFloat(card.dataset.planOriginalValue);
+            const priceEl = card.querySelector('.price');
+
+            if (coupon.applicable_plan_id && coupon.applicable_plan_id !== planId) {
+                return; // Cupom não se aplica a este plano
+            }
+
+            let newPrice = originalPrice;
+            if (coupon.discount_type === 'percentage') {
+                newPrice = originalPrice * (1 - coupon.discount_value / 100);
+            } else { // 'fixed'
+                newPrice = originalPrice - coupon.discount_value;
+            }
+
+            newPrice = Math.max(0.01, newPrice); // Preço mínimo de 1 centavo
+
+            priceEl.innerHTML = `
+                <span style="text-decoration: line-through; color: var(--text-color-light); font-size: 2rem;">R$ ${originalPrice.toFixed(2).replace('.', ',')}</span>
+                R$ ${newPrice.toFixed(2).replace('.', ',')}<span>/mês</span>
+            `;
+        });
+    }
+
+    function resetPlanPrices() {
+        document.querySelectorAll('.plan-card').forEach(card => {
+            const originalPrice = parseFloat(card.dataset.planOriginalValue);
+            const priceEl = card.querySelector('.price');
+            if (priceEl) {
+                priceEl.innerHTML = `R$ ${originalPrice.toFixed(2).replace('.', ',')}<span>/mês</span>`;
+            }
+        });
+    }
+
+
+    // --- FUNÇÕES DE RENDERIZAÇÃO DAS ETAPAS ---
+
     function renderWelcomeStep() {
-        console.log('[DEBUG] Renderizando etapa: welcome');
         const stepContainer = document.getElementById('stepContainer');
         if (!stepContainer) return;
         stepContainer.innerHTML = `
@@ -47,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderPersonalDataStep() {
-        console.log('[DEBUG] Renderizando etapa: personal-data');
         const stepContainer = document.getElementById('stepContainer');
         if (!stepContainer) return;
         stepContainer.innerHTML = `
@@ -73,7 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderAiConfigStep() {
-        console.log('[DEBUG] Renderizando etapa: ai-config');
         const stepContainer = document.getElementById('stepContainer');
         if (!stepContainer) return;
         stepContainer.innerHTML = `
@@ -99,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderBusinessQuestionsStep() {
-        console.log('[DEBUG] Renderizando etapa: business-questions');
         const stepContainer = document.getElementById('stepContainer');
         if (!stepContainer) return;
         stepContainer.innerHTML = `
@@ -121,7 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function renderPlansStep() {
-        console.log('[DEBUG] Renderizando etapa: plans');
         const stepContainer = document.getElementById('stepContainer');
         if (!stepContainer) return;
 
@@ -129,20 +208,25 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="step-content active">
                 <h2>Escolha o plano que melhor se encaixa no seu negócio.</h2>
                 <p>Todos os planos começam com um período de 7 dias para você testar. A cobrança só virá após esse período.</p>
+                <div class="coupon-section" style="margin-bottom: 2.5rem; background-color: var(--bg-color); padding: 2rem; border-radius: 1.2rem; border: 1px solid var(--border-color);">
+                    <label for="couponCode" style="font-weight: 600; display: block; margin-bottom: 1rem;">Tem um cupom de desconto?</label>
+                    <div style="display: flex; gap: 1rem;">
+                        <input type="text" id="couponCode" placeholder="Insira o código" style="flex-grow: 1; margin:0; padding: 1.2rem 1.6rem; border-radius: 0.8rem; text-transform: uppercase;">
+                        <button id="applyCouponBtn" class="btn btn-secondary" style="padding: 1.2rem 2rem; margin:0; white-space: nowrap;">Aplicar</button>
+                    </div>
+                    <p id="couponFeedback" style="font-size: 1.4rem; margin-top: 1rem; font-weight: 500;"></p>
+                </div>
                 <div class="plans-grid" id="plansGridContainer">
                     <p class="loading-message">Carregando planos...</p>
                 </div>
             </div>
         `;
 
+        document.getElementById('applyCouponBtn').addEventListener('click', applyCoupon);
+
         try {
-            const { data: plans, error } = await supabaseClient
-                .from('plans')
-                .select('*')
-                .order('price', { ascending: true });
-
+            const { data: plans, error } = await supabaseClient.from('plans').select('*').order('price', { ascending: true });
             if (error) throw error;
-
             const plansGridContainer = document.getElementById('plansGridContainer');
             if (!plansGridContainer) return;
 
@@ -154,6 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     planCard.dataset.planId = plan.id;
                     planCard.dataset.planName = plan.name;
                     planCard.dataset.planValue = plan.price;
+                    planCard.dataset.planOriginalValue = plan.price;
 
                     planCard.innerHTML = `
                         <h4>${plan.name}</h4>
@@ -174,7 +259,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 plansGridContainer.innerHTML = '<p class="loading-message">Nenhum plano disponível encontrado.</p>';
             }
-
         } catch (error) {
             console.error('Erro ao carregar planos:', error);
             showToast('Não foi possível carregar os planos.', 'error');
@@ -186,25 +270,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function renderPaymentPendingStep() {
-        console.log('[DEBUG] Renderizando etapa: payment-pending');
         const stepContainer = document.getElementById('stepContainer');
         if (!stepContainer) return;
         stepContainer.innerHTML = `
             <div class="step-content active">
                 <h2>Quase lá!</h2>
-                <p>O pagamento da sua assinatura foi aberta em uma nova guia</p>
-                <p>Liberado seu periodo de teste</p>
-                <p>Já pode começar a usar o Oreh</p>
-                <button id="checkPaymentBtn" class="btn btn-primary">Verificar Status da Assinatura</button>
-                <button id="logoutBtn" class="btn btn-secondary" style="margin-top: 10px;">Acessar o painel com 7 dias de teste</button>
+                <p>Sua assinatura foi criada e o link de pagamento aberto em uma nova aba.</p>
+                <p>Enquanto isso, você já tem <strong>7 dias de teste grátis</strong> para explorar a plataforma!</p>
+                <button id="goToAppBtn" class="btn btn-primary">Acessar o painel Oreh</button>
             </div>
         `;
-        document.getElementById('checkPaymentBtn').addEventListener('click', handleCheckPaymentStatus);
-        document.getElementById('logoutBtn').addEventListener('click', () => supabaseClient.auth.signOut().then(() => window.location.href = 'index.html'));
+        document.getElementById('goToAppBtn').addEventListener('click', () => {
+             supabaseClient.auth.signOut().then(() => window.location.href = 'index.html');
+        });
     }
 
+    // --- FUNÇÕES DE CONTROLE DE FLUXO ---
+    
     function renderStep(step) {
-        console.log(`[DEBUG] Chamando renderStep para: ${step}`);
         currentStep = step;
         switch (step) {
             case 'welcome': renderWelcomeStep(); break;
@@ -216,30 +299,25 @@ document.addEventListener('DOMContentLoaded', () => {
             default: renderWelcomeStep();
         }
     }
-
+    
+    // As funções handle... (handleCreateAccount, etc.) permanecem as mesmas, com a adição da lógica de cupom em handleSelectPlan
     async function handleCreateAccount() {
-        console.log('[DEBUG] handleCreateAccount iniciado.');
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const passwordConfirm = document.getElementById('passwordConfirm').value;
 
-        if (password !== passwordConfirm) {
-            return showToast('As senhas não coincidem.', 'error');
-        }
+        if (password !== passwordConfirm) return showToast('As senhas não coincidem.', 'error');
         showToast('Criando sua conta, aguarde...', 'info');
 
         try {
             const { data, error } = await supabaseClient.auth.signUp({ email, password });
             if (error) throw error;
-            console.log('[DEBUG] Conta criada no Supabase Auth.');
             
             const { data: loginData, error: loginError } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (loginError) throw loginError;
-            console.log('[DEBUG] Login automático realizado com sucesso.');
             
             onboardingState.user = loginData.user;
             renderStep('personal-data');
-
         } catch (error) {
             console.error('Erro ao criar conta:', error);
             showToast(error.message, 'error');
@@ -247,7 +325,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function handleSavePersonalData() {
-        console.log('[DEBUG] handleSavePersonalData iniciado.');
         const fullName = document.getElementById('fullName').value;
         const cpfCnpj = document.getElementById('cpfCnpj').value;
         const phone = document.getElementById('phone').value;
@@ -257,11 +334,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         try {
             const customer = await createCustomer(fullName, cpfCnpj);
-            console.log('[DEBUG] Cliente Asaas criado:', customer);
-            
             const { data: companyData, error: companyError } = await supabaseClient.from('companies').select('*').single();
             if (companyError) throw companyError;
-            console.log('[DEBUG] Empresa encontrada no Supabase:', companyData);
             
             const { data: updatedCompany, error: updateError } = await supabaseClient
                 .from('companies')
@@ -277,10 +351,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 .single();
 
             if (updateError) throw updateError;
-            console.log('[DEBUG] Empresa atualizada com sucesso:', updatedCompany);
             onboardingState.company = updatedCompany;
             renderStep('ai-config');
-
         } catch (error) {
             console.error('Erro ao salvar dados pessoais:', error);
             showToast(error.message, 'error');
@@ -288,27 +360,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function handleSaveAiConfig() {
-        console.log('[DEBUG] handleSaveAiConfig iniciado.');
         const agentFunction = document.getElementById('agentFunction').value;
         const personalityStyle = document.getElementById('personalityStyle').value;
         const basePrompt = document.getElementById('basePrompt').value;
-
         showToast('Salvando configurações da IA...', 'info');
-        
         try {
-            const { error } = await supabaseClient
-                .from('company_secrets')
-                .update({
-                    ai_agent_function: agentFunction,
-                    ai_personality_style: personalityStyle,
-                    base_prompt: basePrompt
-                })
-                .eq('company_id', onboardingState.company.id);
-
+            const { error } = await supabaseClient.from('company_secrets').update({
+                ai_agent_function: agentFunction,
+                ai_personality_style: personalityStyle,
+                base_prompt: basePrompt
+            }).eq('company_id', onboardingState.company.id);
             if (error) throw error;
-            console.log('[DEBUG] Configurações de IA salvas.');
             renderStep('business-questions');
-
         } catch (error) {
             console.error('Erro ao salvar config da IA:', error);
             showToast(error.message, 'error');
@@ -316,24 +379,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function handleSaveBusinessQuestions() {
-        console.log('[DEBUG] handleSaveBusinessQuestions iniciado.');
         const companyAddress = document.getElementById('companyAddress').value;
         const socialMedia = document.getElementById('socialMedia').value;
-        
         showToast('Quase lá...', 'info');
-
         try {
-            const { error } = await supabaseClient
-                .from('onboarding_data')
-                .insert({
-                    company_id: onboardingState.company.id,
-                    responses: { companyAddress, socialMedia }
-                });
-            
+            const { error } = await supabaseClient.from('onboarding_data').insert({
+                company_id: onboardingState.company.id,
+                responses: { companyAddress, socialMedia }
+            });
             if (error) throw error;
-            console.log('[DEBUG] Perguntas de negócio salvas.');
             renderStep('plans');
-
         } catch (error) {
             console.error('Erro ao salvar perguntas de negócio:', error);
             showToast(error.message, 'error');
@@ -341,39 +396,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function handleSelectPlan(planId, planName, planValue) {
-        console.log(`[DEBUG] handleSelectPlan iniciado para o plano: ${planName}`);
+        let finalValue = parseFloat(planValue);
+        const coupon = onboardingState.appliedCoupon;
+        const card = document.querySelector(`.plan-card[data-plan-id="${planId}"]`);
+        
+        if (card) {
+            const originalPrice = parseFloat(card.dataset.planOriginalValue);
+             if (coupon && (!coupon.applicable_plan_id || coupon.applicable_plan_id === planId)) {
+                if (coupon.discount_type === 'percentage') {
+                    finalValue = originalPrice * (1 - coupon.discount_value / 100);
+                } else { // fixed
+                    finalValue = originalPrice - coupon.discount_value;
+                }
+                finalValue = Math.max(0.01, finalValue);
+            } else {
+                finalValue = originalPrice;
+            }
+        }
+        
         showToast('Criando sua assinatura, aguarde...', 'info');
         try {
             const companyId = onboardingState.company.id;
             const asaasCustomerId = onboardingState.company.asaas_customer_id;
 
-            const subscription = await createSubscription(asaasCustomerId, planValue, planName);
-            console.log('[DEBUG] Assinatura Asaas criada:', subscription);
+            const description = coupon ? `${planName} (Cupom: ${coupon.code})` : planName;
+            const subscription = await createSubscription(asaasCustomerId, finalValue, description);
             
             await supabaseClient.from('companies').update({
                 asaas_subscription_id: subscription.id,
                 plan_id: planId
             }).eq('id', companyId);
-            console.log('[DEBUG] ID da assinatura salvo no Supabase.');
+
+            if (coupon) {
+                const { error: incrementError } = await supabaseClient.rpc('increment_coupon_usage', { p_coupon_id: coupon.id });
+                if(incrementError) {
+                    console.error('Falha ao incrementar o uso do cupom:', incrementError);
+                }
+            }
 
             const paymentUrl = await getSubscriptionPaymentUrl(subscription.id);
             if (!paymentUrl) throw new Error("Não foi possível obter o link de pagamento.");
-            console.log('[DEBUG] URL de pagamento obtida:', paymentUrl);
             
             await supabaseClient.from('companies').update({ status: 'payment_pending' }).eq('id', companyId);
-            console.log('[DEBUG] Status da empresa atualizado para "payment_pending".');
 
             window.open(paymentUrl, '_blank');
             renderStep('payment-pending');
-
         } catch (error) {
             console.error('Erro ao selecionar plano:', error);
             showToast(`Erro: ${error.message}`, 'error');
         }
     }
+    
+    // ... restante das funções (handleCheckPaymentStatus, initializeOnboardingState) sem alterações
 
     async function handleCheckPaymentStatus() {
-        console.log('[DEBUG] handleCheckPaymentStatus iniciado.');
         showToast('Verificando status da assinatura...', 'info');
         try {
             if (!onboardingState.company || !onboardingState.company.asaas_subscription_id) {
@@ -381,13 +457,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const subscription = await getSubscriptionStatus(onboardingState.company.asaas_subscription_id);
-            console.log('[DEBUG] Status da assinatura recebido do Asaas:', subscription);
             
             if (subscription.status === 'ACTIVE') {
                 showToast('Pagamento confirmado! Bem-vindo!', 'success');
                 
                 await supabaseClient.from('companies').update({ status: 'active' }).eq('id', onboardingState.company.id);
-                console.log('[DEBUG] Status da empresa atualizado para "active". Redirecionando...');
                 window.location.replace('index.html');
 
             } else {
@@ -399,56 +473,45 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(error.message, 'error');
         }
     }
-
+    
     async function initializeOnboardingState() {
-        console.log('[DEBUG] initializeOnboardingState iniciado.');
         const { data: { session } } = await supabaseClient.auth.getSession();
         
         if (session) {
-            console.log('[DEBUG] Sessão encontrada para o usuário:', session.user.id);
             onboardingState.user = session.user;
             
             const { data, error } = await supabaseClient.from('companies').select('*').single();
 
             if (error) {
-                console.error('[DEBUG] Erro ao buscar empresa:', error.message);
                 renderStep('personal-data');
                 return;
             }
 
             if (data) {
-                console.log('[DEBUG] Dados da empresa encontrados:', data);
                 onboardingState.company = data;
 
                 if (data.status === 'active') {
-                    console.log('[DEBUG] Usuário ativo. Redirecionando...');
                     window.location.replace('index.html');
                     return; 
                 }
 
                 if (data.status === 'payment_pending') {
-                     console.log('[DEBUG] Status "payment_pending". Renderizando etapa de pagamento.');
                      renderStep('payment-pending');
                      return;
                 }
 
                 if (!data.asaas_customer_id) {
-                    console.log('[DEBUG] asaas_customer_id não encontrado. Renderizando etapa de dados pessoais.');
                     renderStep('personal-data');
                 } else {
-                    console.log('[DEBUG] asaas_customer_id encontrado. Renderizando etapa de config da IA.');
                     renderStep('ai-config');
                 }
             } else {
-                 console.log('[DEBUG] Nenhum dado de empresa retornado. Renderizando etapa de dados pessoais.');
                  renderStep('personal-data');
             }
         } else {
-            console.log('[DEBUG] Nenhuma sessão encontrada. Renderizando etapa de boas-vindas.');
             renderStep('welcome');
         }
     }
 
     initializeOnboardingState();
 });
-

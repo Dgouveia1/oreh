@@ -146,7 +146,27 @@
     grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
     gap: 2.5rem;
     margin: 3rem 0;
+    max-height: 45vh; /* Altura máxima antes de rolar */
+    overflow-y: auto; /* Adiciona a barra de rolagem vertical quando necessário */
+    padding-right: 1rem; /* Espaço para a barra de rolagem não sobrepor o conteúdo */
 }
+
+/* Estilização da barra de rolagem para navegadores Webkit (Chrome, Safari) */
+.plans-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.plans-grid::-webkit-scrollbar-track {
+    background: var(--bg-color);
+    border-radius: 10px;
+}
+
+.plans-grid::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 10px;
+    border: 2px solid var(--bg-color);
+}
+
 
 .plan-card, .plan-card-onboarding {
     border: 0.2rem solid var(--border-color);
