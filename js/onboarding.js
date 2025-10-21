@@ -101,6 +101,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- FUNÇÕES DE CONTROLE DE PROGRESSO VISUAL ---
+
+    function updateProgress(currentStepName) {
+        const steps = document.querySelectorAll('.progress-step');
+        const stepOrder = ['welcome', 'personal-data', 'ai-config', 'business-questions', 'plans', 'payment-pending'];
+        const currentIndex = stepOrder.indexOf(currentStepName);
+
+        steps.forEach((step, index) => {
+            step.classList.remove('is-active', 'is-complete');
+            if (index < currentIndex) {
+                step.classList.add('is-complete');
+            } else if (index === currentIndex) {
+                step.classList.add('is-active');
+            }
+        });
+
+        const backButton = document.getElementById('backButton');
+        if (backButton) {
+            if (currentIndex > 0 && currentStepName !== 'payment-pending') {
+                backButton.style.display = 'inline-flex';
+            } else {
+                backButton.style.display = 'none';
+            }
+        }
+    }
+
 
     // --- FUNÇÕES DE RENDERIZAÇÃO DAS ETAPAS ---
 
@@ -289,6 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function renderStep(step) {
         currentStep = step;
+        updateProgress(step); // Atualiza o stepper visual
         switch (step) {
             case 'welcome': renderWelcomeStep(); break;
             case 'personal-data': renderPersonalDataStep(); break;
@@ -447,8 +474,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // ... restante das funções (handleCheckPaymentStatus, initializeOnboardingState) sem alterações
-
     async function handleCheckPaymentStatus() {
         showToast('Verificando status da assinatura...', 'info');
         try {
@@ -511,6 +536,18 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             renderStep('welcome');
         }
+    }
+    
+    // Botão de voltar
+    const backButton = document.getElementById('backButton');
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            const stepOrder = ['welcome', 'personal-data', 'ai-config', 'business-questions', 'plans'];
+            const currentIndex = stepOrder.indexOf(currentStep);
+            if (currentIndex > 0) {
+                renderStep(stepOrder[currentIndex - 1]);
+            }
+        });
     }
 
     initializeOnboardingState();

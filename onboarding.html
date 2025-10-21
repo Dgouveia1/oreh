@@ -7,26 +7,85 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    
+    <!-- CSS files -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/onboarding.css">
     <link rel="stylesheet" href="responsive-fixes.css">
 </head>
 <body class="onboarding-body">
     <div id="toast" class="toast hidden"></div>
+
+    <!-- Container principal do Onboarding -->
     <div class="onboarding-container">
         <div class="onboarding-card">
-            <h1 class="logo-text">OREH</h1>
-            <div id="stepContainer">
-                <!-- As etapas do onboarding serão renderizadas aqui -->
+            
+            <!-- Painel Esquerdo: Branding e Progresso -->
+            <div class="onboarding-sidebar">
+                <h1 class="logo-text">OREH</h1>
+                <nav class="onboarding-progress">
+                    <ol id="progress-steps">
+                        <li class="progress-step is-active" data-step="welcome">
+                            <div class="progress-marker">1</div>
+                            <div class="progress-text">
+                                <p class="progress-title">Criação da Conta</p>
+                                <p class="progress-desc">Seu e-mail e senha.</p>
+                            </div>
+                        </li>
+                        <li class="progress-step" data-step="personal-data">
+                            <div class="progress-marker">2</div>
+                            <div class="progress-text">
+                                <p class="progress-title">Dados Pessoais</p>
+                                <p class="progress-desc">Informações para faturamento.</p>
+                            </div>
+                        </li>
+                        <li class="progress-step" data-step="ai-config">
+                            <div class="progress-marker">3</div>
+                            <div class="progress-text">
+                                <p class="progress-title">Configure sua IA</p>
+                                <p class="progress-desc">Personalize seu assistente.</p>
+                            </div>
+                        </li>
+                         <li class="progress-step" data-step="business-questions">
+                            <div class="progress-marker">4</div>
+                            <div class="progress-text">
+                                <p class="progress-title">Sobre seu Negócio</p>
+                                <p class="progress-desc">Nos ajude a te conhecer.</p>
+                            </div>
+                        </li>
+                        <li class="progress-step" data-step="plans">
+                            <div class="progress-marker">5</div>
+                            <div class="progress-text">
+                                <p class="progress-title">Plano e Pagamento</p>
+                                <p class="progress-desc">Escolha a melhor opção.</p>
+                            </div>
+                        </li>
+                        <li class="progress-step" data-step="payment-pending">
+                            <div class="progress-marker"><i class="fas fa-check"></i></div>
+                            <div class="progress-text">
+                                <p class="progress-title">Concluído</p>
+                                <p class="progress-desc">Aproveite o Oreh!</p>
+                            </div>
+                        </li>
+                    </ol>
+                </nav>
             </div>
-            <button id="backButton" class="btn btn-secondary" style="display: none;">Voltar</button>
+
+            <!-- Painel Direito: Conteúdo do Formulário -->
+            <div class="onboarding-content">
+                <div id="stepContainer">
+                    <!-- As etapas do onboarding serão renderizadas aqui pelo JS -->
+                </div>
+                <div class="onboarding-footer">
+                     <button id="backButton" class="btn btn-secondary" style="display: none;">Voltar</button>
+                </div>
+            </div>
+
         </div>
     </div>
     
-    <!-- ✅ CORREÇÃO: Biblioteca do Supabase carregada ANTES do nosso script -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="js/onboarding.js"></script>
 
 </body>
 </html>
-

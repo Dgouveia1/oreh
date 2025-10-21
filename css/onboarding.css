@@ -28,90 +28,158 @@
 
 .onboarding-container {
     width: 100%;
-    max-width: 70rem;
+    max-width: 1200px; /* Aumenta a largura máxima para desktop para acomodar os planos */
     animation: fadeIn 0.5s ease;
     position: relative;
     z-index: 1;
 }
 
-.onboarding-header {
-    margin-bottom: 3rem;
-    text-align: center;
-}
-
-.onboarding-header .logo-text {
-    color: white;
-    font-size: 5.2rem;
-    margin-bottom: 2rem;
-    font-weight: 800;
-    text-shadow: 0 0.4rem 1.2rem rgba(0,0,0,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-}
-
-.onboarding-header .logo-text::before {
-    content: '🚀';
-    font-size: 4.8rem;
-}
-
-.progress-bar-container {
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 1.2rem;
-    height: 1.2rem;
-    overflow: hidden;
-    box-shadow: 0 0.2rem 0.8rem rgba(0,0,0,0.1);
-}
-
-.progress-bar {
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg, white, #f0f0f0);
-    border-radius: 1.2rem;
-    transition: width 0.4s ease-in-out;
-    box-shadow: 0 0.2rem 0.8rem rgba(255,255,255,0.3);
-}
-
 .onboarding-card {
     background-color: var(--card-bg);
     border-radius: 2.4rem;
-    padding: 5rem;
     box-shadow: var(--shadow-lg);
     border: 0.1rem solid rgba(255,255,255,0.1);
     backdrop-filter: blur(1rem);
+    display: grid; /* Ativa o layout em grid */
+    overflow: hidden; /* Garante que os cantos arredondados sejam aplicados aos filhos */
 }
 
-.onboarding-card::before {
+
+/* --- LAYOUT DE DESKTOP (2 COLUNAS) --- */
+@media (min-width: 992px) {
+    .onboarding-card {
+        grid-template-columns: 320px 1fr; /* Coluna da esquerda com 320px, direita flexível */
+        min-height: 600px;
+    }
+}
+
+/* Painel da Esquerda (Sidebar) */
+.onboarding-sidebar {
+    background-color: #f8f9fa; /* Um cinza bem claro para contraste */
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+}
+
+body.dark-mode .onboarding-sidebar {
+    background-color: #2c3e501a; /* Cor mais escura para o dark mode */
+    border-right: 1px solid #444;
+}
+
+.onboarding-sidebar .logo-text {
+    margin-bottom: 5rem;
+    text-align: left;
+    font-size: 3.2rem;
+}
+
+/* Painel da Direita (Conteúdo) */
+.onboarding-content {
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+}
+#stepContainer {
+    flex-grow: 1;
+}
+
+/* Stepper de Progresso */
+.onboarding-progress ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.progress-step {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    padding-left: 3.5rem; /* Espaço para a linha e marcador */
+    padding-bottom: 2.5rem;
+}
+
+/* Linha vertical que conecta os passos */
+.progress-step:not(:last-child)::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 0.4rem;
-    background: linear-gradient(90deg, var(--primary), var(--secondary));
-    border-radius: 2.4rem 2.4rem 0 0;
+    left: 1.2rem;
+    top: 1.2rem;
+    width: 2px;
+    height: 100%;
+    background-color: var(--border-color);
+    transition: background-color 0.3s ease;
 }
 
-/* Estilos das etapas */
+.progress-marker {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--text-color-light);
+    transition: all 0.3s ease;
+}
+
+.progress-text .progress-title {
+    font-weight: 600;
+    color: var(--text-color-light);
+    transition: color 0.3s ease;
+    font-size: 1.6rem;
+}
+
+.progress-text .progress-desc {
+    font-size: 1.4rem;
+    color: var(--text-color-light);
+    margin: 0;
+}
+
+/* Estilos dos estados do Stepper */
+.progress-step.is-active .progress-marker {
+    border-color: var(--primary);
+    background-color: var(--primary);
+    color: white;
+}
+.progress-step.is-active .progress-title {
+    color: var(--text-color);
+}
+
+.progress-step.is-complete .progress-marker {
+    border-color: var(--success);
+    background-color: var(--success);
+    color: white;
+}
+.progress-step.is-complete .progress-title {
+    color: var(--text-color-light);
+}
+.progress-step.is-complete:not(:last-child)::before {
+    background-color: var(--success);
+}
+.progress-step.is-complete .progress-marker i {
+    font-size: 1.2rem;
+}
+
+/* Rodapé com botão Voltar */
+.onboarding-footer {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-start;
+}
+
+/* Conteúdo das Etapas */
 .step-content { animation: fadeIn 0.4s ease; }
 .step-content h2 {
     color: var(--primary);
     font-size: 2.8rem;
     margin-bottom: 1.5rem;
     font-weight: 800;
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-}
-
-.step-content h2::before {
-    content: '';
-    width: 0.6rem;
-    height: 3rem;
-    background: linear-gradient(to bottom, var(--primary), var(--secondary));
-    border-radius: 0.3rem;
 }
 
 .step-content p, .step-content p.description {
@@ -121,97 +189,68 @@
     margin-bottom: 3.5rem;
 }
 
-.step-actions {
-    margin-top: 3.5rem;
-    text-align: right;
-    display: flex;
-    gap: 1.5rem;
-    justify-content: flex-end;
-}
-
-.step-actions .btn {
-    padding: 1.4rem 3.2rem;
-    font-weight: 600;
-    border-radius: 1.2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    min-width: 12rem;
-    justify-content: center;
+#stepContainer .btn-primary {
+    margin-top: 1rem;
+    width: 100%;
 }
 
 /* Estilos para a seleção de planos */
 .plans-grid, .plans-grid-onboarding {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
-    gap: 2.5rem;
-    margin: 3rem 0;
-    max-height: 45vh; /* Altura máxima antes de rolar */
-    overflow-y: auto; /* Adiciona a barra de rolagem vertical quando necessário */
-    padding-right: 1rem; /* Espaço para a barra de rolagem não sobrepor o conteúdo */
-}
-
-/* Estilização da barra de rolagem para navegadores Webkit (Chrome, Safari) */
-.plans-grid::-webkit-scrollbar {
-    width: 8px;
-}
-
-.plans-grid::-webkit-scrollbar-track {
-    background: var(--bg-color);
-    border-radius: 10px;
-}
-
-.plans-grid::-webkit-scrollbar-thumb {
-    background-color: var(--primary);
-    border-radius: 10px;
-    border: 2px solid var(--bg-color);
+    display: flex;
+    flex-wrap: nowrap; /* Impede a quebra de linha */
+    gap: 1.5rem;
+    margin: 2rem 0;
 }
 
 
 .plan-card, .plan-card-onboarding {
     border: 0.2rem solid var(--border-color);
     border-radius: 1.6rem;
-    padding: 3rem 2.5rem;
+    padding: 2.5rem 2rem;
     text-align: center;
     cursor: pointer;
     transition: var(--transition);
-    background: linear-gradient(135deg, var(--card-bg), var(--bg-color));
+    flex: 1; /* Permite que os cards cresçam igualmente para preencher o espaço */
+    min-width: 180px; /* Garante uma largura mínima */
+}
+
+.plan-card:hover, .plan-card-onboarding:hover {
+    transform: translateY(-0.5rem);
     box-shadow: var(--shadow);
-    position: relative;
-    overflow: hidden;
-}
-
-.plan-card-onboarding:hover {
-    transform: translateY(-0.8rem);
-    box-shadow: var(--shadow-lg);
     border-color: var(--primary);
 }
 
-.plan-card-onboarding.selected {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 0.3rem rgba(255, 127, 64, 0.4), var(--shadow-lg);
-    background: linear-gradient(135deg, var(--card-bg), rgba(255, 127, 64, 0.05));
+.plan-card h4, .plan-card-onboarding h4 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
 }
 
-.plan-card-onboarding h4 {
-    font-size: 2rem;
-    color: var(--text-color);
-    margin-bottom: 1.5rem;
-    font-weight: 700;
-}
-
-.plan-card-onboarding .price {
-    font-size: 3.6rem;
+.plan-card .price, .plan-card-onboarding .price {
+    font-size: 3rem;
     font-weight: 800;
     color: var(--primary);
-    margin-bottom: 2rem;
-    line-height: 1;
+    margin-bottom: 1.5rem;
+}
+.plan-card .price span, .plan-card-onboarding .price span {
+    font-size: 1.5rem;
 }
 
-.plan-card-onboarding .price span {
-    font-size: 1.6rem;
-    font-weight: 600;
-    color: var(--text-color-light);
+
+/* --- LAYOUT RESPONSIVO (MOBILE) --- */
+@media (max-width: 991px) {
+    .onboarding-card {
+        display: block; /* Volta para o layout de bloco */
+        padding: 4rem 2.5rem;
+    }
+    .onboarding-sidebar {
+        display: none; /* Esconde a sidebar com o progresso */
+    }
+    .onboarding-content {
+        padding: 0;
+    }
+    .plans-grid, .plans-grid-onboarding {
+        flex-direction: column; /* Empilha os planos verticalmente no mobile */
+    }
 }
 
 /* Spinner de carregamento */
@@ -250,12 +289,4 @@
     border: 0.2rem solid var(--border-color);
     border-radius: 1.2rem;
     font-size: 1.6rem;
-}
-
-@media (max-width: 768px) {
-    .onboarding-card { padding: 3.5rem 2.5rem; }
-    .onboarding-header .logo-text { font-size: 4.2rem; }
-    .plans-grid, .plans-grid-onboarding { grid-template-columns: 1fr; }
-    .step-actions { flex-direction: column; }
-    .step-actions .btn { width: 100%; }
 }
