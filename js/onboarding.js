@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- FUNÇÕES DE LÓGICA DE CUPOM ---
-
+    // ... (código do cupom permanece o mesmo) ...
     async function applyCoupon() {
         const codeInput = document.getElementById('couponCode');
         const feedbackEl = document.getElementById('couponFeedback');
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- FUNÇÕES DE RENDERIZAÇÃO DAS ETAPAS ---
-
+    // ... (código de renderização das etapas permanece o mesmo) ...
     function renderWelcomeStep() {
         const stepContainer = document.getElementById('stepContainer');
         if (!stepContainer) return;
@@ -298,6 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+
     // --- FUNÇÕES DE CONTROLE DE FLUXO ---
 
     function renderStep(step) {
@@ -328,6 +329,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Função Auxiliar para Logar Aceite (Via Edge Function) ---
+    async function logTermsAcceptanceEdge(userId, email, termsVersion, acceptanceType) {
+        try {
+            // Chama a Edge Function 'log-terms-acceptance'
+            const { data, error } = await supabaseClient.functions.invoke('log-terms-acceptance', {
+                body: {
+                    userId: userId,
+                    email: email,
+                    termsVersion: termsVersion,
+                    acceptanceType: acceptanceType
+                }
+            });
+
+            if (error) {
+                console.error(`Erro ao chamar Edge Function (${acceptanceType}):`, error);
+                showToast(`Erro ao registrar aceite dos termos: ${error.message || 'Erro desconhecido'}`, 'error');
+            } else {
+                console.log(`Aceite de termos (${acceptanceType}) logado via Edge Function para ${email}`, data);
+            }
+        } catch (e) {
+            console.error(`Exceção ao chamar Edge Function (${acceptanceType}):`, e);
+            showToast(`Erro inesperado ao registrar aceite dos termos.`, 'error');
+        }
+    }
+
     async function handleCreateAccount() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
@@ -341,20 +367,55 @@ document.addEventListener('DOMContentLoaded', () => {
         if (password !== passwordConfirm) return showToast('As senhas não coincidem.', 'error');
         showToast('Criando sua conta, aguarde...', 'info');
 
-        try {
-            const { data, error } = await supabaseClient.auth.signUp({ email, password });
-            if (error) throw error;
+        let newUser = null; // Variável para armazenar o usuário criado
 
+        try {
+            // 1. Cria o usuário
+            const { data: signUpData, error: signUpError } = await supabaseClient.auth.signUp({ email, password });
+            if (signUpError) throw signUpError;
+            if (!signUpData.user) throw new Error("Criação do usuário falhou.");
+
+            newUser = signUpData.user;
+
+            // 2. Busca a data da última atualização dos termos gerais
+            const { data: legalDoc, error: legalError } = await supabaseClient
+                .from('legal_documents')
+                .select('last_updated_at')
+                .eq('id', 1)
+                .single();
+
+            let termsVersion = new Date().toISOString(); // Fallback
+            if (legalError) {
+                console.error("Erro ao buscar versão dos termos gerais:", legalError);
+            } else if (legalDoc) {
+                termsVersion = legalDoc.last_updated_at;
+            }
+
+            // 3. Loga o aceite dos termos CHAMANDO A EDGE FUNCTION
+            await logTermsAcceptanceEdge(newUser.id, newUser.email, termsVersion, 'user');
+
+            // 4. Faz login para continuar o fluxo (necessário para as próximas etapas)
             const { data: loginData, error: loginError } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (loginError) throw loginError;
+            if (loginError) {
+                 // Se o login falhar após o signUp (raro, mas possível), informa o usuário
+                 console.error("Erro no login após signUp:", loginError);
+                 throw new Error("Conta criada, mas houve um erro ao iniciar a sessão automaticamente. Tente fazer login.");
+            }
 
             onboardingState.user = loginData.user;
             renderStep('personal-data');
+
         } catch (error) {
             console.error('Erro ao criar conta:', error);
             showToast(error.message, 'error');
+             // Se o erro ocorreu DEPOIS do signUp mas ANTES do login completar,
+             // pode ser útil deslogar para evitar estado inconsistente.
+             if (newUser && !onboardingState.user) {
+                 await supabaseClient.auth.signOut();
+             }
         }
     }
+
 
     async function handleSavePersonalData() {
         const fullName = document.getElementById('fullName').value;
@@ -597,3 +658,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initializeOnboardingState();
 });
+

@@ -9,14 +9,16 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="responsive-fixes.css">
+    <!-- Estilo específico para onboarding -->
+    <link rel="stylesheet" href="css/onboarding.css">
 </head>
 <body class="onboarding-body">
     <div id="toast" class="toast hidden"></div>
     <div class="onboarding-container">
-        <div class="onboarding-card">
-            <h1 class="logo-text">OREH</h1>
-            <h2>Cadastro de Afiliado</h2>
-            <p>Preencha os dados abaixo para se tornar um parceiro Oreh.</p>
+        <div class="onboarding-card" style="display: block; padding: 4rem 2.5rem;"> <!-- Estilo inline para garantir layout de bloco -->
+            <h1 class="logo-text" style="text-align: center;">OREH</h1>
+            <h2 style="text-align: center; color: var(--primary); margin-bottom: 1rem;">Cadastro de Afiliado</h2>
+            <p style="text-align: center; color: var(--text-color-light); font-size: 1.7rem; margin-bottom: 3rem;">Preencha os dados abaixo para se tornar um parceiro Oreh.</p>
             <form id="affiliateRegisterForm">
                 <!-- A classe 'responsive-grid' será usada para controle no CSS -->
                 <div class="responsive-grid">
@@ -51,15 +53,23 @@
                         <input type="password" id="passwordConfirm" required>
                     </div>
                 </div>
-                <div class="step-actions">
-                    <button type="submit" id="registerBtn" class="btn btn-primary">Finalizar Cadastro</button>
+                <!-- Link e Checkbox para Termos de Afiliado -->
+                <div class="input-group terms-acceptance" style="margin-top: 2rem; display: flex; align-items: center; gap: 1rem;">
+                    <input type="checkbox" id="acceptAffiliateTerms" required style="width: auto; height: auto;">
+                    <label for="acceptAffiliateTerms" style="margin-bottom: 0; font-weight: normal; font-size: 1.4rem;">
+                        Li e aceito os <a href="affiliate-legal.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Termos do Programa de Afiliados e Política de Pagamentos</a>.
+                    </label>
+                </div>
+                <div class="step-actions" style="margin-top: 2rem; text-align: center;"> <!-- Centraliza botão -->
+                    <button type="submit" id="registerBtn" class="btn btn-primary" style="width: auto;">Finalizar Cadastro</button>
                 </div>
             </form>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="js/api.js"></script>
+    <script type="module" src="js/ui.js"></script> <!-- Adicionado ui.js para showToast -->
     <script type="module" src="js/affiliate-register.js"></script>
 
 </body>

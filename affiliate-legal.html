@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oreh - Termos e Políticas do Programa de Afiliados</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="style.css"> <!-- Inclui estilos principais -->
+     <style>
+        /* Estilos são os mesmos de legal.html, apenas aplicados aqui */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 3rem;
+        }
+        .legal-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background-color: var(--card-bg);
+            padding: 3rem;
+            border-radius: 1.6rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 2.8rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+        h2 {
+            color: var(--text-color);
+            font-size: 2.2rem;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.8rem;
+        }
+        .document-content {
+            font-size: 1.6rem;
+            line-height: 1.7;
+            color: var(--text-color-light);
+            white-space: pre-wrap; /* Mantém a formatação do texto */
+            background-color: var(--input-bg);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .last-updated {
+            text-align: right;
+            font-size: 1.3rem;
+            color: var(--text-color-light);
+            margin-top: 3rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+        }
+        .acceptance-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .acceptance-section label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.6rem;
+            cursor: pointer;
+        }
+         .acceptance-section input[type="checkbox"] {
+            width: 2rem;
+            height: 2rem;
+            accent-color: var(--primary);
+         }
+        #closeBtn {
+             padding: 1rem 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="legal-container">
+        <h1>Termos e Políticas - Programa de Afiliados Oreh</h1>
+
+        <div id="loadingMessage" style="text-align: center; padding: 2rem; font-size: 1.6rem; color: var(--primary);">
+            <i class="fas fa-spinner fa-spin"></i> Carregando documentos...
+        </div>
+
+        <div id="documentsContainer" style="display: none;">
+            <section>
+                <h2>Termos do Programa de Afiliados</h2>
+                <div class="document-content" id="affiliateTermsContent"></div>
+            </section>
+
+            <section>
+                <h2>Política de Pagamentos</h2>
+                <div class="document-content" id="paymentPolicyContent"></div>
+            </section>
+
+            <p class="last-updated">Última atualização em: <span id="affiliateLastUpdatedDate">--/--/----</span></p>
+
+            <div class="acceptance-section">
+                <label for="acceptAffiliateCheckbox">
+                    <input type="checkbox" id="acceptAffiliateCheckbox">
+                    Li e aceito os termos do programa de afiliados.
+                </label>
+                <button id="closeBtn" class="btn btn-secondary">Fechar</button>
+            </div>
+        </div>
+        <div id="errorMessage" style="text-align: center; padding: 2rem; font-size: 1.6rem; color: var(--danger); display: none;">
+            Não foi possível carregar os termos do programa de afiliados.
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module">
+        import { supabaseClient } from './js/api.js';
+
+        async function loadAffiliateLegalContent() {
+            const loadingMsg = document.getElementById('loadingMessage');
+            const docsContainer = document.getElementById('documentsContainer');
+            const errorMsg = document.getElementById('errorMessage');
+
+            loadingMsg.style.display = 'block';
+            docsContainer.style.display = 'none';
+            errorMsg.style.display = 'none';
+
+            try {
+                // Busca da nova tabela 'affiliate_legal_documents'
+                const { data, error } = await supabaseClient
+                    .from('affiliate_legal_documents') // <-- Nova tabela
+                    .select('*')
+                    .eq('id', 1)
+                    .single();
+
+                if (error && error.code !== 'PGRST116') {
+                    throw error;
+                }
+
+                if (data) {
+                    // Atualiza IDs dos elementos
+                    document.getElementById('affiliateTermsContent').textContent = data.affiliate_terms || 'Conteúdo não disponível.';
+                    document.getElementById('paymentPolicyContent').textContent = data.payment_policy || 'Conteúdo não disponível.';
+
+                    const updateDate = new Date(data.last_updated_at);
+                    document.getElementById('affiliateLastUpdatedDate').textContent = updateDate.toLocaleDateString('pt-BR', {
+                        day: '2-digit', month: '2-digit', year: 'numeric'
+                    });
+
+                    docsContainer.style.display = 'block';
+                } else {
+                    document.getElementById('affiliateTermsContent').textContent = 'Conteúdo não disponível.';
+                    document.getElementById('paymentPolicyContent').textContent = 'Conteúdo não disponível.';
+                    document.getElementById('affiliateLastUpdatedDate').textContent = '--/--/----';
+                    docsContainer.style.display = 'block';
+                }
+
+            } catch (err) {
+                console.error("Erro ao carregar documentos legais de afiliados:", err);
+                errorMsg.style.display = 'block';
+            } finally {
+                loadingMsg.style.display = 'none';
+            }
+        }
+
+        document.getElementById('closeBtn').addEventListener('click', () => {
+            window.close();
+        });
+
+        loadAffiliateLegalContent();
+    </script>
+</body>
+</html>

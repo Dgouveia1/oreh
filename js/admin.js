@@ -4,71 +4,119 @@ import { renderCouponsTable, setupCouponModalListeners } from './admin-cupons.js
 import { supabaseClient } from './api.js';
 import { showToast, setTableLoading, setAllPlans, setAllAffiliates, getAllPlans, getAllAffiliates } from './admin-helpers.js';
 
-// --- LÓGICA DE DOCUMENTOS LEGAIS ---
+// --- LÓGICA DE DOCUMENTOS LEGAIS (GERAIS) ---
 
 async function loadLegalDocuments() {
-    console.log('[Admin] Carregando documentos legais...');
+    console.log('[Admin] Carregando documentos legais gerais...');
     try {
-        // Assume que os documentos estão em uma única linha com id=1
         const { data, error } = await supabaseClient
             .from('legal_documents')
             .select('*')
             .eq('id', 1)
             .single();
 
-        if (error && error.code !== 'PGRST116') throw error; // Ignora erro "nenhuma linha encontrada"
+        if (error && error.code !== 'PGRST116') throw error;
 
         if (data) {
             document.getElementById('membershipAgreement').value = data.membership_agreement || '';
             document.getElementById('termsOfUse').value = data.terms_of_use || '';
             document.getElementById('privacyPolicy').value = data.privacy_policy || '';
         } else {
-            // Se não encontrar dados, limpa os campos
             document.getElementById('membershipAgreement').value = '';
             document.getElementById('termsOfUse').value = '';
             document.getElementById('privacyPolicy').value = '';
-            console.log('[Admin] Nenhum documento legal encontrado no banco de dados.');
+            console.log('[Admin] Nenhum documento legal geral encontrado.');
         }
-
     } catch (error) {
-        console.error("Erro ao carregar documentos legais:", error);
-        showToast('Falha ao carregar os documentos legais.', 'error');
+        console.error("Erro ao carregar documentos legais gerais:", error);
+        showToast('Falha ao carregar os documentos gerais.', 'error');
     }
 }
 
 async function handleLegalDocsFormSubmit(event) {
     event.preventDefault();
-    console.log('[Admin] Salvando documentos legais...');
+    console.log('[Admin] Salvando documentos legais gerais...');
     const saveBtn = document.getElementById('saveLegalDocsBtn');
     saveBtn.disabled = true;
     saveBtn.textContent = 'Salvando...';
 
     const legalData = {
-        id: 1, // Assume sempre o ID 1
+        id: 1,
         membership_agreement: document.getElementById('membershipAgreement').value,
         terms_of_use: document.getElementById('termsOfUse').value,
         privacy_policy: document.getElementById('privacyPolicy').value,
-        last_updated_at: new Date().toISOString() // Atualiza a data
+        last_updated_at: new Date().toISOString()
     };
 
     try {
-        const { error } = await supabaseClient
-            .from('legal_documents')
-            .upsert(legalData, { onConflict: 'id' }); // Usa upsert para criar se não existir
-
+        const { error } = await supabaseClient.from('legal_documents').upsert(legalData, { onConflict: 'id' });
         if (error) throw error;
-        showToast('Documentos legais salvos com sucesso!', 'success');
+        showToast('Documentos gerais salvos com sucesso!', 'success');
     } catch (error) {
-        console.error('Erro ao salvar documentos legais:', error);
-        showToast('Erro ao salvar os documentos legais.', 'error');
+        console.error('Erro ao salvar documentos legais gerais:', error);
+        showToast('Erro ao salvar os documentos gerais.', 'error');
     } finally {
         saveBtn.disabled = false;
-        saveBtn.textContent = 'Salvar Documentos';
+        saveBtn.textContent = 'Salvar Documentos Gerais';
     }
 }
 
-// --- FIM DA LÓGICA DE DOCUMENTOS LEGAIS ---
+// --- LÓGICA DE DOCUMENTOS LEGAIS (AFILIADOS) ---
 
+async function loadAffiliateLegalDocuments() {
+    console.log('[Admin] Carregando documentos legais de afiliados...');
+    try {
+        const { data, error } = await supabaseClient
+            .from('affiliate_legal_documents') // <-- Nova tabela
+            .select('*')
+            .eq('id', 1)
+            .single();
+
+        if (error && error.code !== 'PGRST116') throw error;
+
+        if (data) {
+            document.getElementById('affiliateTerms').value = data.affiliate_terms || '';
+            document.getElementById('affiliatePaymentPolicy').value = data.payment_policy || '';
+        } else {
+            document.getElementById('affiliateTerms').value = '';
+            document.getElementById('affiliatePaymentPolicy').value = '';
+            console.log('[Admin] Nenhum documento legal de afiliado encontrado.');
+        }
+    } catch (error) {
+        console.error("Erro ao carregar documentos legais de afiliados:", error);
+        showToast('Falha ao carregar os documentos de afiliados.', 'error');
+    }
+}
+
+async function handleAffiliateLegalDocsFormSubmit(event) {
+    event.preventDefault();
+    console.log('[Admin] Salvando documentos legais de afiliados...');
+    const saveBtn = document.getElementById('saveAffiliateLegalDocsBtn');
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Salvando...';
+
+    const legalData = {
+        id: 1,
+        affiliate_terms: document.getElementById('affiliateTerms').value,
+        payment_policy: document.getElementById('affiliatePaymentPolicy').value,
+        last_updated_at: new Date().toISOString()
+    };
+
+    try {
+        const { error } = await supabaseClient.from('affiliate_legal_documents').upsert(legalData, { onConflict: 'id' }); // <-- Nova tabela
+        if (error) throw error;
+        showToast('Documentos de afiliados salvos com sucesso!', 'success');
+    } catch (error) {
+        console.error('Erro ao salvar documentos legais de afiliados:', error);
+        showToast('Erro ao salvar os documentos de afiliados.', 'error');
+    } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Salvar Documentos de Afiliados';
+    }
+}
+
+
+// --- INICIALIZAÇÃO E LÓGICA PRINCIPAL ---
 
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('[Admin] DOM totalmente carregado e analisado.');
@@ -137,6 +185,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             sidebarHeader.textContent = 'SUPERADMIN';
             userAvatar.textContent = 'SA';
             userNameDisplay.textContent = 'Super Admin';
+            // Garante que a seção de documentos legais de afiliados seja visível
+            const affiliateLegalForm = document.getElementById('affiliateLegalDocumentsForm');
+            if (affiliateLegalForm) affiliateLegalForm.style.display = 'block';
         }
     }
 
@@ -187,7 +238,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 case 'adminPlans': renderPlansTable(); break;
                 case 'adminCoupons': renderCouponsTable(); break;
                 case 'adminAffiliates': renderAffiliatesTable(); break;
-                case 'adminLegal': loadLegalDocuments(); break; // Carrega documentos legais ao navegar
+                case 'adminLegal':
+                    loadLegalDocuments(); // Carrega documentos gerais
+                    loadAffiliateLegalDocuments(); // Carrega documentos de afiliados
+                    break;
             }
         });
     });
@@ -195,8 +249,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- LÓGICA DO DASHBOARD ---
     async function loadAdminDashboard() {
         console.log('[Admin] A carregar dados do dashboard...');
-        // Oculta a lógica específica do dashboard para focar nas mudanças pedidas
-        // ... (código do dashboard original) ...
+        // ... (código do dashboard existente) ...
     }
 
     // --- LÓGICA DAS TABELAS (Planos) ---
@@ -315,7 +368,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         document.getElementById('userForm').addEventListener('submit', (event) => handleUserFormSubmit(event, userRole, affiliateId));
         document.getElementById('planForm').addEventListener('submit', handlePlanFormSubmit);
-        document.getElementById('legalDocumentsForm').addEventListener('submit', handleLegalDocsFormSubmit); // Listener para form legal
+        document.getElementById('legalDocumentsForm').addEventListener('submit', handleLegalDocsFormSubmit); // Listener para form legal geral
+        document.getElementById('affiliateLegalDocumentsForm').addEventListener('submit', handleAffiliateLegalDocsFormSubmit); // Listener para form legal afiliado
 
         document.getElementById('usersTableBody').addEventListener('click', async (e) => {
             const button = e.target.closest('button[data-action="edit-user"]');
@@ -350,3 +404,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadAdminDashboard(); // Carrega o dashboard por padrão
     setupModalListeners();
 });
+

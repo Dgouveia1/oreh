@@ -205,29 +205,49 @@
                 <div class="page-header">
                     <h2>Gerenciar Documentos Legais</h2>
                 </div>
-                <form id="legalDocumentsForm">
-                    <div class="ia-card"> <!-- Reutilizando estilo de card -->
-                        <h3>Textos Legais</h3>
-                        <p class="description">Edite o conteúdo dos documentos legais da plataforma. A data da última atualização será registrada automaticamente ao salvar.</p>
 
+                <!-- Seção para Documentos Gerais -->
+                <form id="legalDocumentsForm">
+                    <div class="ia-card">
+                        <h3>Documentos Gerais da Plataforma</h3>
+                        <p class="description">Edite o conteúdo dos documentos legais principais (Contrato de Adesão, Termos de Uso, Política de Privacidade). Visível para todos os usuários.</p>
                         <div class="input-group">
                             <label for="membershipAgreement">Contrato de Adesão</label>
-                            <textarea id="membershipAgreement" rows="10"></textarea>
+                            <textarea id="membershipAgreement" rows="10" placeholder="Insira o texto do Contrato de Adesão..."></textarea>
                         </div>
                         <div class="input-group">
                             <label for="termsOfUse">Termos de Uso</label>
-                            <textarea id="termsOfUse" rows="10"></textarea>
+                            <textarea id="termsOfUse" rows="10" placeholder="Insira o texto dos Termos de Uso..."></textarea>
                         </div>
                         <div class="input-group">
                             <label for="privacyPolicy">Política de Privacidade</label>
-                            <textarea id="privacyPolicy" rows="10"></textarea>
+                            <textarea id="privacyPolicy" rows="10" placeholder="Insira o texto da Política de Privacidade..."></textarea>
                         </div>
-
                         <div class="ia-card-footer">
-                            <button type="submit" id="saveLegalDocsBtn" class="btn btn-primary">Salvar Documentos</button>
+                            <button type="submit" id="saveLegalDocsBtn" class="btn btn-primary">Salvar Documentos Gerais</button>
                         </div>
                     </div>
                 </form>
+
+                <!-- Seção para Documentos de Afiliados -->
+                <form id="affiliateLegalDocumentsForm" style="margin-top: 3rem;">
+                    <div class="ia-card">
+                        <h3>Documentos do Programa de Afiliados</h3>
+                        <p class="description">Edite os termos específicos para o programa de afiliados (Termos do Programa, Política de Pagamentos).</p>
+                        <div class="input-group">
+                            <label for="affiliateTerms">Termos do Programa de Afiliados</label>
+                            <textarea id="affiliateTerms" rows="10" placeholder="Insira os Termos do Programa de Afiliados..."></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="affiliatePaymentPolicy">Política de Pagamentos</label>
+                            <textarea id="affiliatePaymentPolicy" rows="10" placeholder="Insira a Política de Pagamentos para Afiliados..."></textarea>
+                        </div>
+                        <div class="ia-card-footer">
+                            <button type="submit" id="saveAffiliateLegalDocsBtn" class="btn btn-primary">Salvar Documentos de Afiliados</button>
+                        </div>
+                    </div>
+                </form>
+
             </div>
 
 
@@ -414,3 +434,4 @@
     <script type="module" src="js/affiliates.js"></script>
 </body>
 </html>
+
