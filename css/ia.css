@@ -138,6 +138,7 @@ body.dark-mode .ia-card:hover {
     height: 0;
 }
 
+/* --- Alteração de Cor do Toggle --- */
 .toggle-switch .toggle-label {
     position: absolute;
     cursor: pointer;
@@ -145,14 +146,16 @@ body.dark-mode .ia-card:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    /* Vermelho para desligado por padrão */
+    background-color: var(--danger);
     border-radius: 34px;
     transition: .4s;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
 }
 
 body.dark-mode .toggle-switch .toggle-label {
-    background-color: #555;
+    /* Tom mais escuro de vermelho para modo escuro */
+    background-color: #a54f4f;
 }
 
 .toggle-switch .toggle-label:before {
@@ -168,9 +171,15 @@ body.dark-mode .toggle-switch .toggle-label {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
+/* Verde quando está ligado (checked) */
 .toggle-input:checked + .toggle-label {
-    background-color: var(--primary);
+    background-color: var(--success);
 }
+
+body.dark-mode .toggle-input:checked + .toggle-label {
+    background-color: #27ae60; /* Verde mais escuro para dark mode */
+}
+/* --- Fim da Alteração de Cor --- */
 
 .toggle-input:checked + .toggle-label:before {
     transform: translateX(28px);
@@ -293,33 +302,33 @@ body.dark-mode .toggle-switch .toggle-label {
     .ia-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .ia-card {
         padding: 25px;
     }
-    
+
     .day-row {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
     }
-    
+
     .day-row input[type="time"] {
         max-width: 100%;
         width: 100%;
     }
-    
+
     .time-inputs {
         width: 100%;
         justify-content: space-between;
     }
-    
+
     .form-group-toggle {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
     }
-    
+
     .settings-grid {
         grid-template-columns: 1fr;
     }

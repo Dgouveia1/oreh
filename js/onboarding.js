@@ -2,7 +2,7 @@ import { supabaseClient } from './api.js';
 import { createCustomer, createSubscription, getSubscriptionPaymentUrl, getSubscriptionStatus } from './asaasService.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     let currentStep = 'welcome';
     let onboardingState = {
         user: null,
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (error) throw error;
             if (result.error) throw new Error(result.error);
-            
+
             onboardingState.appliedCoupon = result;
             showToast('Cupom aplicado com sucesso!', 'success');
             feedbackEl.textContent = `Cupom "${result.code}" aplicado!`;
@@ -122,6 +122,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="input-group">
                     <label for="passwordConfirm">Confirme sua senha</label>
                     <input type="password" id="passwordConfirm" required autocomplete="new-password">
+                </div>
+                <!-- Link e Checkbox para Termos -->
+                <div class="input-group terms-acceptance" style="margin-top: 2rem; display: flex; align-items: center; gap: 1rem;">
+                    <input type="checkbox" id="acceptTerms" required style="width: auto; height: auto;">
+                    <label for="acceptTerms" style="margin-bottom: 0; font-weight: normal; font-size: 1.4rem;">
+                        Li e aceito o <a href="legal.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Contrato de Adesão, Termos de Uso e Política de Privacidade</a>.
+                    </label>
                 </div>
                 <button id="nextBtn" class="btn btn-primary">Começar</button>
             </div>
@@ -225,13 +232,19 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('applyCouponBtn').addEventListener('click', applyCoupon);
 
         try {
-            const { data: plans, error } = await supabaseClient.from('plans').select('*').order('price', { ascending: true });
+            // Modificado para buscar apenas planos com show_on_onboarding = true
+            const { data: plans, error } = await supabaseClient
+                .from('plans')
+                .select('*')
+                .eq('show_on_onboarding', true) // Filtro adicionado
+                .order('price', { ascending: true });
+
             if (error) throw error;
             const plansGridContainer = document.getElementById('plansGridContainer');
             if (!plansGridContainer) return;
 
             if (plans && plans.length > 0) {
-                plansGridContainer.innerHTML = ''; 
+                plansGridContainer.innerHTML = '';
                 plans.forEach(plan => {
                     const planCard = document.createElement('div');
                     planCard.className = 'plan-card';
@@ -268,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-    
+
     function renderPaymentPendingStep() {
         const stepContainer = document.getElementById('stepContainer');
         if (!stepContainer) return;
@@ -286,9 +299,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- FUNÇÕES DE CONTROLE DE FLUXO ---
-    
+
     function renderStep(step) {
         currentStep = step;
+        // Atualiza a UI do stepper
+        const steps = document.querySelectorAll('.progress-step');
+        let activeFound = false;
+        steps.forEach(s => {
+            const stepData = s.getAttribute('data-step');
+            s.classList.remove('is-active', 'is-complete');
+            if (stepData === step) {
+                s.classList.add('is-active');
+                activeFound = true;
+            } else if (!activeFound) {
+                s.classList.add('is-complete');
+            }
+        });
+
+        // Renderiza o conteúdo da etapa
         switch (step) {
             case 'welcome': renderWelcomeStep(); break;
             case 'personal-data': renderPersonalDataStep(); break;
@@ -299,11 +327,16 @@ document.addEventListener('DOMContentLoaded', () => {
             default: renderWelcomeStep();
         }
     }
-    
+
     async function handleCreateAccount() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const passwordConfirm = document.getElementById('passwordConfirm').value;
+        const acceptTerms = document.getElementById('acceptTerms').checked; // Verifica se o checkbox está marcado
+
+        if (!acceptTerms) {
+            return showToast('Você precisa aceitar os termos para continuar.', 'error');
+        }
 
         if (password !== passwordConfirm) return showToast('As senhas não coincidem.', 'error');
         showToast('Criando sua conta, aguarde...', 'info');
@@ -311,10 +344,10 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const { data, error } = await supabaseClient.auth.signUp({ email, password });
             if (error) throw error;
-            
+
             const { data: loginData, error: loginError } = await supabaseClient.auth.signInWithPassword({ email, password });
             if (loginError) throw loginError;
-            
+
             onboardingState.user = loginData.user;
             renderStep('personal-data');
         } catch (error) {
@@ -330,12 +363,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!fullName || !cpfCnpj) return showToast('Por favor, preencha todos os campos.', 'error');
         showToast('Salvando seus dados...', 'info');
-        
+
         try {
             const customer = await createCustomer(fullName, cpfCnpj);
-            const { data: companyData, error: companyError } = await supabaseClient.from('companies').select('*').single();
-            if (companyError) throw companyError;
-            
+            // Busca o company_id associado ao user_id (pode ter sido criado pelo trigger)
+            const { data: userProfile, error: profileError } = await supabaseClient
+                .from('users')
+                .select('company_id')
+                .eq('id', onboardingState.user.id)
+                .single();
+
+            if (profileError || !userProfile || !userProfile.company_id) {
+                throw new Error("Não foi possível encontrar a empresa associada ao usuário.");
+            }
+
+            const companyId = userProfile.company_id;
+
             const { data: updatedCompany, error: updateError } = await supabaseClient
                 .from('companies')
                 .update({
@@ -345,7 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     phone: phone,
                     asaas_customer_id: customer.id
                 })
-                .eq('id', companyData.id)
+                .eq('id', companyId)
                 .select()
                 .single();
 
@@ -382,10 +425,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const socialMedia = document.getElementById('socialMedia').value;
         showToast('Quase lá...', 'info');
         try {
-            const { error } = await supabaseClient.from('onboarding_data').insert({
-                company_id: onboardingState.company.id,
-                responses: { companyAddress, socialMedia }
-            });
+            // Em vez de inserir em 'onboarding_data', atualizamos 'company_secrets'
+            const { error } = await supabaseClient
+                .from('company_secrets')
+                .update({
+                    business_info: {
+                        address: companyAddress,
+                        social_media_links: socialMedia // Ajuste o nome da chave se necessário
+                        // Adicione outros campos de business_info aqui se houver
+                    }
+                })
+                .eq('company_id', onboardingState.company.id);
+
             if (error) throw error;
             renderStep('plans');
         } catch (error) {
@@ -394,11 +445,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+
     async function handleSelectPlan(planId, planName, planValue) {
         let finalValue = parseFloat(planValue);
         const coupon = onboardingState.appliedCoupon;
         const card = document.querySelector(`.plan-card[data-plan-id="${planId}"]`);
-        
+
         if (card) {
             const originalPrice = parseFloat(card.dataset.planOriginalValue);
              if (coupon && (!coupon.applicable_plan_id || coupon.applicable_plan_id === planId)) {
@@ -412,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 finalValue = originalPrice;
             }
         }
-        
+
         showToast('Criando sua assinatura, aguarde...', 'info');
         try {
             const companyId = onboardingState.company.id;
@@ -420,16 +472,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const description = coupon ? `${planName} (Cupom: ${coupon.code})` : planName;
             const subscription = await createSubscription(asaasCustomerId, finalValue, description);
-            
+
             // Prepara os dados para a atualização da empresa
             const companyUpdateData = {
                 asaas_subscription_id: subscription.id,
                 plan_id: planId
             };
-    
+
             // Se um cupom foi aplicado, adiciona seu ID aos dados de atualização
             if (coupon) {
-                companyUpdateData.used_coupon_id = coupon.id;
+                companyUpdateData.used_coupon_id = coupon.id; // Assume que a coluna se chama used_coupon_id
             }
 
             await supabaseClient.from('companies').update(companyUpdateData).eq('id', companyId);
@@ -438,12 +490,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const { error: incrementError } = await supabaseClient.rpc('increment_coupon_usage', { p_coupon_id: coupon.id });
                 if(incrementError) {
                     console.error('Falha ao incrementar o uso do cupom:', incrementError);
+                    // Não impede o fluxo principal, mas registra o erro
                 }
             }
 
             const paymentUrl = await getSubscriptionPaymentUrl(subscription.id);
             if (!paymentUrl) throw new Error("Não foi possível obter o link de pagamento.");
-            
+
             await supabaseClient.from('companies').update({ status: 'payment_pending' }).eq('id', companyId);
 
             window.open(paymentUrl, '_blank');
@@ -453,7 +506,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(`Erro: ${error.message}`, 'error');
         }
     }
-    
+
     async function handleCheckPaymentStatus() {
         showToast('Verificando status da assinatura...', 'info');
         try {
@@ -462,10 +515,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const subscription = await getSubscriptionStatus(onboardingState.company.asaas_subscription_id);
-            
+
             if (subscription.status === 'ACTIVE') {
                 showToast('Pagamento confirmado! Bem-vindo!', 'success');
-                
+
                 await supabaseClient.from('companies').update({ status: 'active' }).eq('id', onboardingState.company.id);
                 window.location.replace('index.html');
 
@@ -478,46 +531,69 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(error.message, 'error');
         }
     }
-    
+
     async function initializeOnboardingState() {
         const { data: { session } } = await supabaseClient.auth.getSession();
-        
+
         if (session) {
             onboardingState.user = session.user;
-            
-            const { data, error } = await supabaseClient.from('companies').select('*').single();
 
-            if (error) {
-                renderStep('personal-data');
+            // Busca o perfil do usuário para obter o company_id
+            const { data: userProfile, error: profileError } = await supabaseClient
+                .from('users')
+                .select('company_id')
+                .eq('id', session.user.id)
+                .single();
+
+            if (profileError || !userProfile || !userProfile.company_id) {
+                 console.warn("Usuário sem company_id, iniciando do zero.");
+                 renderStep('personal-data'); // Se não achar company_id, vai para dados pessoais
+                 return;
+            }
+
+            const companyId = userProfile.company_id;
+
+            // Busca os dados da empresa usando o company_id encontrado
+            const { data: companyData, error: companyError } = await supabaseClient
+                .from('companies')
+                .select('*')
+                .eq('id', companyId)
+                .single();
+
+            if (companyError || !companyData) {
+                console.error("Erro ao buscar dados da empresa:", companyError);
+                renderStep('personal-data'); // Se não achar empresa, recomeça
                 return;
             }
 
-            if (data) {
-                onboardingState.company = data;
+            onboardingState.company = companyData;
 
-                if (data.status === 'active') {
-                    window.location.replace('index.html');
-                    return; 
-                }
-
-                if (data.status === 'payment_pending') {
-                     renderStep('payment-pending');
-                     return;
-                }
-
-                if (!data.asaas_customer_id) {
-                    renderStep('personal-data');
-                } else {
-                    renderStep('ai-config');
-                }
-            } else {
-                 renderStep('personal-data');
+            // Lógica de direcionamento baseada no status da empresa
+            if (companyData.status === 'active') {
+                window.location.replace('index.html'); // Já ativo, vai pro app
+                return;
             }
+
+            if (companyData.status === 'payment_pending') {
+                 renderStep('payment-pending'); // Pagamento pendente, mostra essa tela
+                 return;
+            }
+
+            // Se status for 'onboarding' ou nulo/outro, continua o fluxo
+            if (!companyData.asaas_customer_id) {
+                renderStep('personal-data'); // Sem cliente Asaas, pede dados
+            } else {
+                // Se já tem cliente Asaas, mas não está ativo ou pendente,
+                // assume que parou na configuração da IA ou seleção de plano.
+                // Vamos para a configuração da IA como ponto seguro.
+                renderStep('ai-config');
+            }
+
         } else {
-            renderStep('welcome');
+            renderStep('welcome'); // Sem sessão, tela de boas-vindas/login
         }
     }
 
+
     initializeOnboardingState();
 });
-

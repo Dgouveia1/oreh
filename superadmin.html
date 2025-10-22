@@ -13,7 +13,10 @@
     <link rel="stylesheet" href="css/components.css">
     <!-- Estilos específicos do painel admin -->
     <link rel="stylesheet" href="css/admin.css">
+     <!-- Estilos IA (para o toggle) -->
+    <link rel="stylesheet" href="css/ia.css">
     <link rel="stylesheet" href="responsive-fixes.css">
+
 </head>
 <body>
     <div id="toast" class="toast hidden"></div>
@@ -22,7 +25,7 @@
         <div class="sidebar">
             <div class="sidebar-header">
                 <!-- O texto aqui será alterado dinamicamente via JS -->
-                <h1><i class="fas fa-user-shield"></i> <span>SUPERADMIN</span></h1>  
+                <h1><i class="fas fa-user-shield"></i> <span>SUPERADMIN</span></h1>
             </div>
             <ul class="nav-links">
                 <li><a href="#" class="nav-link active" data-page="adminDashboard"><i class="fas fa-chart-line"></i> <span>Visão Geral</span></a></li>
@@ -31,6 +34,8 @@
                 <li><a href="#" class="nav-link" data-page="adminPlans"><i class="fas fa-file-invoice-dollar"></i> <span>Planos</span></a></li>
                 <li><a href="#" class="nav-link" data-page="adminCoupons"><i class="fas fa-tags"></i> <span>Cupons</span></a></li>
                 <li><a href="#" class="nav-link" data-page="adminAffiliates"><i class="fas fa-sitemap"></i> <span>Afiliados</span></a></li>
+                <!-- Nova opção para Documentos Legais -->
+                <li><a href="#" class="nav-link" data-page="adminLegal"><i class="fas fa-gavel"></i> <span>Documentos Legais</span></a></li>
                 <li><a href="index.html" class="nav-link"><i class="fas fa-arrow-left"></i> <span>Voltar para Oreh</span></a></li>
             </ul>
         </div>
@@ -93,7 +98,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Página de Gestão de Clientes -->
             <div id="adminUsersPage" class="page-content">
                 <div class="page-header">
@@ -132,6 +137,7 @@
                                 <th>Nome do Plano</th>
                                 <th>Preço</th>
                                 <th>Limite de Conversas</th>
+                                <th>Visível no Onboarding</th> <!-- Nova coluna -->
                                 <th>Status</th>
                                 <th>Ações</th>
                             </tr>
@@ -193,6 +199,37 @@
                     </table>
                 </div>
             </div>
+
+            <!-- Página de Gestão de Documentos Legais -->
+            <div id="adminLegalPage" class="page-content">
+                <div class="page-header">
+                    <h2>Gerenciar Documentos Legais</h2>
+                </div>
+                <form id="legalDocumentsForm">
+                    <div class="ia-card"> <!-- Reutilizando estilo de card -->
+                        <h3>Textos Legais</h3>
+                        <p class="description">Edite o conteúdo dos documentos legais da plataforma. A data da última atualização será registrada automaticamente ao salvar.</p>
+
+                        <div class="input-group">
+                            <label for="membershipAgreement">Contrato de Adesão</label>
+                            <textarea id="membershipAgreement" rows="10"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="termsOfUse">Termos de Uso</label>
+                            <textarea id="termsOfUse" rows="10"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="privacyPolicy">Política de Privacidade</label>
+                            <textarea id="privacyPolicy" rows="10"></textarea>
+                        </div>
+
+                        <div class="ia-card-footer">
+                            <button type="submit" id="saveLegalDocsBtn" class="btn btn-primary">Salvar Documentos</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
 
         </div>
     </div>
@@ -263,7 +300,15 @@
                     </div>
                     <div class="input-group">
                         <label for="planChatLimit">Limite de Conversas/Mês</label>
-                        <input type="number" id="planChatLimit" required>
+                        <input type="number" id="planChatLimit" placeholder="Deixe em branco para ilimitado">
+                    </div>
+                </div>
+                <!-- Toggle para Visibilidade no Onboarding -->
+                <div class="form-group form-group-toggle" style="align-items: center; border-bottom: none; padding-bottom: 0;">
+                    <label for="planShowOnOnboarding">Mostrar no Onboarding</label>
+                    <div class="toggle-switch" style="margin-top: 0;">
+                        <input type="checkbox" id="planShowOnOnboarding" class="toggle-input" checked>
+                        <label for="planShowOnOnboarding" class="toggle-label"></label>
                     </div>
                 </div>
                  <div class="modal-footer">
@@ -272,7 +317,7 @@
             </form>
         </div>
     </div>
-    
+
     <!-- Modal de Afiliado -->
     <div class="modal" id="affiliateModal">
         <div class="modal-content">
@@ -282,7 +327,7 @@
             </div>
             <form id="affiliateForm">
                 <input type="hidden" id="affiliateUserId">
-                
+
                 <div class="input-group">
                     <label for="affiliateName">Nome do Afiliado</label>
                     <input type="text" id="affiliateName" readonly>
@@ -359,8 +404,9 @@
             </form>
         </div>
     </div>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="js/api.js"></script> <!-- Certifique-se que api.js está antes -->
     <script type="module" src="js/admin-helpers.js"></script>
     <script type="module" src="js/admin-clientes.js"></script>
     <script type="module" src="js/admin-cupons.js"></script>
