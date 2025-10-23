@@ -5,7 +5,7 @@
     <!-- Viewport otimizado para mobile, impedindo zoom do usuário -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Oreh - Gestão de Atendimentos com IA</title>
-    
+
     <!-- Ícone do App -->
     <link rel="icon" type="image/png" href="favicon.png">
 
@@ -36,19 +36,21 @@
     </div>
 
     <div id="toast" class="toast hidden" role="alert" aria-live="assertive"></div>
-    
+
     <div id="loginPage" class="login-container">
         <div class="login-card">
             <div class="logo-text">OREH</div>
             <div class="input-group">
-                <label for="username">Usuário</label>
-                <input type="text" id="username" placeholder="Digite seu usuário" autocomplete="username" aria-label="Usuário">
+                <label for="username">Usuário (E-mail)</label> <!-- Mudança no label -->
+                <input type="email" id="username" placeholder="Digite seu e-mail" autocomplete="username" aria-label="Usuário"> <!-- Mudança no type e placeholder -->
             </div>
             <div class="input-group">
                 <label for="password">Senha</label>
                 <input type="password" id="password" placeholder="Digite sua senha" autocomplete="current-password" aria-label="Senha">
             </div>
             <button id="loginBtn" class="btn btn-primary" aria-label="Entrar no sistema">Entrar</button>
+             <!-- Link "Esqueci minha senha" adicionado -->
+            <a href="#" id="forgotPasswordLink" class="forgot-password-link" style="display: block; margin-top: 1rem; color: var(--text-color-light); font-size: 1.4rem;">Esqueci minha senha</a>
             <p class="signup-link">
                 Não tem uma conta? <a href="onboarding.html">Cadastre-se</a>
             </p>
@@ -59,7 +61,7 @@
         <!-- O sidebar se transforma em barra de navegação inferior no mobile -->
         <div class="sidebar">
             <div class="sidebar-header">
-                <h1><i class="fas fa-cloud"></i> <span>OREH</span></h1>  
+                <h1><i class="fas fa-cloud"></i> <span>OREH</span></h1>
             </div>
             <ul class="nav-links">
                 <!-- Itens principais visíveis na barra móvel e no desktop -->
@@ -70,14 +72,14 @@
 
                 <!-- Botão "Mais" que aparece apenas no mobile -->
                 <li class="mobile-only"><a href="#" id="moreMenuBtn" class="nav-link" data-page="more"><i class="fas fa-ellipsis-h"></i> <span>Mais</span></a></li>
-                
+
                 <!-- Itens que aparecem no menu lateral do desktop e dentro do menu "Mais" no mobile -->
                 <li class="desktop-only"><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i> <span>Conexão</span></a></li>
                 <li class="desktop-only"><a href="#" class="nav-link" data-page="produtos"><i class="fas fa-box-open"></i> <span>Produtos</span></a></li>
                 <li class="desktop-only"><a href="#" class="nav-link" data-page="drive"><i class="fas fa-book"></i> <span>Biblioteca</span></a></li>
                 <li class="desktop-only"><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de IA</span></a></li>
-                <li class="desktop-only"><a href="#" class="nav-link" data-page="finances"><i class="fas fa-money-bill"></i> <span>Assinatura</span></a></li>  
-                <li class="desktop-only"><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> <span>Config.</span></a></li>  
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="finances"><i class="fas fa-money-bill"></i> <span>Assinatura</span></a></li>
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> <span>Config.</span></a></li>
             </ul>
         </div>
 
@@ -140,7 +142,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div id="statusPage" class="page-content">
                 <div class="status-container">
                     <div class="status-card">
@@ -234,7 +236,7 @@
                     </div>
                 </div>
             </div>
-    
+
 
             <div id="clientsPage" class="page-content">
                 <div class="page-header">
@@ -344,7 +346,7 @@
                 </div>
                 <div id="fileGrid" class="file-grid"></div>
             </div>
-            
+
             <div id="iaPage" class="page-content">
                <div class="ia-management-container">
                    <div class="ia-card">
@@ -357,7 +359,7 @@
                            </div>
                        </div>
                    </div>
-                   
+
                    <div class="ia-card">
                        <h3>Informações do Negócio</h3>
                        <p class="description">Forneça detalhes sobre sua empresa para que a IA possa dar respostas mais precisas sobre localização, redes sociais e horários.</p>
@@ -387,7 +389,7 @@
                            </div>
                        </div>
                    </div>
-                   
+
                    <div class="ia-card">
                        <h3>Orientações para sua IA</h3>
                        <p class="description">Estas serão as orientações principais que definem o comportamento geral do seu agente. As configurações abaixo ajudarão a refinar este comportamento.</p>
@@ -396,7 +398,7 @@
                            <textarea id="basePrompt" rows="8" placeholder="Ex: Você é um assistente virtual da empresa X..."></textarea>
                        </div>
                    </div>
-                   
+
                    <div class="ia-grid">
                        <div class="ia-card">
                            <h3>1. Personalidade</h3>
@@ -445,7 +447,7 @@
                            <!-- Linhas de dias da semana serão inseridas via JS -->
                        </div>
                    </div>
-                   
+
                    <div class="ia-card-footer">
                        <button id="saveAiSettingsBtn" class="btn btn-primary">Salvar Configurações de IA</button>
                    </div>
@@ -460,7 +462,7 @@
                             <p class="loading-message">Carregando dados da assinatura...</p>
                         </div>
                     </div>
-            
+
                     <div class="settings-card" id="plansCard">
                         <h3>Planos Disponíveis</h3>
                         <div class="plans-grid" id="plansGrid">
@@ -535,7 +537,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Modais -->
     <div class="modal mobile-only" id="moreMenuModal">
         <div class="modal-content modal-content-bottom">
@@ -814,7 +816,50 @@
         </div>
     </div>
     <audio id="notificationSound" src="notification.mp3" preload="auto"></audio>
-    
+
+     <!-- Modal "Esqueci minha senha" -->
+    <div class="modal" id="forgotPasswordModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3>Redefinir Senha</h3>
+            </div>
+            <p style="margin-bottom: 20px; text-align: left; color: var(--gray);">Digite seu e-mail abaixo. Enviaremos um link para você criar uma nova senha.</p>
+            <form id="forgotPasswordForm">
+                <div class="input-group">
+                    <label for="forgotPasswordEmail">E-mail</label>
+                    <input type="email" id="forgotPasswordEmail" required autocomplete="email">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="sendResetLinkBtn" class="btn btn-primary">Enviar Link</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para definir nova senha (após clicar no link do email) -->
+    <div class="modal" id="resetPasswordModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3>Crie sua Nova Senha</h3>
+            </div>
+            <form id="resetPasswordForm">
+                <div class="input-group">
+                    <label for="newPassword">Nova Senha</label>
+                    <input type="password" id="newPassword" required autocomplete="new-password">
+                </div>
+                 <div class="input-group">
+                    <label for="confirmNewPassword">Confirme a Nova Senha</label>
+                    <input type="password" id="confirmNewPassword" required autocomplete="new-password">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="updatePasswordBtn" class="btn btn-primary">Salvar Nova Senha</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script type="module" src="js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>

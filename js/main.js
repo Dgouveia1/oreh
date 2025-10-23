@@ -1,14 +1,14 @@
-import { checkLoginState, login, logout, signUp } from './auth.js';
+import { checkLoginState, login, logout, signUp, showForgotPasswordModal, handleForgotPassword, handlePasswordUpdate } from './auth.js'; // Importa as novas funções
 import { setupNavigation, setupModals, setupUploadModal, setupThemeToggle } from './ui.js';
 import { saveAiSettings } from './ia.js';
 import { disconnectInstance } from './status.js';
 import { saveEvent, changeDay } from './agenda.js';
-import { descartarLead, takeOverChat } from './atendimentos.js'; 
+import { descartarLead, takeOverChat } from './atendimentos.js';
 import { uploadFile, deleteFile } from './drive.js';
 import { saveUserSettings, saveCompanySettings } from './settings.js';
 import { handleProductFormSubmit, deleteProduct, openEditModal as openEditProductModal, setupProductEventListeners } from './produtos.js';
 import { handleClientFormSubmit, deleteClient, openEditModal as openEditClientModal, setupClientTableListeners } from './clientes.js';
-import './finances.js'; 
+import './finances.js';
 
 
 console.log('[OREH] Módulo principal carregado.');
@@ -53,6 +53,27 @@ function setupEventListeners() {
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) logoutBtn.addEventListener('click', logout);
 
+    // --- Listeners para Redefinição de Senha ---
+    const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+    if (forgotPasswordLink) {
+        forgotPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showForgotPasswordModal();
+        });
+    }
+
+    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+    if (forgotPasswordForm) {
+        forgotPasswordForm.addEventListener('submit', handleForgotPassword);
+    }
+
+    const resetPasswordForm = document.getElementById('resetPasswordForm');
+    if (resetPasswordForm) {
+        resetPasswordForm.addEventListener('submit', handlePasswordUpdate);
+    }
+     // --- Fim dos Listeners de Redefinição ---
+
+
     // Gestão de IA
     const saveAiSettingsBtn = document.getElementById('saveAiSettingsBtn');
     if (saveAiSettingsBtn) {
@@ -74,7 +95,7 @@ function setupEventListeners() {
 
             const modal = document.getElementById('chatDetailModal');
             if (!modal) return;
-            
+
             const descartarBtn = modal.querySelector('#descartarLeadBtn');
             if (descartarBtn) {
                 descartarBtn.dataset.chatId = card.dataset.id;
@@ -102,7 +123,7 @@ function setupEventListeners() {
             modal.style.display = 'flex';
         });
     }
-    
+
     const humanAttentionContainer = document.getElementById('humanAttentionContainer');
     if (humanAttentionContainer) {
         humanAttentionContainer.addEventListener('click', (e) => {
@@ -111,7 +132,7 @@ function setupEventListeners() {
 
             const modal = document.getElementById('humanAttentionDetailModal');
             if (!modal) return;
-            
+
             const takeOverBtn = modal.querySelector('#takeOverBtn');
             if (takeOverBtn) {
                 takeOverBtn.dataset.chatId = card.dataset.id;
@@ -121,7 +142,7 @@ function setupEventListeners() {
                 const el = modal.querySelector(id);
                 if (el) el.textContent = text || 'N/A';
             };
-            
+
             const status = (card.dataset.status || 'N/A').replace(/_/g, ' ');
             const statusEl = modal.querySelector('#humanAttentionStatus');
 
@@ -139,7 +160,7 @@ function setupEventListeners() {
             modal.style.display = 'flex';
         });
     }
-    
+
     const takeOverBtn = document.getElementById('takeOverBtn');
     if(takeOverBtn) {
         takeOverBtn.addEventListener('click', (e) => {
@@ -169,7 +190,7 @@ function setupEventListeners() {
 
             const modal = document.getElementById('eventDetailModal');
             if (!modal) return;
-            
+
             const setText = (id, text) => {
                 const el = modal.querySelector(id);
                 if (el) el.textContent = text || 'N/A';
@@ -181,7 +202,7 @@ function setupEventListeners() {
             setText('#eventDetailCliente', card.dataset.cliente);
             setText('#eventDetailTelefone', card.dataset.telefone);
             setText('#eventDetailLocal', card.dataset.local);
-            
+
             modal.style.display = 'flex';
         });
     }
@@ -227,7 +248,7 @@ function setupEventListeners() {
     setupProductEventListeners();
 
     // Clientes
-    setupClientTableListeners(); 
+    setupClientTableListeners();
 
     // Formulários
     const productForm = document.getElementById('productForm');
@@ -255,7 +276,7 @@ function setupEventListeners() {
             document.getElementById('productFormModal').style.display = 'flex';
         });
     }
-    
+
     const openClientModalBtn = document.getElementById('openClientModalBtn');
     if (openClientModalBtn) {
         openClientModalBtn.addEventListener('click', () => {
@@ -264,27 +285,14 @@ function setupEventListeners() {
             document.getElementById('clientId').value = '';
             document.getElementById('clientModalTitle').textContent = 'Novo Cliente';
             document.getElementById('clientFormModal').style.display = 'flex';
-            document.getElementById('isPersonal').checked = false; 
+            document.getElementById('isPersonal').checked = false;
         });
     }
 
-    // Cadastro (SignUp)
-    const openSignUpModalBtn = document.getElementById('openSignUpModalBtn');
-    if (openSignUpModalBtn) {
-        openSignUpModalBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('signUpModal').style.display = 'flex';
-        });
-    }
+    // Cadastro (SignUp) - Removido daqui, pois o link agora vai para onboarding.html
+    // const openSignUpModalBtn = document.getElementById('openSignUpModalBtn'); ...
+    // const signUpForm = document.getElementById('signUpForm'); ...
 
-    const signUpForm = document.getElementById('signUpForm');
-    if (signUpForm) {
-        signUpForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            signUp();
-        });
-    }
-    
     console.log('[OREH] Listeners configurados.');
 }
 
@@ -294,9 +302,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupNavigation();
     setupModals();
     setupUploadModal();
-    setupEventListeners();
+    setupEventListeners(); // Configura todos os listeners, incluindo os novos de reset
     setupThemeToggle();
-    await checkLoginState();
+    await checkLoginState(); // Verifica login e também se há reset de senha pendente
     // A splash screen é escondida após a verificação de login
     hideSplashScreen();
 });
