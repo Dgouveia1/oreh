@@ -52,12 +52,14 @@
 
             <!-- Página de Visão Geral (Dashboard) -->
             <div id="adminDashboardPage" class="page-content active">
-                <div class="metrics-grid">
+                
+                <!-- Métricas do Superadmin -->
+                <div class="metrics-grid" id="superadminMetricsGrid">
                     <div class="metric-card">
                         <div class="card-icon icon-valor"><i class="fas fa-hand-holding-usd"></i></div>
                         <div class="card-content">
                             <span class="metric-value" id="totalRevenue">R$ 0,00</span>
-                            <span class="metric-label" id="revenueLabel">Receita Total (MRR)</span>
+                            <span class="metric-label">Receita Total (MRR)</span>
                         </div>
                     </div>
                     <div class="metric-card">
@@ -74,7 +76,6 @@
                             <span class="metric-label">Clientes Ativos</span>
                         </div>
                     </div>
-                    <!-- Card de Total de Afiliados será escondido para a role 'admin' -->
                     <div class="metric-card" id="totalAffiliatesCard">
                         <div class="card-icon icon-ia"><i class="fas fa-sitemap"></i></div>
                         <div class="card-content">
@@ -82,18 +83,112 @@
                             <span class="metric-label">Total de Afiliados</span>
                         </div>
                     </div>
+                    <!-- Novas Métricas Superadmin -->
+                    <div class="metric-card">
+                        <div class="card-icon icon-valor" style="background: linear-gradient(135deg, #2ecc71, #27ae60);"><i class="fas fa-percent"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="avgTicket">R$ 0,00</span>
+                            <span class="metric-label">Ticket Médio (MRR)</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="card-icon icon-leads" style="background: linear-gradient(135deg, #e74c3c, #c0392b);"><i class="fas fa-user-slash"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="churnRate">0%</span>
+                            <span class="metric-label">Churn Rate (Mês)</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="card-icon icon-atendimentos" style="background: linear-gradient(135deg, #3498db, #2980b9);"><i class="fas fa-user-clock"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="clientsOnboarding">0</span>
+                            <span class="metric-label">Clientes em Onboarding</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="card-icon icon-valor" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);"><i class="fas fa-money-check-alt"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="commissionsToPay">R$ 0,00</span>
+                            <span class="metric-label">Comissões a Pagar (Mês)</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="charts-grid">
+
+                <!-- Métricas do Afiliado (escondidas por padrão) -->
+                <div class="metrics-grid" id="affiliateMetricsGrid" style="display: none;">
+                    <div class="metric-card">
+                        <div class="card-icon icon-valor"><i class="fas fa-hand-holding-usd"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="affiliateRevenue">R$ 0,00</span>
+                            <span class="metric-label">Sua Receita Gerada (MRR)</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="card-icon icon-atendimentos"><i class="fas fa-users"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="affiliateTotalClients">0</span>
+                            <span class="metric-label">Seus Clientes Totais</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="card-icon icon-leads"><i class="fas fa-check-circle"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="affiliateActiveClients">0</span>
+                            <span class="metric-label">Seus Clientes Ativos</span>
+                        </div>
+                    </div>
+                    <!-- Novas Métricas Afiliado -->
+                    <div class="metric-card">
+                        <div class="card-icon icon-valor" style="background: linear-gradient(135deg, #2ecc71, #27ae60);"><i class="fas fa-wallet"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="affiliatePendingCommission">R$ 0,00</span>
+                            <span class="metric-label">Comissão Pendente (Mês)</span>
+                        </div>
+                    </div>
+                     <div class="metric-card">
+                        <div class="card-icon icon-valor" style="background: linear-gradient(135deg, #3498db, #2980b9);"><i class="fas fa-landmark"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" id="affiliateTotalCommission">R$ 0,00</span>
+                            <span class="metric-label">Total Recebido (Vitalício)</span>
+                        </div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="card-icon icon-ia" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);"><i class="fas fa-link"></i></div>
+                        <div class="card-content">
+                            <span class="metric-value" style="font-size: 1.4rem;" id="affiliateLink">...</span>
+                            <span class="metric-label">Seu Link de Afiliado</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráficos -->
+                <div class="charts-grid" id="superadminChartsGrid">
                     <div class="chart-card">
-                        <h3>Receita Mensal Recorrente (MRR)</h3>
+                        <h3>Novos Clientes por Mês (Plataforma)</h3>
                         <div class="chart-container">
-                            <canvas id="mrrChart"></canvas>
+                            <canvas id="newClientsChart"></canvas>
                         </div>
                     </div>
                     <div class="chart-card">
-                        <h3>Novos Clientes por Mês</h3>
+                        <h3>Clientes por Afiliado</h3>
                          <div class="chart-container">
-                            <canvas id="newClientsChart"></canvas>
+                            <canvas id="clientsByAffiliateChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Comissões a Pagar por Afiliado (Mês)</h3>
+                         <div class="chart-container">
+                            <canvas id="commissionsByAffiliateChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Gráficos do Afiliado (escondidos por padrão) -->
+                 <div class="charts-grid" id="affiliateChartsGrid" style="display: none;">
+                    <div class="chart-card">
+                        <h3>Seus Novos Clientes por Mês</h3>
+                        <div class="chart-container">
+                            <canvas id="affiliateNewClientsChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -105,6 +200,39 @@
                     <!-- O Título aqui será alterado dinamicamente via JS -->
                     <h2 id="clientsPageTitle">Gerenciar Clientes</h2>
                 </div>
+                
+                <!-- Barra de Filtros e Busca -->
+                <div class="admin-filters">
+                    <div class="input-group search-input">
+                         <i class="fas fa-search"></i>
+                         <input type="text" id="clientSearchInput" placeholder="Buscar por nome ou empresa...">
+                    </div>
+                    <div class="input-group">
+                        <label for="filterPlan">Plano</label>
+                        <select id="filterPlan">
+                            <option value="">Todos os Planos</option>
+                            <!-- Planos carregados via JS -->
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="filterStatus">Status</label>
+                        <select id="filterStatus">
+                            <option value="">Todos os Status</option>
+                            <option value="active">Ativo</option>
+                            <option value="onboarding">Onboarding</option>
+                            <option value="payment_pending">Pag. Pendente</option>
+                            <option value="inactive">Inativo</option>
+                        </select>
+                    </div>
+                    <div class="input-group" id="affiliateFilterContainer">
+                        <label for="filterAffiliate">Afiliado</label>
+                        <select id="filterAffiliate">
+                            <option value="">Todos os Afiliados</option>
+                            <!-- Afiliados carregados via JS -->
+                        </select>
+                    </div>
+                </div>
+
                 <div class="table-container">
                     <table class="admin-table">
                         <thead>
@@ -434,4 +562,3 @@
     <script type="module" src="js/affiliates.js"></script>
 </body>
 </html>
-

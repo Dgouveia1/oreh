@@ -1,64 +1,93 @@
 import { supabaseClient } from './api.js';
 import { showToast, setTableLoading } from './admin-helpers.js';
 
+let allClientData = []; // Cache para os dados dos clientes
+let isDataFetched = false;
+
 /**
- * Renderiza a tabela de clientes buscando dados da tabela sincronizada 'company_user_details_sync'.
- * A tabela já contém os dados combinados e é atualizada por triggers.
- * A RLS definida na tabela 'company_user_details_sync' controla a visibilidade para 'super_admin' e 'admin'.
+ * Renderiza a tabela de clientes. Busca os dados se for a primeira vez,
+ * caso contrário, usa o cache e aplica os filtros.
  * @param {string} userRole - A função do usuário logado ('super_admin' ou 'admin').
  * @param {string|null} affiliateId - O ID do afiliado (apenas para a função 'admin').
+ * @param {object} filters - Objeto com os filtros (search, planId, status, affiliateId).
  */
-export async function renderUsersTable(userRole, affiliateId = null) {
-    console.log(`[Admin-Clientes] Renderizando tabela via Tabela Sincronizada para role: ${userRole}.`);
+export async function renderUsersTable(userRole, affiliateId = null, filters = {}) {
+    console.log(`[Admin-Clientes] Renderizando tabela com filtros:`, filters);
     setTableLoading('usersTableBody');
     const tableBody = document.getElementById('usersTableBody');
     tableBody.innerHTML = ''; // Limpa a tabela
 
     try {
-        // --- ETAPA ÚNICA: Buscar dados da Tabela Sincronizada ---
-        let syncQuery = supabaseClient
-            .from('company_user_details_sync') // Consulta a Tabela Sincronizada
-            .select(`
-                company_id,
-                company_name,
-                official_name,
-                company_status,
-                plan_id,
-                plan_name,
-                affiliate_id,
-                affiliate_name,
-                user_id,
-                contact_name,
-                contact_email
-            `) // Seleciona as colunas da tabela sync
-            .order('company_created_at', { ascending: false }); // Ordena pelos mais recentes
+        // --- ETAPA 1: Buscar dados (apenas se o cache estiver vazio) ---
+        if (!isDataFetched) {
+            console.log("[Admin-Clientes] Cache vazio. Buscando dados da Tabela Sincronizada...");
+            let syncQuery = supabaseClient
+                .from('company_user_details_sync')
+                .select(`
+                    company_id,
+                    company_name,
+                    official_name,
+                    company_status,
+                    plan_id,
+                    plan_name,
+                    affiliate_id,
+                    affiliate_name,
+                    user_id,
+                    contact_name,
+                    contact_email
+                `)
+                .order('company_created_at', { ascending: false });
 
-        // O filtro por afiliado AGORA É FEITO PELA RLS DA TABELA 'company_user_details_sync'.
-        // O código JS não precisa mais filtrar se a RLS estiver correta.
-        if (userRole === 'admin') {
-             console.log(`[Admin-Clientes] Role 'admin' detectada. RLS da tabela sync deve filtrar por affiliate_id: ${affiliateId}`);
+            // A RLS da tabela 'company_user_details_sync' já filtra para o 'admin'
+            // Então não precisamos de filtro JS para 'admin'
+            const { data, error: syncError } = await syncQuery;
+            if (syncError) throw syncError;
+
+            allClientData = data || []; // Armazena no cache
+            isDataFetched = true;
+            console.log(`[Admin-Clientes] Dados buscados e cacheados (${allClientData.length} registros).`);
         } else {
-             // CORREÇÃO: Troca as aspas externas para crases (backticks)
-             console.log(`[Admin-Clientes] Role 'super_admin' detectada. RLS da tabela sync deve permitir acesso total.`);
+            console.log("[Admin-Clientes] Usando dados cacheados.");
         }
 
-        const { data: details, error: syncError } = await syncQuery;
-        if (syncError) throw syncError;
+        // --- ETAPA 2: Aplicar Filtros (no lado do cliente) ---
+        let filteredDetails = allClientData;
 
-        console.log('[Admin-Clientes] Dados recebidos da tabela sync:', details);
+        // 1. Filtro de Busca (Nome do Contato ou Nome da Empresa)
+        if (filters.search) {
+            const searchTerm = filters.search.toLowerCase();
+            filteredDetails = filteredDetails.filter(detail => 
+                (detail.contact_name && detail.contact_name.toLowerCase().includes(searchTerm)) ||
+                (detail.company_name && detail.company_name.toLowerCase().includes(searchTerm)) ||
+                (detail.official_name && detail.official_name.toLowerCase().includes(searchTerm))
+            );
+        }
 
-        if (!details || details.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px;">Nenhum cliente encontrado.</td></tr>`;
-            return;
+        // 2. Filtro de Plano
+        if (filters.planId) {
+            filteredDetails = filteredDetails.filter(detail => detail.plan_id === filters.planId);
+        }
+
+        // 3. Filtro de Status
+        if (filters.status) {
+            filteredDetails = filteredDetails.filter(detail => detail.company_status === filters.status);
+        }
+
+        // 4. Filtro de Afiliado (APENAS para super_admin)
+        if (userRole === 'super_admin' && filters.affiliateId) {
+            filteredDetails = filteredDetails.filter(detail => detail.affiliate_id === filters.affiliateId);
         }
 
         // --- Renderizar Tabela ---
-        tableBody.innerHTML = details.map(detail => {
-            // Usa os nomes das colunas da tabela sync
+        if (!filteredDetails || filteredDetails.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px;">Nenhum cliente encontrado com os filtros aplicados.</td></tr>`;
+            return;
+        }
+
+        tableBody.innerHTML = filteredDetails.map(detail => {
             const contactDisplay = detail.contact_name || detail.official_name || detail.company_name || 'N/A';
             const contactSub = detail.contact_email ? `<small style="color: var(--text-color-light);">${detail.contact_email}</small>` : '';
 
-            // Define se a coluna 'Afiliado' deve ser exibida
             const affiliateCell = userRole === 'super_admin'
                 ? `<td data-label="Afiliado">${detail.affiliate_name || 'Nenhum'}</td>`
                 : '';
@@ -67,9 +96,13 @@ export async function renderUsersTable(userRole, affiliateId = null) {
             const companySubName = detail.official_name && detail.company_name && detail.official_name !== detail.company_name
                 ? `<small style="color: var(--text-color-light);">${detail.company_name}</small>`
                 : '';
+            
+            const statusLabel = detail.company_status === 'active' ? 'Ativo' 
+                              : detail.company_status === 'onboarding' ? 'Onboarding'
+                              : detail.company_status === 'payment_pending' ? 'Pag. Pendente'
+                              : detail.company_status === 'inactive' ? 'Inativo'
+                              : 'N/A';
 
-            // Monta o HTML da linha usando dados da tabela sync
-            // Os data attributes refletem os nomes da tabela sync
             return `
                 <tr data-company_id="${detail.company_id}"
                     data-user_id="${detail.user_id || ''}"
@@ -91,7 +124,7 @@ export async function renderUsersTable(userRole, affiliateId = null) {
                         ${companySubName}
                     </td>
                     <td data-label="Plano">${detail.plan_name || 'Nenhum'}</td>
-                    <td data-label="Status"><span class="status-badge-admin ${detail.company_status === 'active' ? 'active' : 'inactive'}">${detail.company_status || 'N/A'}</span></td>
+                    <td data-label="Status"><span class="status-badge-admin ${detail.company_status || 'inactive'}">${statusLabel}</span></td>
                     ${affiliateCell}
                     <td class="table-actions" data-label="Ações">
                         <button class="btn btn-small btn-secondary" data-action="edit-user"><i class="fas fa-edit"></i></button>
@@ -101,8 +134,9 @@ export async function renderUsersTable(userRole, affiliateId = null) {
         }).join('');
 
     } catch (error) {
-        console.error("Erro ao carregar clientes via Tabela Sincronizada:", error);
-        tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--danger);">Falha ao carregar clientes. Verifique o console e as permissões RLS da tabela 'company_user_details_sync'.</td></tr>`;
+        console.error("Erro ao carregar clientes:", error);
+        tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--danger);">Falha ao carregar clientes. Verifique o console.</td></tr>`;
+        isDataFetched = false; // Força recarregar em caso de erro
     }
 }
 
@@ -237,10 +271,20 @@ export async function handleUserFormSubmit(event, userRole, currentAffiliateId) 
         showToast('Dados do cliente atualizados! A tabela será atualizada em breve.', 'success'); // Informa que a atualização pode levar um instante (trigger)
         document.getElementById('userModal').style.display = 'none';
         form.reset();
-        // Não chamamos renderUsersTable() imediatamente, esperamos o trigger e a RLS fazerem efeito.
-        // O Supabase Realtime (se configurado para a tabela sync) pode atualizar a UI.
-        // Ou podemos adicionar um pequeno delay e chamar renderUsersTable().
-        setTimeout(() => renderUsersTable(userRole, currentAffiliateId), 1000); // Exemplo com delay
+        
+        // Limpa o cache para forçar a busca de dados frescos na próxima renderização
+        isDataFetched = false;
+        
+        // Recarrega a tabela com um pequeno delay para esperar o trigger
+        setTimeout(() => {
+            const filters = {
+                search: document.getElementById('clientSearchInput').value,
+                planId: document.getElementById('filterPlan').value,
+                status: document.getElementById('filterStatus').value,
+                affiliateId: document.getElementById('filterAffiliate').value
+            };
+            renderUsersTable(userRole, currentAffiliateId, filters);
+        }, 1500); // Aumenta o delay para garantir a propagação do trigger
 
     } catch (error) {
         console.error('Erro ao atualizar dados do cliente:', error);
@@ -250,4 +294,3 @@ export async function handleUserFormSubmit(event, userRole, currentAffiliateId) 
         saveBtn.textContent = 'Salvar Alterações';
     }
 }
-

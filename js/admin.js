@@ -4,6 +4,14 @@ import { renderCouponsTable, setupCouponModalListeners } from './admin-cupons.js
 import { supabaseClient } from './api.js';
 import { showToast, setTableLoading, setAllPlans, setAllAffiliates, getAllPlans, getAllAffiliates } from './admin-helpers.js';
 
+// Variáveis para instâncias dos gráficos
+let mrrChart = null;
+let newClientsChart = null;
+let clientsByAffiliateChart = null;
+let commissionsByAffiliateChart = null;
+let affiliateNewClientsChart = null;
+
+
 // --- LÓGICA DE DOCUMENTOS LEGAIS (GERAIS) ---
 
 async function loadLegalDocuments() {
@@ -166,25 +174,50 @@ document.addEventListener('DOMContentLoaded', async () => {
         const userAvatar = document.querySelector('.user-avatar');
         const userNameDisplay = document.querySelector('.user-info span');
 
+        // Seleciona os containers de métricas e gráficos
+        const superadminMetrics = document.getElementById('superadminMetricsGrid');
+        const affiliateMetrics = document.getElementById('affiliateMetricsGrid');
+        const superadminCharts = document.getElementById('superadminChartsGrid');
+        const affiliateCharts = document.getElementById('affiliateChartsGrid');
+        const affiliateFilter = document.getElementById('affiliateFilterContainer');
+
+
         if (role === 'admin') { // Visão do Afiliado
+            // Esconde navegação de Superadmin
             document.querySelector('.nav-link[data-page="adminPlans"]').style.display = 'none';
             document.querySelector('.nav-link[data-page="adminAffiliates"]').style.display = 'none';
             document.querySelector('.nav-link[data-page="adminCoupons"]').style.display = 'none';
             document.querySelector('.nav-link[data-page="adminLegal"]').style.display = 'none'; // Esconde legal para afiliado
-            document.getElementById('totalAffiliatesCard').style.display = 'none';
-            document.querySelector('.charts-grid').style.display = 'none'; // Esconde gráficos por padrão
             document.getElementById('affiliateColumnHeader').style.display = 'none'; // Esconde coluna de afiliado na tabela de clientes
+            if (affiliateFilter) affiliateFilter.style.display = 'none'; // Esconde filtro de afiliados
+
+            // Ajusta textos
             document.querySelector('.nav-link[data-page="adminUsers"] span').textContent = 'Meus Clientes';
             document.getElementById('clientsPageTitle').textContent = 'Meus Clientes Indicados';
-            document.getElementById('revenueLabel').textContent = 'Sua Receita Gerada (MRR)';
 
+            // Ajusta Dashboard
+            if (superadminMetrics) superadminMetrics.style.display = 'none';
+            if (affiliateMetrics) affiliateMetrics.style.display = 'grid'; // Mostra métricas de afiliado
+            if (superadminCharts) superadminCharts.style.display = 'none';
+            if (affiliateCharts) affiliateCharts.style.display = 'grid'; // Mostra gráficos de afiliado
+            
+            // Info do Usuário
             sidebarHeader.textContent = 'PAINEL DE AFILIADO';
             userAvatar.textContent = fullName ? fullName.substring(0, 2).toUpperCase() : 'AF';
             userNameDisplay.textContent = fullName || 'Afiliado';
+
         } else { // Visão do Super Admin
             sidebarHeader.textContent = 'SUPERADMIN';
             userAvatar.textContent = 'SA';
             userNameDisplay.textContent = 'Super Admin';
+
+            // Ajusta Dashboard
+            if (superadminMetrics) superadminMetrics.style.display = 'grid';
+            if (affiliateMetrics) affiliateMetrics.style.display = 'none';
+            if (superadminCharts) superadminCharts.style.display = 'grid';
+            if (affiliateCharts) affiliateCharts.style.display = 'none';
+            if (affiliateFilter) affiliateFilter.style.display = 'block'; // Mostra filtro de afiliados
+
             // Garante que a seção de documentos legais de afiliados seja visível
             const affiliateLegalForm = document.getElementById('affiliateLegalDocumentsForm');
             if (affiliateLegalForm) affiliateLegalForm.style.display = 'block';
@@ -202,11 +235,28 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (plansError) throw plansError;
             setAllPlans(plansData);
 
+            // Popula o filtro de planos na página de Gestão de Clientes
+            const filterPlan = document.getElementById('filterPlan');
+            if (filterPlan) {
+                plansData.forEach(plan => {
+                    filterPlan.innerHTML += `<option value="${plan.id}">${plan.name}</option>`;
+                });
+            }
+
             const { data: affiliatesData, error: affiliatesError } = await supabaseClient
                 .from('affiliates')
                 .select('id, name, contact_email'); // Ajuste conforme nome real das colunas
             if (affiliatesError) throw affiliatesError;
             setAllAffiliates(affiliatesData);
+
+            // Popula o filtro de afiliados na página de Gestão de Clientes
+            const filterAffiliate = document.getElementById('filterAffiliate');
+            if (filterAffiliate) {
+                affiliatesData.forEach(aff => {
+                    filterAffiliate.innerHTML += `<option value="${aff.id}">${aff.name || aff.contact_email}</option>`;
+                });
+            }
+
         } catch (error) {
             console.error("Falha ao buscar planos e afiliados", error);
             showToast('Erro ao carregar dados de suporte.', 'error');
@@ -232,9 +282,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             pageContents.forEach(page => page.classList.toggle('active', page.id === `${targetPage}Page`));
             pageTitle.textContent = link.querySelector('span').textContent;
 
+            // Limpa gráficos antigos
+            [mrrChart, newClientsChart, clientsByAffiliateChart, commissionsByAffiliateChart, affiliateNewClientsChart].forEach(chart => {
+                if (chart) chart.destroy();
+                chart = null;
+            });
+
             switch (targetPage) {
                 case 'adminDashboard': loadAdminDashboard(); break;
-                case 'adminUsers': renderUsersTable(userRole, affiliateId); break; // Passa a role e o ID
+                case 'adminUsers': renderUsersTable(userRole, affiliateId, getFilters()); break; // Passa a role, ID e filtros
                 case 'adminPlans': renderPlansTable(); break;
                 case 'adminCoupons': renderCouponsTable(); break;
                 case 'adminAffiliates': renderAffiliatesTable(); break;
@@ -249,8 +305,161 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- LÓGICA DO DASHBOARD ---
     async function loadAdminDashboard() {
         console.log('[Admin] A carregar dados do dashboard...');
-        // ... (código do dashboard existente) ...
+        
+        try {
+            if (userRole === 'super_admin') {
+                const { data, error } = await supabaseClient.rpc('get_superadmin_dashboard_metrics');
+                if (error) throw error;
+                console.log("Métricas Superadmin:", data);
+                populateSuperadminDashboard(data);
+            } else if (userRole === 'admin') {
+                const { data, error } = await supabaseClient.rpc('get_affiliate_dashboard_metrics', { p_affiliate_id: affiliateId });
+                if (error) throw error;
+                console.log("Métricas Afiliado:", data);
+                populateAffiliateDashboard(data);
+            }
+        } catch (error) {
+            console.error('Erro ao carregar métricas do dashboard:', error);
+            showToast(`Erro ao carregar métricas: ${error.message}`, 'error');
+        }
     }
+    
+    function formatCurrency(value) {
+        return (value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function populateSuperadminDashboard(data) {
+        // Cards
+        document.getElementById('totalRevenue').textContent = formatCurrency(data.total_revenue);
+        document.getElementById('totalUsers').textContent = data.total_clients;
+        document.getElementById('activeSubscriptions').textContent = data.clients_by_status.active || 0;
+        document.getElementById('totalAffiliates').textContent = data.total_affiliates;
+        document.getElementById('avgTicket').textContent = formatCurrency(data.avg_ticket);
+        document.getElementById('churnRate').textContent = `${(data.churn_rate_month || 0).toFixed(1)}%`;
+        document.getElementById('clientsOnboarding').textContent = data.clients_by_status.onboarding || 0;
+        document.getElementById('commissionsToPay').textContent = formatCurrency(data.commissions_to_pay_month);
+        
+        // Gráficos
+        renderBarChart('newClientsChart', data.new_clients_monthly, 'Novos Clientes', 'Clientes');
+        renderDoughnutChart('clientsByAffiliateChart', data.clients_by_affiliate, 'Clientes por Afiliado');
+        renderBarChart('commissionsByAffiliateChart', data.commissions_by_affiliate, 'Comissões por Afiliado', 'Valor (R$)');
+    }
+
+    function populateAffiliateDashboard(data) {
+        // Cards
+        document.getElementById('affiliateRevenue').textContent = formatCurrency(data.total_revenue);
+        document.getElementById('affiliateTotalClients').textContent = data.total_clients;
+        document.getElementById('affiliateActiveClients').textContent = data.active_clients;
+        document.getElementById('affiliatePendingCommission').textContent = formatCurrency(data.commission_pending_month);
+        document.getElementById('affiliateTotalCommission').textContent = formatCurrency(data.commission_total_lifetime);
+        
+        // Link de Afiliado (Exemplo)
+        const affiliateLinkEl = document.getElementById('affiliateLink');
+        if(affiliateLinkEl) {
+            const affiliateLink = `https://oreh.com.br/register?aff_id=${affiliateId.substring(0, 8)}`;
+            affiliateLinkEl.textContent = affiliateLink;
+            affiliateLinkEl.title = "Clique para copiar";
+            affiliateLinkEl.style.cursor = "pointer";
+            affiliateLinkEl.onclick = () => {
+                // Implementar lógica de copiar para clipboard
+                showToast("Link copiado! (implementação pendente)", "info");
+            };
+        }
+
+        // Gráfico
+        renderBarChart('affiliateNewClientsChart', data.new_clients_monthly_chart, 'Seus Novos Clientes', 'Clientes');
+    }
+
+    // --- FUNÇÕES DE GRÁFICO ---
+    function renderBarChart(canvasId, chartData, label, valueLabel) {
+        const ctx = document.getElementById(canvasId)?.getContext('2d');
+        if (!ctx) return;
+
+        const labels = chartData.map(item => item.name || item.month);
+        const data = chartData.map(item => item.total || item.count);
+
+        // CORREÇÃO: Destruir a instância de gráfico correta (armazenada na variável)
+        // e não no 'window' (que é o elemento canvas).
+        let chartInstance = null;
+        if (canvasId === 'newClientsChart') chartInstance = newClientsChart;
+        else if (canvasId === 'commissionsByAffiliateChart') chartInstance = commissionsByAffiliateChart;
+        else if (canvasId === 'affiliateNewClientsChart') chartInstance = affiliateNewClientsChart;
+
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        const newChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: valueLabel,
+                    data: data,
+                    backgroundColor: 'rgba(255, 127, 64, 0.7)',
+                    borderColor: 'rgba(255, 127, 64, 1)',
+                    borderWidth: 1,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+
+        // CORREÇÃO: Armazena a nova instância na variável global correta.
+        if (canvasId === 'newClientsChart') newClientsChart = newChart;
+        else if (canvasId === 'commissionsByAffiliateChart') commissionsByAffiliateChart = newChart;
+        else if (canvasId === 'affiliateNewClientsChart') affiliateNewClientsChart = newChart;
+    }
+
+    function renderDoughnutChart(canvasId, chartData, label) {
+         const ctx = document.getElementById(canvasId)?.getContext('2d');
+        if (!ctx) return;
+
+        const labels = chartData.map(item => item.name);
+        const data = chartData.map(item => item.count);
+        
+        // Gerar cores dinamicamente
+        const colors = data.map((_, i) => `hsl(${(i * 360 / data.length) % 360}, 70%, 60%)`);
+
+        // CORREÇÃO: Destruir a instância de gráfico correta (armazenada na variável).
+        let chartInstance = null;
+        if (canvasId === 'clientsByAffiliateChart') chartInstance = clientsByAffiliateChart;
+
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        const newChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: label,
+                    data: data,
+                    backgroundColor: colors,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    }
+                }
+            }
+        });
+
+        // CORREÇÃO: Armazena a nova instância na variável global correta.
+        if (canvasId === 'clientsByAffiliateChart') clientsByAffiliateChart = newChart;
+    }
+
 
     // --- LÓGICA DAS TABELAS (Planos) ---
     async function renderPlansTable() {
@@ -356,6 +565,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // --- LÓGICA DE FILTROS (CLIENTES) ---
+    function getFilters() {
+        const search = document.getElementById('clientSearchInput').value;
+        const planId = document.getElementById('filterPlan').value;
+        const status = document.getElementById('filterStatus').value;
+        const affiliateId = document.getElementById('filterAffiliate').value;
+        return { search, planId, status, affiliateId };
+    }
+
     // --- INICIALIZAÇÃO DOS LISTENERS ---
     function setupModalListeners() {
         document.querySelectorAll('.modal').forEach(modal => {
@@ -394,6 +612,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('planShowOnOnboarding').checked = true; // Default para true
             document.getElementById('planModal').style.display = 'flex';
         });
+
+        // Listeners dos Filtros
+        const triggerFilter = () => renderUsersTable(userRole, affiliateId, getFilters());
+        document.getElementById('clientSearchInput').addEventListener('input', triggerFilter);
+        document.getElementById('filterPlan').addEventListener('change', triggerFilter);
+        document.getElementById('filterStatus').addEventListener('change', triggerFilter);
+        document.getElementById('filterAffiliate').addEventListener('change', triggerFilter);
 
         setupAffiliateModal(); // Configura os listeners para a tabela de afiliados
         setupCouponModalListeners(); // Configura os listeners para a tabela de cupons

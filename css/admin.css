@@ -367,6 +367,74 @@ body.dark-mode .close-modal:hover {
     color: #e53e3e;
 }
 
+/* Filtros da Página de Clientes */
+.admin-filters {
+    display: grid;
+    /* Alinha os filtros em colunas que se adaptam ao tamanho */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    align-items: flex-end; /* Alinha os inputs/selects na base */
+    background-color: var(--card-bg);
+    padding: 2rem;
+    border-radius: 1.6rem;
+    box-shadow: var(--card-shadow);
+    margin-bottom: 3rem;
+    border: 1px solid var(--border-color);
+}
+
+.admin-filters .input-group {
+    margin-bottom: 0; /* Remove a margem padrão do input-group */
+}
+
+.admin-filters .input-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-color-light);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.admin-filters .input-group select,
+.admin-filters .input-group input {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.admin-filters .search-input {
+    position: relative;
+    grid-column: 1 / -1; /* Faz a busca ocupar a linha inteira em telas maiores */
+}
+
+@media (min-width: 768px) {
+    .admin-filters .search-input {
+        grid-column: auto; /* Volta ao normal em telas médias */
+    }
+}
+
+@media (min-width: 1024px) {
+     .admin-filters {
+        /* Em telas grandes, força 4 colunas */
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+     }
+    .admin-filters .search-input {
+        grid-column: 1 / 2; /* Ocupa o primeiro espaço */
+    }
+}
+
+
+.admin-filters .search-input i {
+    position: absolute;
+    left: 1.5rem;
+    top: 50%;
+    transform: translateY(25%); /* Ajuste fino para alinhar verticalmente */
+    color: var(--text-color-light);
+    font-size: 0.9rem;
+}
+
+.admin-filters .search-input input {
+    padding-left: 3.5rem !important;
+}
 
 /* Responsividade melhorada */
 @media (max-width: 1200px) {
