@@ -221,6 +221,11 @@ img, video, canvas, svg {
         color: var(--primary);
     }
 
+    /* Oculta o botão flutuante do WhatsApp no mobile */
+    .whatsapp-fab {
+        display: none;
+    }
+
     /* TABELAS RESPONSIVAS (CARD LAYOUT) */
     .table-container { overflow-x: visible; }
     .client-table, .product-table, .admin-table { min-width: 0; border: none; }
