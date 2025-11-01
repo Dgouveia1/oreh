@@ -6,7 +6,8 @@ import { saveEvent, changeDay } from './agenda.js';
 import { descartarLead, takeOverChat } from './atendimentos.js';
 import { uploadFile, deleteFile } from './drive.js';
 import { saveUserSettings, saveCompanySettings } from './settings.js';
-import { handleProductFormSubmit, deleteProduct, openEditModal as openEditProductModal, setupProductEventListeners } from './produtos.js';
+// ✅ ATUALIZADO: Importa 'confirmDeleteProduct' e remove 'deleteProduct'
+import { handleProductFormSubmit, openEditModal as openEditProductModal, setupProductEventListeners, confirmDeleteProduct } from './produtos.js';
 import { handleClientFormSubmit, deleteClient, openEditModal as openEditClientModal, setupClientTableListeners } from './clientes.js';
 import './finances.js';
 
@@ -245,7 +246,7 @@ function setupEventListeners() {
     }
 
     // Produtos
-    setupProductEventListeners();
+    setupProductEventListeners(); // ✅ CORREÇÃO: Esta função agora configura os listeners da tabela
 
     // Clientes
     setupClientTableListeners();
@@ -288,10 +289,13 @@ function setupEventListeners() {
             document.getElementById('isPersonal').checked = false;
         });
     }
+    
+    // ✅ NOVO LISTENER: Adiciona listener para o botão de confirmação de exclusão de produto
+    const confirmDeleteProductBtn = document.getElementById('confirmDeleteProductBtn');
+    if (confirmDeleteProductBtn) {
+        confirmDeleteProductBtn.addEventListener('click', confirmDeleteProduct);
+    }
 
-    // Cadastro (SignUp) - Removido daqui, pois o link agora vai para onboarding.html
-    // const openSignUpModalBtn = document.getElementById('openSignUpModalBtn'); ...
-    // const signUpForm = document.getElementById('signUpForm'); ...
 
     console.log('[OREH] Listeners configurados.');
 }
@@ -308,3 +312,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     // A splash screen é escondida após a verificação de login
     hideSplashScreen();
 });
+

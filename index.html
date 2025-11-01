@@ -15,6 +15,7 @@
 
     <!-- Meta tags para experiência de App em tela cheia no iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Oreh">
     <link rel="apple-touch-icon" href="favicon.png"> <!-- Ícone para tela inicial do iOS -->
@@ -815,6 +816,28 @@
             </form>
         </div>
     </div>
+    <!-- ✅ NOVO MODAL: Confirmação de Exclusão de Produto -->
+    <div class="modal" id="deleteProductModal">
+        <div class="modal-content" style="max-width: 450px;">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3 style="color: var(--danger);"><i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão</h3>
+            </div>
+            <p style="margin-top: 15px; color: var(--text-color); font-weight: 500;">
+                Tem certeza de que deseja apagar este produto?
+            </p>
+            <p id="deleteProductName" style="margin-top: 10px; color: var(--text-color-light); font-weight: 600;"></p>
+            <div class="modal-footer" style="padding-top: 20px;">
+                <button id="confirmDeleteProductBtn" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Sim, Apagar
+                </button>
+                <button class="btn btn-secondary close-modal">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <audio id="notificationSound" src="notification.mp3" preload="auto"></audio>
 
      <!-- Modal "Esqueci minha senha" -->
@@ -864,3 +887,4 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
 </html>
+

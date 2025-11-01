@@ -56,7 +56,7 @@ function renderProductsTable(products) {
             const value = product[key];
             row.dataset[key] = typeof value === 'object' ? JSON.stringify(value) : value;
         });
-        row.dataset.productId = product.id;
+        row.dataset.productId = product.id; // Garante que o ID do produto esteja no dataset
 
         const photoUrls = product.photo_urls || [];
         const filesHtml = photoUrls.map(url => {
@@ -125,13 +125,24 @@ export function openEditModal(productData) {
     form.reset();
     
     document.getElementById('productModalTitle').textContent = 'Editar Produto';
-    document.getElementById('productId').value = productData.id;
+    document.getElementById('productId').value = productData.id || productData.productId; // Pega o ID
     document.getElementById('productName').value = productData.name;
     document.getElementById('productDescription').value = productData.description;
     document.getElementById('productValue').value = productData.value;
     document.getElementById('productPurchaseLink').value = productData.purchase_link || '';
     
-    const photoUrls = JSON.parse(productData.photo_urls || '[]');
+    // O dataset pode ter 'photo_urls' como string JSON
+    let photoUrls = [];
+    if (typeof productData.photo_urls === 'string') {
+        try {
+            photoUrls = JSON.parse(productData.photo_urls || '[]');
+        } catch (e) {
+            console.warn("Não foi possível analisar photo_urls do dataset:", productData.photo_urls);
+        }
+    } else if (Array.isArray(productData.photo_urls)) {
+        photoUrls = productData.photo_urls;
+    }
+    
     form.dataset.existingPhotos = JSON.stringify(photoUrls);
 
     const previewContainer = document.getElementById('imagePreviewContainer');
@@ -207,22 +218,57 @@ export async function handleProductFormSubmit(event) {
     }
 }
 
+// ✅ NOVA FUNÇÃO: Abre o modal de confirmação de exclusão
+export function openDeleteModal(productData) {
+    const modal = document.getElementById('deleteProductModal');
+    if (!modal) return;
+    
+    const productNameEl = modal.querySelector('#deleteProductName');
+    const confirmBtn = modal.querySelector('#confirmDeleteProductBtn');
+    
+    if (productNameEl) {
+        productNameEl.textContent = productData.name || 'Produto sem nome';
+    }
+    if (confirmBtn) {
+        // Pega o ID de productData.productId (que veio do dataset da linha)
+        confirmBtn.dataset.productId = productData.productId; 
+    }
+    
+    modal.style.display = 'flex';
+}
 
-export async function deleteProduct(productId) {
-    if (!confirm('Tem a certeza de que deseja apagar este produto?')) return;
+// ✅ FUNÇÃO ATUALIZADA: Agora é chamada pelo botão de confirmação
+export async function confirmDeleteProduct() {
+    const confirmBtn = document.getElementById('confirmDeleteProductBtn');
+    const productId = confirmBtn.dataset.productId;
+
+    if (!productId) {
+        showToast('Erro: ID do produto não encontrado.', 'error');
+        return;
+    }
+
+    confirmBtn.disabled = true;
+    confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Apagando...';
 
     try {
         const { error } = await supabaseClient.from('products').delete().eq('id', productId);
         if (error) throw error;
         showToast('Produto apagado com sucesso!', 'success');
-        loadProducts(); // ✅ RECARREGA A LISTA APÓS DELETAR
+        logEvent('INFO', `Produto com ID ${productId} apagado.`);
+        loadProducts(); // Recarrega a lista
     } catch (error) {
         console.error('Erro ao apagar produto:', error);
         showToast(`Erro ao apagar produto: ${error.message}`, 'error');
+        logEvent('ERROR', 'Falha ao apagar produto', { errorMessage: error.message });
+    } finally {
+        confirmBtn.disabled = false;
+        confirmBtn.innerHTML = '<i class="fas fa-trash"></i> Sim, Apagar';
+        document.getElementById('deleteProductModal').style.display = 'none';
+        delete confirmBtn.dataset.productId; // Limpa o ID
     }
 }
 
-// ✅ NOVA FUNÇÃO: Configura os event listeners para a página de produtos
+// ✅ FUNÇÃO ATUALIZADA: Configura os event listeners para a página de produtos
 export function setupProductEventListeners() {
     const previewContainer = document.getElementById('imagePreviewContainer');
     if(previewContainer) {
@@ -279,5 +325,29 @@ export function setupProductEventListeners() {
             }
         });
     }
-}
 
+    // ✅ NOVO LISTENER: Adiciona o listener para a tabela de produtos
+    const tableBody = document.getElementById('productTableBody');
+    if (tableBody) {
+        tableBody.addEventListener('click', (e) => {
+            const button = e.target.closest('button[data-action]');
+            if (!button) return;
+
+            const row = button.closest('tr');
+            if (!row) return;
+
+            const action = button.dataset.action;
+            
+            // Clona todos os dados do dataset da linha (tr)
+            const productData = { ...row.dataset };
+
+            if (action === 'edit') {
+                // Chama a função de abrir modal de edição
+                openEditModal(productData); 
+            } else if (action === 'delete') {
+                // Chama a NOVA função de abrir modal de exclusão
+                openDeleteModal(productData);
+            }
+        });
+    }
+}

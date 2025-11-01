@@ -1,234 +1,252 @@
 categoria,objeto,detalhes
+1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: role | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: affiliate_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: email | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: admin_users,COLUNA: role | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: affiliate_legal_documents,COLUNA: id | TIPO: smallint | NULÁVEL: NO | PADRÃO: 1 | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliate_legal_documents,COLUNA: affiliate_terms | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: affiliate_legal_documents,COLUNA: payment_policy | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliate_legal_documents,COLUNA: affiliate_terms | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: affiliate_legal_documents,COLUNA: last_updated_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: hotmart_code | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: commission_rate | TIPO: numeric | NULÁVEL: YES | PADRÃO: 0.20 | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: payment_info | TIPO: jsonb | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: cpf_cnpj | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: hotmart_code | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: contact_email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: address | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: phone | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: cpf_cnpj | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: contact_email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: commission_rate | TIPO: numeric | NULÁVEL: YES | PADRÃO: 0.20 | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: affiliates,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: tokens_used | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: user_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: id | TIPO: bigint | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: flow_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: user_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: ai_token_usage,COLUNA: tokens_used | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: company_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: id | TIPO: bigint | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: metadata | TIPO: jsonb | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: company_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: user_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: level | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: message | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: id | TIPO: bigint | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: chats,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: app_logs,COLUNA: level | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: chats,COLUNA: last_message_summary | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: chats,COLUNA: status | TIPO: text | NULÁVEL: YES | PADRÃO: '''Atendimento''::text'::text | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: chats,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: chats,COLUNA: temperatura | TIPO: text | NULÁVEL: YES | PADRÃO: 'TOPO DO FUNIL'::text | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: chats,COLUNA: customer_phone | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: chats,COLUNA: lead_value | TIPO: numeric | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: chats,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: chats,COLUNA: customer_name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: chats,COLUNA: status | TIPO: text | NULÁVEL: YES | PADRÃO: '''Atendimento''::text'::text | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: chats,COLUNA: lead_value | TIPO: numeric | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: chats,COLUNA: customer_phone | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: chats,COLUNA: updated_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: chats,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: clients,COLUNA: is_personal | TIPO: boolean | NULÁVEL: YES | PADRÃO: false | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: clients,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: clients,COLUNA: origin | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: clients,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: clients,COLUNA: name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: clients,COLUNA: notes | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: clients,COLUNA: location | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: clients,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: gen_random_uuid() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: clients,COLUNA: origin | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: clients,COLUNA: status | TIPO: text | NULÁVEL: YES | PADRÃO: 'Lead'::text | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: clients,COLUNA: updated_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: clients,COLUNA: email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: clients,COLUNA: phone | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: official_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: clients,COLUNA: name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: clients,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: gen_random_uuid() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: clients,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: clients,COLUNA: is_personal | TIPO: boolean | NULÁVEL: YES | PADRÃO: false | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: clients,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: clients,COLUNA: updated_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: clients,COLUNA: location | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: asaas_customer_id | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: companies,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: plan_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: plan_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: '83a6e00d-67d6-4301-b96c-c1bb51ab3f80'::uuid | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: companies,COLUNA: affiliate_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Identifica o afiliado responsável pela empresa/cliente.
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: used_coupon_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Registra o ID do cupom de desconto utilizado pelo cliente no momento da assinatura.
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: companies,COLUNA: status | TIPO: text | NULÁVEL: YES | PADRÃO: 'onboarding'::text | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: companies,COLUNA: asaas_subscription_id | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: asaas_customer_id | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: companies,COLUNA: address | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: companies,COLUNA: phone | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: companies,COLUNA: used_coupon_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Registra o ID do cupom de desconto utilizado pelo cliente no momento da assinatura.
 1. TABELAS E COLUNAS,TABELA: companies,COLUNA: corporate_email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: companies,COLUNA: industry | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: companies,COLUNA: cnpj | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: official_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: companies,COLUNA: name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: evolution_api_url | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: evolution_api_key | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: base_prompt | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: is_ai_active | TIPO: boolean | NULÁVEL: YES | PADRÃO: true | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_tone_adaptability | TIPO: boolean | NULÁVEL: YES | PADRÃO: true | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: business_info | TIPO: jsonb | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: evolution_instance_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_personality_style | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_dominant_traits | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_tone_formality | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_language_complexity | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_agent_function | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: evolution_number | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: business_info | TIPO: jsonb | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_tone_adaptability | TIPO: boolean | NULÁVEL: YES | PADRÃO: true | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: is_ai_active | TIPO: boolean | NULÁVEL: YES | PADRÃO: true | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: evolution_api_url | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: evolution_api_key | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: company_secrets,COLUNA: ai_personality_style | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: usage_count | TIPO: integer | NULÁVEL: NO | PADRÃO: 0 | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: usage_limit | TIPO: integer | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: code | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: is_active | TIPO: boolean | NULÁVEL: NO | PADRÃO: true | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: affiliate_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: plan_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: company_created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: user_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: last_synced_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: company_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: official_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: company_status | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: contact_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: contact_email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: user_role | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: plan_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: company_user_details_sync,COLUNA: affiliate_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: expires_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: campaign_name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: is_active | TIPO: boolean | NULÁVEL: NO | PADRÃO: true | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: discount_type | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: Tipo de desconto: 'percentage' para percentual ou 'fixed' para valor fixo.
 1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: gen_random_uuid() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: code | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: discount_value | TIPO: numeric | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: usage_limit | TIPO: integer | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: campaign_name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: coupons,COLUNA: usage_count | TIPO: integer | NULÁVEL: NO | PADRÃO: 0 | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: coupons,"COLUNA: applicable_plan_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Se nulo, o cupom se aplica a todos os planos."
-1. TABELAS E COLUNAS,TABELA: documents,COLUNA: embedding | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: documents,COLUNA: metadata | TIPO: jsonb | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: documents,COLUNA: company_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: documents,COLUNA: id | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: documents,COLUNA: content | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: documents,COLUNA: file_path | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: events,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: events,COLUNA: hora_fim | TIPO: time without time zone | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: documents,COLUNA: content | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: documents,COLUNA: embedding | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: documents,COLUNA: company_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: documents,COLUNA: metadata | TIPO: jsonb | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: documents,COLUNA: id | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: events,COLUNA: data | TIPO: date | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: events,COLUNA: local | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: events,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: events,COLUNA: telefone | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: events,COLUNA: cliente | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: events,COLUNA: hora_fim | TIPO: time without time zone | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: events,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: events,COLUNA: assunto | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: events,COLUNA: telefone | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: events,COLUNA: local | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: events,COLUNA: cliente | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: events,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: events,COLUNA: hora_inicio | TIPO: time without time zone | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: file_path | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: status | TIPO: text | NULÁVEL: YES | PADRÃO: 'pending'::text | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: company_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: id | TIPO: bigint | NULÁVEL: NO | PADRÃO: nextval('ingestion_queue_id_seq'::regclass) | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: updated_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: leads,"COLUNA: telefone | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: Número de telefone para contato, deve ser único."
+1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: file_path | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: ingestion_queue,COLUNA: company_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: leads,COLUNA: ultima_interacao | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: Data e hora da última conversa ou contato.
 1. TABELAS E COLUNAS,TABELA: leads,COLUNA: criado_em | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: Data e hora de criação do registro do lead.
 1. TABELAS E COLUNAS,TABELA: leads,COLUNA: id | TIPO: bigint | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: leads,"COLUNA: resumo | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Um breve resumo sobre o lead, suas necessidades ou a última conversa."
-1. TABELAS E COLUNAS,TABELA: leads,"COLUNA: temperatura | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Nível de interesse do lead (Quente, Morno, Frio)."
 1. TABELAS E COLUNAS,TABELA: leads,COLUNA: nome | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: Nome completo do lead.
+1. TABELAS E COLUNAS,TABELA: leads,"COLUNA: telefone | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: Número de telefone para contato, deve ser único."
+1. TABELAS E COLUNAS,TABELA: leads,"COLUNA: temperatura | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Nível de interesse do lead (Quente, Morno, Frio)."
+1. TABELAS E COLUNAS,TABELA: leads,"COLUNA: resumo | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Um breve resumo sobre o lead, suas necessidades ou a última conversa."
 1. TABELAS E COLUNAS,TABELA: legal_documents,COLUNA: id | TIPO: smallint | NULÁVEL: NO | PADRÃO: 1 | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: legal_documents,COLUNA: privacy_policy | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: legal_documents,COLUNA: membership_agreement | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: legal_documents,COLUNA: terms_of_use | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: legal_documents,COLUNA: last_updated_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: n8n_chat_histories,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: n8n_chat_histories,COLUNA: message | TIPO: jsonb | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: n8n_chat_histories,COLUNA: id | TIPO: integer | NULÁVEL: NO | PADRÃO: nextval('n8n_chat_histories_id_seq'::regclass) | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: n8n_chat_histories,COLUNA: session_id | TIPO: character varying(255) | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: n8n_chat_histories,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: onboarding_data,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: gen_random_uuid() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: onboarding_data,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: onboarding_data,COLUNA: responses | TIPO: jsonb | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: onboarding_data,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: onboarding_data,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: plans,COLUNA: price | TIPO: numeric | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: plans,COLUNA: show_on_onboarding | TIPO: boolean | NULÁVEL: YES | PADRÃO: true | DESCRIÇÃO: Indica se o plano deve ser exibido na tela de seleção durante o onboarding.
-1. TABELAS E COLUNAS,TABELA: plans,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: plans,COLUNA: description | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Descrição detalhada do que o plano inclui.
-1. TABELAS E COLUNAS,TABELA: plans,COLUNA: name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: plans,COLUNA: monthly_chat_limit | TIPO: integer | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: plans,COLUNA: is_active | TIPO: boolean | NULÁVEL: YES | PADRÃO: true | DESCRIÇÃO: Se o plano está ativo e pode ser selecionado.
+1. TABELAS E COLUNAS,TABELA: plans,COLUNA: name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: plans,COLUNA: price | TIPO: numeric | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: plans,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: uuid_generate_v4() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: plans,COLUNA: monthly_chat_limit | TIPO: integer | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: plans,COLUNA: show_on_onboarding | TIPO: boolean | NULÁVEL: YES | PADRÃO: true | DESCRIÇÃO: Indica se o plano deve ser exibido na tela de seleção durante o onboarding.
+1. TABELAS E COLUNAS,TABELA: plans,COLUNA: description | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: Descrição detalhada do que o plano inclui.
 1. TABELAS E COLUNAS,TABELA: plans,COLUNA: max_users | TIPO: integer | NULÁVEL: YES | PADRÃO: 1 | DESCRIÇÃO: Número máximo de usuários permitidos neste plano.
-1. TABELAS E COLUNAS,TABELA: products,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: products,COLUNA: name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: products,COLUNA: description | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: products,COLUNA: purchase_link | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: products,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: YES | PADRÃO: now() | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: products,COLUNA: photo_urls | TIPO: jsonb | NULÁVEL: YES | PADRÃO: '[]'::jsonb | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: products,COLUNA: value | TIPO: numeric | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: products,COLUNA: company_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: products,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: gen_random_uuid() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: terms_version | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: Timestamp da coluna last_updated_at da tabela legal_documents ou affiliate_legal_documents correspondente.
-1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: ip_address | TIPO: inet | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: acceptance_type | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: Indica se o aceite foi de um usuário comum (user) ou de um afiliado (affiliate).
-1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: user_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: gen_random_uuid() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: accepted_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: products,COLUNA: name | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: products,COLUNA: purchase_link | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: geolocation_lon | TIPO: numeric | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: geolocation_lat | TIPO: numeric | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: ip_address | TIPO: inet | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: accepted_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: user_id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: gen_random_uuid() | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: acceptance_type | TIPO: text | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: Indica se o aceite foi de um usuário comum (user) ou de um afiliado (affiliate).
+1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: terms_acceptances,COLUNA: terms_version | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: Timestamp da coluna last_updated_at da tabela legal_documents ou affiliate_legal_documents correspondente.
 1. TABELAS E COLUNAS,TABELA: users,COLUNA: created_at | TIPO: timestamp with time zone | NULÁVEL: NO | PADRÃO: now() | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: users,COLUNA: full_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: users,COLUNA: userinitial | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: users,COLUNA: job_title | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-1. TABELAS E COLUNAS,TABELA: users,"COLUNA: role | TIPO: text | NULÁVEL: YES | PADRÃO: 'app_user'::text | DESCRIÇÃO: Define o perfil do usuário (ex: app_user, affiliate, admin)"
-1. TABELAS E COLUNAS,TABELA: users,COLUNA: email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: users,COLUNA: id | TIPO: uuid | NULÁVEL: NO | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: users,COLUNA: userinitial | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: users,COLUNA: full_name | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 1. TABELAS E COLUNAS,TABELA: users,COLUNA: company_id | TIPO: uuid | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
-2. CONSTRAINTS (CHAVES),TABELA: admin_users,CONSTRAINT: admin_users_email_key | TIPO: UNIQUE | COLUNA(S): email
+1. TABELAS E COLUNAS,TABELA: users,COLUNA: email | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
+1. TABELAS E COLUNAS,TABELA: users,"COLUNA: role | TIPO: text | NULÁVEL: YES | PADRÃO: 'app_user'::text | DESCRIÇÃO: Define o perfil do usuário (ex: app_user, affiliate, admin)"
+1. TABELAS E COLUNAS,TABELA: users,COLUNA: job_title | TIPO: text | NULÁVEL: YES | PADRÃO: N/A | DESCRIÇÃO: N/A
 2. CONSTRAINTS (CHAVES),TABELA: admin_users,CONSTRAINT: admin_users_affiliate_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): affiliate_id | REFERENCIA: affiliates(id)
+2. CONSTRAINTS (CHAVES),TABELA: admin_users,CONSTRAINT: admin_users_email_key | TIPO: UNIQUE | COLUNA(S): email
 2. CONSTRAINTS (CHAVES),TABELA: admin_users,CONSTRAINT: admin_users_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: affiliate_legal_documents,CONSTRAINT: affiliate_legal_documents_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
-2. CONSTRAINTS (CHAVES),TABELA: affiliates,CONSTRAINT: affiliates_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): id | REFERENCIA: users(id)
 2. CONSTRAINTS (CHAVES),TABELA: affiliates,CONSTRAINT: affiliates_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
-2. CONSTRAINTS (CHAVES),TABELA: ai_token_usage,CONSTRAINT: ai_token_usage_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
-2. CONSTRAINTS (CHAVES),TABELA: ai_token_usage,CONSTRAINT: ai_token_usage_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
+2. CONSTRAINTS (CHAVES),TABELA: affiliates,CONSTRAINT: affiliates_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): id | REFERENCIA: users(id)
 2. CONSTRAINTS (CHAVES),TABELA: ai_token_usage,null
-2. CONSTRAINTS (CHAVES),TABELA: app_logs,null
+2. CONSTRAINTS (CHAVES),TABELA: ai_token_usage,CONSTRAINT: ai_token_usage_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
+2. CONSTRAINTS (CHAVES),TABELA: ai_token_usage,CONSTRAINT: ai_token_usage_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: app_logs,CONSTRAINT: app_logs_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
+2. CONSTRAINTS (CHAVES),TABELA: app_logs,null
 2. CONSTRAINTS (CHAVES),TABELA: app_logs,CONSTRAINT: app_logs_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: chats,CONSTRAINT: chats_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
 2. CONSTRAINTS (CHAVES),TABELA: clients,CONSTRAINT: clients_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
 2. CONSTRAINTS (CHAVES),TABELA: clients,CONSTRAINT: clients_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: companies,CONSTRAINT: companies_plan_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): plan_id | REFERENCIA: plans(id)
-2. CONSTRAINTS (CHAVES),TABELA: companies,CONSTRAINT: fk_used_coupon | TIPO: FOREIGN KEY | COLUNA(S): used_coupon_id | REFERENCIA: coupons(id)
+2. CONSTRAINTS (CHAVES),TABELA: companies,CONSTRAINT: companies_cnpj_key | TIPO: UNIQUE | COLUNA(S): cnpj
 2. CONSTRAINTS (CHAVES),TABELA: companies,CONSTRAINT: companies_affiliate_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): affiliate_id | REFERENCIA: affiliates(id)
 2. CONSTRAINTS (CHAVES),TABELA: companies,CONSTRAINT: companies_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
-2. CONSTRAINTS (CHAVES),TABELA: companies,CONSTRAINT: companies_cnpj_key | TIPO: UNIQUE | COLUNA(S): cnpj
+2. CONSTRAINTS (CHAVES),TABELA: companies,CONSTRAINT: fk_used_coupon | TIPO: FOREIGN KEY | COLUNA(S): used_coupon_id | REFERENCIA: coupons(id)
 2. CONSTRAINTS (CHAVES),TABELA: company_secrets,CONSTRAINT: company_secrets_pkey | TIPO: PRIMARY KEY | COLUNA(S): company_id
 2. CONSTRAINTS (CHAVES),TABELA: company_secrets,CONSTRAINT: company_secrets_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
-2. CONSTRAINTS (CHAVES),TABELA: coupons,CONSTRAINT: coupons_code_key | TIPO: UNIQUE | COLUNA(S): code
-2. CONSTRAINTS (CHAVES),TABELA: coupons,CONSTRAINT: coupons_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
+2. CONSTRAINTS (CHAVES),TABELA: company_user_details_sync,CONSTRAINT: company_user_details_sync_pkey | TIPO: PRIMARY KEY | COLUNA(S): company_id
 2. CONSTRAINTS (CHAVES),TABELA: coupons,CONSTRAINT: coupons_applicable_plan_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): applicable_plan_id | REFERENCIA: plans(id)
-2. CONSTRAINTS (CHAVES),TABELA: documents,CONSTRAINT: documents_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
+2. CONSTRAINTS (CHAVES),TABELA: coupons,CONSTRAINT: coupons_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
+2. CONSTRAINTS (CHAVES),TABELA: coupons,CONSTRAINT: coupons_code_key | TIPO: UNIQUE | COLUNA(S): code
 2. CONSTRAINTS (CHAVES),TABELA: documents,CONSTRAINT: documents_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
-2. CONSTRAINTS (CHAVES),TABELA: events,CONSTRAINT: events_pkey | TIPO: PRIMARY KEY | COLUNA(S): telefone
+2. CONSTRAINTS (CHAVES),TABELA: documents,CONSTRAINT: documents_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
 2. CONSTRAINTS (CHAVES),TABELA: events,CONSTRAINT: events_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
+2. CONSTRAINTS (CHAVES),TABELA: events,CONSTRAINT: events_pkey | TIPO: PRIMARY KEY | COLUNA(S): telefone
 2. CONSTRAINTS (CHAVES),TABELA: ingestion_queue,CONSTRAINT: ingestion_queue_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
 2. CONSTRAINTS (CHAVES),TABELA: ingestion_queue,CONSTRAINT: ingestion_queue_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
-2. CONSTRAINTS (CHAVES),TABELA: leads,CONSTRAINT: leads_telefone_key | TIPO: UNIQUE | COLUNA(S): telefone
 2. CONSTRAINTS (CHAVES),TABELA: leads,CONSTRAINT: leads_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
+2. CONSTRAINTS (CHAVES),TABELA: leads,CONSTRAINT: leads_telefone_key | TIPO: UNIQUE | COLUNA(S): telefone
 2. CONSTRAINTS (CHAVES),TABELA: legal_documents,CONSTRAINT: legal_documents_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: n8n_chat_histories,CONSTRAINT: n8n_chat_histories_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
-2. CONSTRAINTS (CHAVES),TABELA: onboarding_data,CONSTRAINT: onboarding_data_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
 2. CONSTRAINTS (CHAVES),TABELA: onboarding_data,CONSTRAINT: onboarding_data_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
+2. CONSTRAINTS (CHAVES),TABELA: onboarding_data,CONSTRAINT: onboarding_data_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
 2. CONSTRAINTS (CHAVES),TABELA: plans,CONSTRAINT: plans_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
-2. CONSTRAINTS (CHAVES),TABELA: products,CONSTRAINT: products_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: products,CONSTRAINT: products_company_id_fkey | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
-2. CONSTRAINTS (CHAVES),TABELA: terms_acceptances,null
+2. CONSTRAINTS (CHAVES),TABELA: products,CONSTRAINT: products_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
 2. CONSTRAINTS (CHAVES),TABELA: terms_acceptances,CONSTRAINT: terms_acceptances_pkey | TIPO: PRIMARY KEY | COLUNA(S): id
+2. CONSTRAINTS (CHAVES),TABELA: terms_acceptances,null
+2. CONSTRAINTS (CHAVES),TABELA: users,null
 2. CONSTRAINTS (CHAVES),TABELA: users,CONSTRAINT: users_email_key1 | TIPO: UNIQUE | COLUNA(S): email
 2. CONSTRAINTS (CHAVES),TABELA: users,CONSTRAINT: users_company_id_fkey1 | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
-2. CONSTRAINTS (CHAVES),TABELA: users,null
 2. CONSTRAINTS (CHAVES),TABELA: users,CONSTRAINT: users_pkey1 | TIPO: PRIMARY KEY | COLUNA(S): id
-3. ÍNDICES,TABELA: admin_users,ÍNDICE: admin_users_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX admin_users_pkey ON public.admin_users USING btree (id)
 3. ÍNDICES,TABELA: admin_users,ÍNDICE: admin_users_email_key | DEFINIÇÃO: CREATE UNIQUE INDEX admin_users_email_key ON public.admin_users USING btree (email)
+3. ÍNDICES,TABELA: admin_users,ÍNDICE: admin_users_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX admin_users_pkey ON public.admin_users USING btree (id)
 3. ÍNDICES,TABELA: affiliate_legal_documents,ÍNDICE: affiliate_legal_documents_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX affiliate_legal_documents_pkey ON public.affiliate_legal_documents USING btree (id)
 3. ÍNDICES,TABELA: affiliates,ÍNDICE: affiliates_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX affiliates_pkey ON public.affiliates USING btree (id)
 3. ÍNDICES,TABELA: ai_token_usage,ÍNDICE: ai_token_usage_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX ai_token_usage_pkey ON public.ai_token_usage USING btree (id)
 3. ÍNDICES,TABELA: app_logs,ÍNDICE: app_logs_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX app_logs_pkey ON public.app_logs USING btree (id)
 3. ÍNDICES,TABELA: chats,ÍNDICE: chats_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX chats_pkey ON public.chats USING btree (id)
-3. ÍNDICES,TABELA: clients,ÍNDICE: clients_company_id_idx | DEFINIÇÃO: CREATE INDEX clients_company_id_idx ON public.clients USING btree (company_id)
 3. ÍNDICES,TABELA: clients,ÍNDICE: clients_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX clients_pkey ON public.clients USING btree (id)
+3. ÍNDICES,TABELA: clients,ÍNDICE: clients_company_id_idx | DEFINIÇÃO: CREATE INDEX clients_company_id_idx ON public.clients USING btree (company_id)
 3. ÍNDICES,TABELA: companies,ÍNDICE: companies_cnpj_key | DEFINIÇÃO: CREATE UNIQUE INDEX companies_cnpj_key ON public.companies USING btree (cnpj)
 3. ÍNDICES,TABELA: companies,ÍNDICE: companies_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX companies_pkey ON public.companies USING btree (id)
 3. ÍNDICES,TABELA: company_secrets,ÍNDICE: company_secrets_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX company_secrets_pkey ON public.company_secrets USING btree (company_id)
-3. ÍNDICES,TABELA: coupons,ÍNDICE: coupons_code_key | DEFINIÇÃO: CREATE UNIQUE INDEX coupons_code_key ON public.coupons USING btree (code)
+3. ÍNDICES,TABELA: company_user_details_sync,ÍNDICE: idx_company_details_sync_affiliate | DEFINIÇÃO: CREATE INDEX idx_company_details_sync_affiliate ON public.company_user_details_sync USING btree (affiliate_id)
+3. ÍNDICES,TABELA: company_user_details_sync,ÍNDICE: company_user_details_sync_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX company_user_details_sync_pkey ON public.company_user_details_sync USING btree (company_id)
+3. ÍNDICES,TABELA: company_user_details_sync,ÍNDICE: idx_company_details_sync_status | DEFINIÇÃO: CREATE INDEX idx_company_details_sync_status ON public.company_user_details_sync USING btree (company_status)
 3. ÍNDICES,TABELA: coupons,ÍNDICE: coupons_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX coupons_pkey ON public.coupons USING btree (id)
+3. ÍNDICES,TABELA: coupons,ÍNDICE: coupons_code_key | DEFINIÇÃO: CREATE UNIQUE INDEX coupons_code_key ON public.coupons USING btree (code)
 3. ÍNDICES,TABELA: documents,ÍNDICE: idx_documents_file_path | DEFINIÇÃO: CREATE INDEX idx_documents_file_path ON public.documents USING btree (file_path)
 3. ÍNDICES,TABELA: documents,ÍNDICE: documents_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX documents_pkey ON public.documents USING btree (id)
 3. ÍNDICES,TABELA: events,ÍNDICE: events_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX events_pkey ON public.events USING btree (telefone)
@@ -241,14 +259,8 @@ categoria,objeto,detalhes
 3. ÍNDICES,TABELA: plans,ÍNDICE: plans_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX plans_pkey ON public.plans USING btree (id)
 3. ÍNDICES,TABELA: products,ÍNDICE: products_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX products_pkey ON public.products USING btree (id)
 3. ÍNDICES,TABELA: terms_acceptances,ÍNDICE: terms_acceptances_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX terms_acceptances_pkey ON public.terms_acceptances USING btree (id)
-3. ÍNDICES,TABELA: users,ÍNDICE: users_pkey1 | DEFINIÇÃO: CREATE UNIQUE INDEX users_pkey1 ON public.users USING btree (id)
 3. ÍNDICES,TABELA: users,ÍNDICE: users_email_key1 | DEFINIÇÃO: CREATE UNIQUE INDEX users_email_key1 ON public.users USING btree (email)
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(integer[], integer, boolean)
- RETURNS halfvec
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$array_to_halfvec$function$
-"
+3. ÍNDICES,TABELA: users,ÍNDICE: users_pkey1 | DEFINIÇÃO: CREATE UNIQUE INDEX users_pkey1 ON public.users USING btree (id)
 4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(numeric[], integer, boolean)
  RETURNS halfvec
  LANGUAGE c
@@ -267,13 +279,19 @@ AS '$libdir/vector', $function$array_to_halfvec$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_halfvec$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(double precision[], integer, boolean)
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(integer[], integer, boolean)
+ RETURNS halfvec
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$array_to_halfvec$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(numeric[], integer, boolean)
  RETURNS sparsevec
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_sparsevec$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(integer[], integer, boolean)
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(double precision[], integer, boolean)
  RETURNS sparsevec
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
@@ -285,11 +303,17 @@ AS '$libdir/vector', $function$array_to_sparsevec$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_sparsevec$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(numeric[], integer, boolean)
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(integer[], integer, boolean)
  RETURNS sparsevec
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_sparsevec$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(double precision[], integer, boolean)
+ RETURNS vector
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$array_to_vector$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(real[], integer, boolean)
  RETURNS vector
@@ -303,23 +327,11 @@ AS '$libdir/vector', $function$array_to_vector$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_vector$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(double precision[], integer, boolean)
- RETURNS vector
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$array_to_vector$function$
-"
 4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(integer[], integer, boolean)
  RETURNS vector
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_vector$function$
-"
-4. FUNÇÕES (RPC),FUNÇÃO: binary_quantize,"CREATE OR REPLACE FUNCTION public.binary_quantize(halfvec)
- RETURNS bit
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$halfvec_binary_quantize$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: binary_quantize,"CREATE OR REPLACE FUNCTION public.binary_quantize(vector)
  RETURNS bit
@@ -327,11 +339,17 @@ AS '$libdir/vector', $function$halfvec_binary_quantize$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$binary_quantize$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: cosine_distance,"CREATE OR REPLACE FUNCTION public.cosine_distance(halfvec, halfvec)
+4. FUNÇÕES (RPC),FUNÇÃO: binary_quantize,"CREATE OR REPLACE FUNCTION public.binary_quantize(halfvec)
+ RETURNS bit
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$halfvec_binary_quantize$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: cosine_distance,"CREATE OR REPLACE FUNCTION public.cosine_distance(sparsevec, sparsevec)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$halfvec_cosine_distance$function$
+AS '$libdir/vector', $function$sparsevec_cosine_distance$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: cosine_distance,"CREATE OR REPLACE FUNCTION public.cosine_distance(vector, vector)
  RETURNS double precision
@@ -339,11 +357,11 @@ AS '$libdir/vector', $function$halfvec_cosine_distance$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$cosine_distance$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: cosine_distance,"CREATE OR REPLACE FUNCTION public.cosine_distance(sparsevec, sparsevec)
+4. FUNÇÕES (RPC),FUNÇÃO: cosine_distance,"CREATE OR REPLACE FUNCTION public.cosine_distance(halfvec, halfvec)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$sparsevec_cosine_distance$function$
+AS '$libdir/vector', $function$halfvec_cosine_distance$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: create_ingestion_job,"CREATE OR REPLACE FUNCTION public.create_ingestion_job()
  RETURNS trigger
@@ -879,17 +897,17 @@ BEGIN
 END;
 $function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: inner_product,"CREATE OR REPLACE FUNCTION public.inner_product(sparsevec, sparsevec)
- RETURNS double precision
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$sparsevec_inner_product$function$
-"
 4. FUNÇÕES (RPC),FUNÇÃO: inner_product,"CREATE OR REPLACE FUNCTION public.inner_product(halfvec, halfvec)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_inner_product$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: inner_product,"CREATE OR REPLACE FUNCTION public.inner_product(sparsevec, sparsevec)
+ RETURNS double precision
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$sparsevec_inner_product$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: inner_product,"CREATE OR REPLACE FUNCTION public.inner_product(vector, vector)
  RETURNS double precision
@@ -918,17 +936,17 @@ AS '$libdir/vector', $function$ivfflathandler$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$jaccard_distance$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: l1_distance,"CREATE OR REPLACE FUNCTION public.l1_distance(vector, vector)
- RETURNS double precision
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$l1_distance$function$
-"
 4. FUNÇÕES (RPC),FUNÇÃO: l1_distance,"CREATE OR REPLACE FUNCTION public.l1_distance(halfvec, halfvec)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_l1_distance$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: l1_distance,"CREATE OR REPLACE FUNCTION public.l1_distance(vector, vector)
+ RETURNS double precision
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$l1_distance$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: l1_distance,"CREATE OR REPLACE FUNCTION public.l1_distance(sparsevec, sparsevec)
  RETURNS double precision
@@ -936,11 +954,11 @@ AS '$libdir/vector', $function$halfvec_l1_distance$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$sparsevec_l1_distance$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: l2_distance,"CREATE OR REPLACE FUNCTION public.l2_distance(sparsevec, sparsevec)
+4. FUNÇÕES (RPC),FUNÇÃO: l2_distance,"CREATE OR REPLACE FUNCTION public.l2_distance(halfvec, halfvec)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$sparsevec_l2_distance$function$
+AS '$libdir/vector', $function$halfvec_l2_distance$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: l2_distance,"CREATE OR REPLACE FUNCTION public.l2_distance(vector, vector)
  RETURNS double precision
@@ -948,11 +966,11 @@ AS '$libdir/vector', $function$sparsevec_l2_distance$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$l2_distance$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: l2_distance,"CREATE OR REPLACE FUNCTION public.l2_distance(halfvec, halfvec)
+4. FUNÇÕES (RPC),FUNÇÃO: l2_distance,"CREATE OR REPLACE FUNCTION public.l2_distance(sparsevec, sparsevec)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$halfvec_l2_distance$function$
+AS '$libdir/vector', $function$sparsevec_l2_distance$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: l2_norm,"CREATE OR REPLACE FUNCTION public.l2_norm(halfvec)
  RETURNS double precision
@@ -966,6 +984,12 @@ AS '$libdir/vector', $function$halfvec_l2_norm$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$sparsevec_l2_norm$function$
 "
+4. FUNÇÕES (RPC),FUNÇÃO: l2_normalize,"CREATE OR REPLACE FUNCTION public.l2_normalize(halfvec)
+ RETURNS halfvec
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$halfvec_l2_normalize$function$
+"
 4. FUNÇÕES (RPC),FUNÇÃO: l2_normalize,"CREATE OR REPLACE FUNCTION public.l2_normalize(sparsevec)
  RETURNS sparsevec
  LANGUAGE c
@@ -977,12 +1001,6 @@ AS '$libdir/vector', $function$sparsevec_l2_normalize$function$
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$l2_normalize$function$
-"
-4. FUNÇÕES (RPC),FUNÇÃO: l2_normalize,"CREATE OR REPLACE FUNCTION public.l2_normalize(halfvec)
- RETURNS halfvec
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$halfvec_l2_normalize$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: login,"CREATE OR REPLACE FUNCTION public.login(email_param text, password_param text)
  RETURNS json
@@ -1160,17 +1178,93 @@ AS '$libdir/vector', $function$sparsevec_to_vector$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$sparsevec_typmod_in$function$
 "
+4. FUNÇÕES (RPC),FUNÇÃO: subvector,"CREATE OR REPLACE FUNCTION public.subvector(halfvec, integer, integer)
+ RETURNS halfvec
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$halfvec_subvector$function$
+"
 4. FUNÇÕES (RPC),FUNÇÃO: subvector,"CREATE OR REPLACE FUNCTION public.subvector(vector, integer, integer)
  RETURNS vector
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$subvector$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: subvector,"CREATE OR REPLACE FUNCTION public.subvector(halfvec, integer, integer)
- RETURNS halfvec
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$halfvec_subvector$function$
+4. FUNÇÕES (RPC),FUNÇÃO: sync_company_user_details,"CREATE OR REPLACE FUNCTION public.sync_company_user_details()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$
+DECLARE
+    company_record RECORD;
+    user_record RECORD;
+    plan_record RECORD;
+    affiliate_record RECORD;
+    v_company_id uuid;
+BEGIN
+    -- Determina o company_id relevante baseado na tabela que acionou o trigger
+    IF TG_TABLE_NAME = 'companies' THEN
+        v_company_id := COALESCE(NEW.id, OLD.id);
+    ELSIF TG_TABLE_NAME = 'users' THEN
+        v_company_id := COALESCE(NEW.company_id, OLD.company_id);
+    ELSIF TG_TABLE_NAME = 'plans' THEN
+        -- Se um plano muda, precisamos atualizar TODAS as empresas que usam esse plano
+        -- Atualizar todos individualmente pode ser pesado. Uma abordagem mais simples é apenas buscar o company_id se existir.
+        -- Uma abordagem mais robusta seria atualizar em lote, mas vamos manter simples por agora.
+        SELECT id INTO v_company_id FROM public.companies WHERE plan_id = COALESCE(NEW.id, OLD.id) LIMIT 1;
+    ELSIF TG_TABLE_NAME = 'affiliates' THEN
+        -- Se um afiliado muda, precisamos atualizar TODAS as empresas ligadas a ele
+        SELECT id INTO v_company_id FROM public.companies WHERE affiliate_id = COALESCE(NEW.id, OLD.id) LIMIT 1;
+    END IF;
+
+    -- Se não encontrarmos um company_id relevante, saímos (ex: usuário sem empresa)
+    IF v_company_id IS NULL THEN
+        -- Se for DELETE em companies, remove da tabela sync
+        IF TG_OP = 'DELETE' AND TG_TABLE_NAME = 'companies' THEN
+             DELETE FROM public.company_user_details_sync WHERE company_id = OLD.id;
+        END IF;
+        RETURN NULL; -- Importante retornar NULL para triggers AFTER
+    END IF;
+
+    -- Se for uma operação DELETE na tabela companies
+    IF TG_OP = 'DELETE' AND TG_TABLE_NAME = 'companies' THEN
+        DELETE FROM public.company_user_details_sync WHERE company_id = OLD.id;
+        RETURN OLD;
+    END IF;
+
+    -- Busca os dados mais recentes das tabelas relacionadas
+    SELECT * INTO company_record FROM public.companies WHERE id = v_company_id;
+    -- Considera apenas o primeiro usuário associado, ou o usuário que mudou, como contato principal
+    SELECT * INTO user_record FROM public.users WHERE company_id = v_company_id ORDER BY created_at LIMIT 1;
+    SELECT * INTO plan_record FROM public.plans WHERE id = company_record.plan_id;
+    SELECT * INTO affiliate_record FROM public.affiliates WHERE id = company_record.affiliate_id;
+
+    -- Insere ou Atualiza a linha na tabela sincronizada
+    INSERT INTO public.company_user_details_sync (
+        company_id, company_name, official_name, company_status, plan_id, affiliate_id, company_created_at,
+        user_id, contact_name, contact_email, user_role, plan_name, affiliate_name, last_synced_at
+    ) VALUES (
+        company_record.id, company_record.name, company_record.official_name, company_record.status, company_record.plan_id, company_record.affiliate_id, company_record.created_at,
+        user_record.id, user_record.full_name, user_record.email, user_record.role, plan_record.name, affiliate_record.name, now()
+    )
+    ON CONFLICT (company_id) DO UPDATE SET
+        company_name = EXCLUDED.company_name,
+        official_name = EXCLUDED.official_name,
+        company_status = EXCLUDED.company_status,
+        plan_id = EXCLUDED.plan_id,
+        affiliate_id = EXCLUDED.affiliate_id,
+        company_created_at = EXCLUDED.company_created_at, -- Pode não ser necessário atualizar
+        user_id = EXCLUDED.user_id,
+        contact_name = EXCLUDED.contact_name,
+        contact_email = EXCLUDED.contact_email,
+        user_role = EXCLUDED.user_role,
+        plan_name = EXCLUDED.plan_name,
+        affiliate_name = EXCLUDED.affiliate_name,
+        last_synced_at = now();
+
+    RETURN NULL; -- Triggers AFTER devem retornar NULL
+END;
+$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: update_company_details_as_admin,"CREATE OR REPLACE FUNCTION public.update_company_details_as_admin(p_company_id uuid, p_user_id uuid, p_contact_name text, p_plan_id uuid, p_affiliate_id uuid)
  RETURNS void
@@ -1413,35 +1507,42 @@ AS '$libdir/vector', $function$vector_to_sparsevec$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$vector_typmod_in$function$
 "
+5. GATILHOS (TRIGGERS),TABELA: affiliates,GATILHO: trigger_sync_after_affiliate_change | EVENTO: UPDATE | QUANDO: AFTER | EXECUTA: EXECUTE FUNCTION sync_company_user_details()
 5. GATILHOS (TRIGGERS),TABELA: affiliates,GATILHO: on_affiliate_insert_set_role | EVENTO: INSERT | QUANDO: AFTER | EXECUTA: EXECUTE FUNCTION set_affiliate_role()
+5. GATILHOS (TRIGGERS),TABELA: companies,GATILHO: trigger_sync_after_company_change | EVENTO: DELETE | QUANDO: AFTER | EXECUTA: EXECUTE FUNCTION sync_company_user_details()
+5. GATILHOS (TRIGGERS),TABELA: companies,GATILHO: trigger_sync_after_company_change | EVENTO: UPDATE | QUANDO: AFTER | EXECUTA: EXECUTE FUNCTION sync_company_user_details()
+5. GATILHOS (TRIGGERS),TABELA: companies,GATILHO: trigger_sync_after_company_change | EVENTO: INSERT | QUANDO: AFTER | EXECUTA: EXECUTE FUNCTION sync_company_user_details()
+5. GATILHOS (TRIGGERS),TABELA: plans,GATILHO: trigger_sync_after_plan_change | EVENTO: UPDATE | QUANDO: AFTER | EXECUTA: EXECUTE FUNCTION sync_company_user_details()
+5. GATILHOS (TRIGGERS),TABELA: users,GATILHO: trigger_sync_after_user_change | EVENTO: UPDATE | QUANDO: AFTER | EXECUTA: EXECUTE FUNCTION sync_company_user_details()
+5. GATILHOS (TRIGGERS),TABELA: users,GATILHO: trigger_sync_after_user_change | EVENTO: INSERT | QUANDO: AFTER | EXECUTA: EXECUTE FUNCTION sync_company_user_details()
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliate_legal_documents,"POLÍTICA: Allow super_admins to manage affiliate documents | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = 'super_admin'::text)"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliate_legal_documents,POLÍTICA: Allow public read access for affiliates | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): true | VERIFICANDO (WITH CHECK): N/A
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,POLÍTICA: Allow affiliates to view their own data | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (auth.uid() = id) | VERIFICANDO (WITH CHECK): N/A
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow admins to read affiliates | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = ANY (ARRAY['super_admin'::text, 'admin'::text])) | VERIFICANDO (WITH CHECK): N/A"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow super_admins to insert affiliates | COMANDO: INSERT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): N/A | VERIFICANDO (WITH CHECK): (( SELECT users.role
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow super_admins to delete affiliates | COMANDO: DELETE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
    FROM users
-  WHERE (users.id = auth.uid())) = 'super_admin'::text)"
+  WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): N/A"
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow super_admins to update affiliate data | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
+   FROM users
+  WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): N/A"
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,POLÍTICA: Allow affiliates to view their own data | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (auth.uid() = id) | VERIFICANDO (WITH CHECK): N/A
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow admins to view all affiliates | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
+   FROM users
+  WHERE (users.id = auth.uid())) = ANY (ARRAY['admin'::text, 'super_admin'::text])) | VERIFICANDO (WITH CHECK): N/A"
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,POLÍTICA: Allow new users to create their own affiliate profile | COMANDO: INSERT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): N/A | VERIFICANDO (WITH CHECK): (auth.uid() = id)
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow super_admins to update affiliates | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = 'super_admin'::text)"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,POLÍTICA: Allow new users to create their own affiliate profile | COMANDO: INSERT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): N/A | VERIFICANDO (WITH CHECK): (auth.uid() = id)
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow admins to view all affiliates | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow super_admins to insert affiliates | COMANDO: INSERT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): N/A | VERIFICANDO (WITH CHECK): (( SELECT users.role
    FROM users
-  WHERE (users.id = auth.uid())) = ANY (ARRAY['admin'::text, 'super_admin'::text])) | VERIFICANDO (WITH CHECK): N/A"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow super_admins to update affiliate data | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
-   FROM users
-  WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): N/A"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow super_admins to delete affiliates | COMANDO: DELETE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
-   FROM users
-  WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): N/A"
+  WHERE (users.id = auth.uid())) = 'super_admin'::text)"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: ai_token_usage,POLÍTICA: Usuários podem ver e criar logs de uso da sua própria empresa | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = get_my_company_id()) | VERIFICANDO (WITH CHECK): N/A
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: app_logs,POLÍTICA: Allow authenticated users to insert logs | COMANDO: INSERT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): N/A | VERIFICANDO (WITH CHECK): (auth.uid() = user_id)
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: app_logs,"POLÍTICA: Allow users to read their own company logs | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): (( SELECT users.company_id
@@ -1453,10 +1554,6 @@ AS '$libdir/vector', $function$vector_typmod_in$function$
   WHERE (users.id = auth.uid()))) | VERIFICANDO (WITH CHECK): (company_id = ( SELECT users.company_id
    FROM users
   WHERE (users.id = auth.uid())))"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: companies,POLÍTICA: Usuários podem ver os dados da sua própria empresa | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (id = get_my_company_id()) | VERIFICANDO (WITH CHECK): N/A
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: companies,"POLÍTICA: Allow users to update their own company | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.company_id
-   FROM users
-  WHERE (users.id = auth.uid())) = id) | VERIFICANDO (WITH CHECK): N/A"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: companies,"POLÍTICA: Affiliates can only see their own clients | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): ((( SELECT admin_users.role
    FROM admin_users
   WHERE (admin_users.id = auth.uid())) = 'super_admin'::text) OR (affiliate_id = ( SELECT admin_users.affiliate_id
@@ -1465,9 +1562,19 @@ AS '$libdir/vector', $function$vector_typmod_in$function$
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: companies,"POLÍTICA: Authenticated users can view their own company | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): (id = ( SELECT users.company_id
    FROM users
   WHERE (users.id = auth.uid()))) | VERIFICANDO (WITH CHECK): N/A"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: company_secrets,POLÍTICA: Usuários só podem acessar os segredos da sua própria empresa | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = get_my_company_id()) | VERIFICANDO (WITH CHECK): N/A
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: companies,POLÍTICA: Usuários podem ver os dados da sua própria empresa | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (id = get_my_company_id()) | VERIFICANDO (WITH CHECK): N/A
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: companies,"POLÍTICA: Allow users to update their own company | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.company_id
+   FROM users
+  WHERE (users.id = auth.uid())) = id) | VERIFICANDO (WITH CHECK): N/A"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: company_secrets,POLÍTICA: Usuários só podem aceder aos segredos da sua própria empresa | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = get_my_company_id()) | VERIFICANDO (WITH CHECK): N/A
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: company_secrets,POLÍTICA: Allow company members to access their own secrets | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = app_auth.get_current_company_id()) | VERIFICANDO (WITH CHECK): (company_id = app_auth.get_current_company_id())
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: company_secrets,POLÍTICA: Usuários só podem acessar os segredos da sua própria empresa | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = get_my_company_id()) | VERIFICANDO (WITH CHECK): N/A
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: company_user_details_sync,"POLÍTICA: Allow super_admins full access SYNC | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
+   FROM users
+  WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): N/A"
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: company_user_details_sync,"POLÍTICA: Allow admins view affiliated SYNC | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): ((( SELECT users.role
+   FROM users
+  WHERE (users.id = auth.uid())) = 'admin'::text) AND (affiliate_id = auth.uid())) | VERIFICANDO (WITH CHECK): N/A"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: coupons,"POLÍTICA: Permitir acesso total de superadmins aos cupons | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): (( SELECT users.role
@@ -1476,29 +1583,26 @@ AS '$libdir/vector', $function$vector_typmod_in$function$
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: coupons,POLÍTICA: Permitir que usuários autenticados leiam cupons ativos | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): (is_active = true) | VERIFICANDO (WITH CHECK): N/A
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: events,POLÍTICA: Permitir acesso total aos eventos da própria empresa | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = get_my_company_id()) | VERIFICANDO (WITH CHECK): N/A
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: legal_documents,POLÍTICA: Allow public read access | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): true | VERIFICANDO (WITH CHECK): N/A
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: legal_documents,"POLÍTICA: Allow super_admins to update | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
-   FROM users
-  WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): (( SELECT users.role
-   FROM users
-  WHERE (users.id = auth.uid())) = 'super_admin'::text)"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: legal_documents,"POLÍTICA: Allow super_admins to manage documents | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = 'super_admin'::text)"
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: legal_documents,"POLÍTICA: Allow super_admins to update | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
+   FROM users
+  WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): (( SELECT users.role
+   FROM users
+  WHERE (users.id = auth.uid())) = 'super_admin'::text)"
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: plans,POLÍTICA: Allow authenticated users to read plans | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): true | VERIFICANDO (WITH CHECK): N/A
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: plans,"POLÍTICA: Allow admins and super_admins full access to plans | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = ANY (ARRAY['admin'::text, 'super_admin'::text])) | VERIFICANDO (WITH CHECK): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = ANY (ARRAY['admin'::text, 'super_admin'::text]))"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: plans,POLÍTICA: Allow authenticated users to read plans | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): true | VERIFICANDO (WITH CHECK): N/A
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow delete for own company products | COMANDO: DELETE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = ( SELECT users.company_id
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow update for own company products | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = ( SELECT users.company_id
    FROM users
   WHERE (users.id = auth.uid()))) | VERIFICANDO (WITH CHECK): N/A"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow insert for own company products | COMANDO: INSERT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): N/A | VERIFICANDO (WITH CHECK): (company_id = ( SELECT users.company_id
-   FROM users
-  WHERE (users.id = auth.uid())))"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow update for own company products | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = ( SELECT users.company_id
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow read access to own company products | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = ( SELECT users.company_id
    FROM users
   WHERE (users.id = auth.uid()))) | VERIFICANDO (WITH CHECK): N/A"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Users can manage their own company's products | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = ( SELECT users.company_id
@@ -1506,9 +1610,12 @@ AS '$libdir/vector', $function$vector_typmod_in$function$
   WHERE (users.id = auth.uid()))) | VERIFICANDO (WITH CHECK): (company_id = ( SELECT users.company_id
    FROM users
   WHERE (users.id = auth.uid())))"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow read access to own company products | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = ( SELECT users.company_id
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow delete for own company products | COMANDO: DELETE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = ( SELECT users.company_id
    FROM users
   WHERE (users.id = auth.uid()))) | VERIFICANDO (WITH CHECK): N/A"
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow insert for own company products | COMANDO: INSERT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): N/A | VERIFICANDO (WITH CHECK): (company_id = ( SELECT users.company_id
+   FROM users
+  WHERE (users.id = auth.uid())))"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: terms_acceptances,POLÍTICA: Allow users to read their own acceptance | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (auth.uid() = user_id) | VERIFICANDO (WITH CHECK): N/A
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: terms_acceptances,"POLÍTICA: Allow super_admins to read all acceptances | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
    FROM users
