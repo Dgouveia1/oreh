@@ -164,12 +164,16 @@ export function openUserEditModal(detailData, allPlans, allAffiliates, userRole)
     document.getElementById('userCompany').value = detailData.company_name || ''; // Nome fantasia
     document.getElementById('userOfficialName').value = detailData.official_name || ''; // Razão social
 
-    // Lógica para esconder/mostrar seleção de afiliado
+    // ATUALIZAÇÃO: Controla a visibilidade do plano e do afiliado baseado na role
     const affiliateSelectGroup = document.getElementById('userAffiliate').parentElement;
-    if (userRole === 'admin') {
+    const planSelectGroup = document.getElementById('userPlanGroup'); // Pega o novo grupo
+
+    if (userRole === 'admin') { // Afiliado
         affiliateSelectGroup.style.display = 'none';
-    } else {
+        if (planSelectGroup) planSelectGroup.style.display = 'none'; // Esconde plano
+    } else { // super_admin
         affiliateSelectGroup.style.display = 'block';
+        if (planSelectGroup) planSelectGroup.style.display = 'block'; // Mostra plano
     }
 
     // Preenche o select de Planos
@@ -220,7 +224,6 @@ export async function handleUserFormSubmit(event, userRole, currentAffiliateId) 
     const contactName = document.getElementById('userName').value;
     const companyName = document.getElementById('userCompany').value;
     const officialName = document.getElementById('userOfficialName').value;
-    const newPlanId = document.getElementById('userPlan').value;
     const newAffiliateId = userRole === 'super_admin'
         ? document.getElementById('userAffiliate').value
         : currentAffiliateId;
@@ -255,14 +258,26 @@ export async function handleUserFormSubmit(event, userRole, currentAffiliateId) 
 
         // 2. Atualiza os dados da empresa na tabela 'companies'
         console.log(`[Admin-Clientes] Atualizando empresa ${companyId}...`);
+
+        // Objeto base de atualização
+        const companyUpdateData = {
+            name: companyName,
+            official_name: officialName,
+            affiliate_id: newAffiliateId || null
+        };
+
+        // Adiciona o plan_id APENAS se for super_admin
+        if (userRole === 'super_admin') {
+            const newPlanId = document.getElementById('userPlan').value;
+            companyUpdateData.plan_id = newPlanId || null;
+        }
+        
+        // Log para verificar o que está sendo enviado
+        console.log('[Admin-Clientes] Dados da atualização da empresa:', companyUpdateData);
+
         const { error: companyUpdateError } = await supabaseClient
             .from('companies')
-            .update({
-                name: companyName,
-                official_name: officialName,
-                plan_id: newPlanId || null,
-                affiliate_id: newAffiliateId || null
-            })
+            .update(companyUpdateData) // Envia o objeto de atualização construído
             .eq('id', companyId);
 
         if (companyUpdateError) throw companyUpdateError;

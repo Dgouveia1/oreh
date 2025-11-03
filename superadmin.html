@@ -152,14 +152,14 @@
                             <span class="metric-label">Total Recebido (Vitalício)</span>
                         </div>
                     </div>
-                    <div class="metric-card">
+                    <!-- <div class="metric-card">
                         <div class="card-icon icon-ia" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);"><i class="fas fa-link"></i></div>
                         <div class="card-content">
                             <span class="metric-value" style="font-size: 1.4rem;" id="affiliateLink">...</span>
                             <span class="metric-label">Seu Link de Afiliado</span>
                         </div>
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> -->
 
                 <!-- Gráficos -->
                 <div class="charts-grid" id="superadminChartsGrid">
@@ -313,9 +313,13 @@
                 <div class="table-container">
                     <table class="admin-table">
                         <thead>
+                            <!-- Títulos da tabela de afiliados atualizados -->
                             <tr>
                                 <th>Nome do Afiliado</th>
                                 <th>E-mail de Contato</th>
+                                <th>Telefone</th>
+                                <th>Clientes</th>
+                                <th>Chave PIX</th>
                                 <th>Data de Cadastro</th>
                                 <th>Comissão</th>
                                 <th>Ações</th>
@@ -409,7 +413,8 @@
                     <input type="text" id="userOfficialName">
                 </div>
                 <div class="form-grid">
-                    <div class="input-group">
+                    <!-- ATUALIZAÇÃO: Adicionado ID 'userPlanGroup' para controle de visibilidade -->
+                    <div class="input-group" id="userPlanGroup">
                         <label for="userPlan">Plano</label>
                         <select id="userPlan" required></select>
                     </div>
