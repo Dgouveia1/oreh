@@ -81,12 +81,20 @@
 /* Estrutura do Kanban */
 .kanban-board {
     display: grid;
-    /* AJUSTE: Força 4 colunas e permite scroll horizontal para garantir o alinhamento lado a lado */
-    grid-template-columns: repeat(4, minmax(30rem, 1fr));
+    /* ALTERAÇÃO: Mudei de '1fr' (fração) para '30rem' (fixo). */
+    /* Isso impede que as colunas estiquem para preencher o espaço. */
+    grid-template-columns: repeat(4, 30rem);
     gap: 2.5rem;
     overflow-x: auto;
     min-height: 0;
     padding-bottom: 1rem;
+    /* NOVO: Impede o container do kanban de esticar horizontalmente */
+    justify-self: start;
+    /* REMOVIDO: "align-items: start;" foi removido para que as colunas estiquem e permitam scroll interno */
+
+    /* --- NOVO: Oculta a barra de rolagem horizontal --- */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
 }
 
 .kanban-column {
@@ -99,7 +107,7 @@
     box-shadow: var(--shadow);
     transition: var(--transition);
     position: relative;
-    overflow: hidden;
+    overflow: hidden; /* Mantém 'hidden' para o ::before */
 }
 
 .kanban-column::before {
@@ -160,6 +168,17 @@
     flex-direction: column;
     gap: 1.8rem;
     min-height: 12rem;
+    
+    /* --- NOVO: Habilita o scroll vertical e oculta a barra --- */
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* --- NOVO: Oculta a barra de rolagem para Chrome/Safari --- */
+.kanban-board::-webkit-scrollbar,
+.kanban-cards-container::-webkit-scrollbar {
+    display: none;
 }
 
 /* Card de Chat */
@@ -346,4 +365,5 @@ body.dark-mode .kanban-column.drag-over .kanban-cards-container {
     .kanban-board, .human-attention-container { grid-template-columns: 1fr; }
     .kanban-column { min-width: auto; }
 }
+
 

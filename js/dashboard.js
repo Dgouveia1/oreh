@@ -129,8 +129,8 @@ async function fetchAndRenderDashboard() {
     }
 }
 
-// Função para iniciar a escuta em tempo real
-function subscribeToChanges() {
+// ✅ CORREÇÃO: Função modificada para incluir async e filtro de RLS
+async function subscribeToChanges() {
     // Garante que não haja subscrições duplicadas
     if (chatsSubscription) {
         supabaseClient.removeChannel(chatsSubscription);
@@ -138,26 +138,45 @@ function subscribeToChanges() {
 
     console.log('[OREH] Iniciando subscrição em tempo real para o Dashboard...');
     
-    // Escuta por QUALQUER alteração (INSERT, UPDATE) na tabela 'chats'
-    chatsSubscription = supabaseClient
-        .channel('dashboard-chats-realtime')
-        .on('postgres_changes', 
-            { event: '*', schema: 'public', table: 'chats' },
-            (payload) => {
-                console.log('Alteração recebida em tempo real:', payload);
-                showToast('O Dashboard foi atualizado!', 'info');
-                // Quando qualquer chat for alterado, simplesmente re-calculamos TODAS as métricas.
-                // É mais simples e robusto do que tentar atualizar cada métrica individualmente.
-                fetchAndRenderDashboard();
-            }
-        )
-        .subscribe((status) => {
-            if (status === 'SUBSCRIBED') {
-                console.log('Conectado ao canal de chats para o dashboard.');
-            } else {
-                 console.log('Status da subscrição:', status);
-            }
-        });
+    try {
+        // 1. Obter o company_id para o filtro (igual ao atendimentos.js)
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        if (!user) return; // Não está logado, não pode subscrever
+
+        const { data: profile } = await supabaseClient.from('users').select('company_id').eq('id', user.id).single();
+        if (!profile || !profile.company_id) return; // Sem empresa
+
+        const companyId = profile.company_id;
+
+        // 2. Escuta por alterações na tabela 'chats' com o filtro de RLS
+        chatsSubscription = supabaseClient
+            .channel(`dashboard-chats-realtime:${companyId}`) // Nome de canal único
+            .on('postgres_changes', 
+                { 
+                    event: '*', 
+                    schema: 'public', 
+                    table: 'chats',
+                    filter: `company_id=eq.${companyId}` // ✅ O FILTRO EM FALTA
+                },
+                (payload) => {
+                    console.log('Alteração recebida em tempo real:', payload);
+                    showToast('O Dashboard foi atualizado!', 'info');
+                    // Quando qualquer chat for alterado, simplesmente re-calculamos TODAS as métricas.
+                    fetchAndRenderDashboard();
+                }
+            )
+            .subscribe((status) => {
+                if (status === 'SUBSCRIBED') {
+                    console.log(`Conectado ao canal de chats para o dashboard (Empresa: ${companyId}).`);
+                } else {
+                     console.log('Status da subscrição:', status);
+                }
+            });
+
+    } catch (error) {
+         console.error('[OREH] Falha ao iniciar subscrição do Dashboard:', error);
+         logEvent('ERROR', 'Falha ao iniciar subscrição do Dashboard', { error: error });
+    }
 }
 
 // Função de inicialização do módulo
