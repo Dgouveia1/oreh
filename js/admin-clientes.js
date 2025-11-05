@@ -97,9 +97,12 @@ export async function renderUsersTable(userRole, affiliateId = null, filters = {
                 ? `<small style="color: var(--text-color-light);">${detail.company_name}</small>`
                 : '';
             
+            // [MODIFICADO] Adiciona os novos status
             const statusLabel = detail.company_status === 'active' ? 'Ativo' 
                               : detail.company_status === 'onboarding' ? 'Onboarding'
                               : detail.company_status === 'payment_pending' ? 'Pag. Pendente'
+                              : detail.company_status === 'overdue' ? 'Em Atraso'
+                              : detail.company_status === 'banned' ? 'Banido'
                               : detail.company_status === 'inactive' ? 'Inativo'
                               : 'N/A';
 
@@ -164,16 +167,19 @@ export function openUserEditModal(detailData, allPlans, allAffiliates, userRole)
     document.getElementById('userCompany').value = detailData.company_name || ''; // Nome fantasia
     document.getElementById('userOfficialName').value = detailData.official_name || ''; // Razão social
 
-    // ATUALIZAÇÃO: Controla a visibilidade do plano e do afiliado baseado na role
+    // [MODIFICADO] Controla a visibilidade do plano, afiliado E STATUS
     const affiliateSelectGroup = document.getElementById('userAffiliate').parentElement;
-    const planSelectGroup = document.getElementById('userPlanGroup'); // Pega o novo grupo
+    const planSelectGroup = document.getElementById('userPlanGroup');
+    const statusSelectGroup = document.getElementById('userStatusGroup'); // Pega o novo grupo
 
     if (userRole === 'admin') { // Afiliado
         affiliateSelectGroup.style.display = 'none';
         if (planSelectGroup) planSelectGroup.style.display = 'none'; // Esconde plano
+        if (statusSelectGroup) statusSelectGroup.style.display = 'none'; // Esconde status
     } else { // super_admin
         affiliateSelectGroup.style.display = 'block';
         if (planSelectGroup) planSelectGroup.style.display = 'block'; // Mostra plano
+        if (statusSelectGroup) statusSelectGroup.style.display = 'block'; // Mostra status
     }
 
     // Preenche o select de Planos
@@ -198,6 +204,12 @@ export function openUserEditModal(detailData, allPlans, allAffiliates, userRole)
          if (affiliate.id === detailData.affiliate_id) option.selected = true; // Usa affiliate_id da tabela sync
          affiliateSelect.appendChild(option);
     });
+
+    // [NOVO] Preenche o select de Status (apenas para super_admin)
+    if (userRole === 'super_admin' && statusSelectGroup) {
+        const statusSelect = document.getElementById('userCompanyStatus');
+        statusSelect.value = detailData.company_status || 'inactive';
+    }
 
     modal.style.display = 'flex';
 }
@@ -266,10 +278,13 @@ export async function handleUserFormSubmit(event, userRole, currentAffiliateId) 
             affiliate_id: newAffiliateId || null
         };
 
-        // Adiciona o plan_id APENAS se for super_admin
+        // [MODIFICADO] Adiciona o plan_id E o status APENAS se for super_admin
         if (userRole === 'super_admin') {
             const newPlanId = document.getElementById('userPlan').value;
             companyUpdateData.plan_id = newPlanId || null;
+            
+            const newStatus = document.getElementById('userCompanyStatus').value;
+            companyUpdateData.status = newStatus;
         }
         
         // Log para verificar o que está sendo enviado

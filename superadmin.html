@@ -8,13 +8,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Importando estilos existentes para manter a consistência -->
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/components.css">
-    <!-- Estilos específicos do painel admin -->
     <link rel="stylesheet" href="css/admin.css">
-     <!-- Estilos IA (para o toggle) -->
-    <link rel="stylesheet" href="css/ia.css">
+     <link rel="stylesheet" href="css/ia.css">
     <link rel="stylesheet" href="responsive-fixes.css">
 
 </head>
@@ -24,17 +21,14 @@
     <div id="appContainer" class="app-container" style="display: block;">
         <div class="sidebar">
             <div class="sidebar-header">
-                <!-- O texto aqui será alterado dinamicamente via JS -->
                 <h1><i class="fas fa-user-shield"></i> <span>SUPERADMIN</span></h1>
             </div>
             <ul class="nav-links">
                 <li><a href="#" class="nav-link active" data-page="adminDashboard"><i class="fas fa-chart-line"></i> <span>Visão Geral</span></a></li>
-                <!-- O texto aqui será "Gestão de Clientes" para superadmin e "Meus Clientes" para afiliado -->
                 <li><a href="#" class="nav-link" data-page="adminUsers"><i class="fas fa-users-cog"></i> <span>Gestão de Clientes</span></a></li>
                 <li><a href="#" class="nav-link" data-page="adminPlans"><i class="fas fa-file-invoice-dollar"></i> <span>Planos</span></a></li>
                 <li><a href="#" class="nav-link" data-page="adminCoupons"><i class="fas fa-tags"></i> <span>Cupons</span></a></li>
                 <li><a href="#" class="nav-link" data-page="adminAffiliates"><i class="fas fa-sitemap"></i> <span>Afiliados</span></a></li>
-                <!-- Nova opção para Documentos Legais -->
                 <li><a href="#" class="nav-link" data-page="adminLegal"><i class="fas fa-gavel"></i> <span>Documentos Legais</span></a></li>
                 <li><a href="index.html" class="nav-link"><i class="fas fa-arrow-left"></i> <span>Voltar para Oreh</span></a></li>
             </ul>
@@ -44,16 +38,13 @@
             <div class="topbar">
                 <h2 id="pageTitle">Visão Geral</h2>
                 <div class="user-info">
-                    <!-- O texto do avatar e nome será alterado dinamicamente via JS -->
                     <div class="user-avatar">SA</div>
                     <span>Super Admin</span>
                 </div>
             </div>
 
-            <!-- Página de Visão Geral (Dashboard) -->
             <div id="adminDashboardPage" class="page-content active">
                 
-                <!-- Métricas do Superadmin -->
                 <div class="metrics-grid" id="superadminMetricsGrid">
                     <div class="metric-card">
                         <div class="card-icon icon-valor"><i class="fas fa-hand-holding-usd"></i></div>
@@ -83,7 +74,6 @@
                             <span class="metric-label">Total de Afiliados</span>
                         </div>
                     </div>
-                    <!-- Novas Métricas Superadmin -->
                     <div class="metric-card">
                         <div class="card-icon icon-valor" style="background: linear-gradient(135deg, #2ecc71, #27ae60);"><i class="fas fa-percent"></i></div>
                         <div class="card-content">
@@ -114,7 +104,6 @@
                     </div>
                 </div>
 
-                <!-- Métricas do Afiliado (escondidas por padrão) -->
                 <div class="metrics-grid" id="affiliateMetricsGrid" style="display: none;">
                     <div class="metric-card">
                         <div class="card-icon icon-valor"><i class="fas fa-hand-holding-usd"></i></div>
@@ -137,7 +126,6 @@
                             <span class="metric-label">Seus Clientes Ativos</span>
                         </div>
                     </div>
-                    <!-- Novas Métricas Afiliado -->
                     <div class="metric-card">
                         <div class="card-icon icon-valor" style="background: linear-gradient(135deg, #2ecc71, #27ae60);"><i class="fas fa-wallet"></i></div>
                         <div class="card-content">
@@ -152,16 +140,8 @@
                             <span class="metric-label">Total Recebido (Vitalício)</span>
                         </div>
                     </div>
-                    <!-- <div class="metric-card">
-                        <div class="card-icon icon-ia" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);"><i class="fas fa-link"></i></div>
-                        <div class="card-content">
-                            <span class="metric-value" style="font-size: 1.4rem;" id="affiliateLink">...</span>
-                            <span class="metric-label">Seu Link de Afiliado</span>
-                        </div>
-                    </div> -->
-                </div>
+                    </div>
 
-                <!-- Gráficos -->
                 <div class="charts-grid" id="superadminChartsGrid">
                     <div class="chart-card">
                         <h3>Novos Clientes por Mês (Plataforma)</h3>
@@ -183,8 +163,7 @@
                     </div>
                 </div>
                 
-                <!-- Gráficos do Afiliado (escondidos por padrão) -->
-                 <div class="charts-grid" id="affiliateChartsGrid" style="display: none;">
+                <div class="charts-grid" id="affiliateChartsGrid" style="display: none;">
                     <div class="chart-card">
                         <h3>Seus Novos Clientes por Mês</h3>
                         <div class="chart-container">
@@ -194,14 +173,11 @@
                 </div>
             </div>
 
-            <!-- Página de Gestão de Clientes -->
             <div id="adminUsersPage" class="page-content">
                 <div class="page-header">
-                    <!-- O Título aqui será alterado dinamicamente via JS -->
                     <h2 id="clientsPageTitle">Gerenciar Clientes</h2>
                 </div>
                 
-                <!-- Barra de Filtros e Busca -->
                 <div class="admin-filters">
                     <div class="input-group search-input">
                          <i class="fas fa-search"></i>
@@ -211,8 +187,7 @@
                         <label for="filterPlan">Plano</label>
                         <select id="filterPlan">
                             <option value="">Todos os Planos</option>
-                            <!-- Planos carregados via JS -->
-                        </select>
+                            </select>
                     </div>
                     <div class="input-group">
                         <label for="filterStatus">Status</label>
@@ -221,6 +196,8 @@
                             <option value="active">Ativo</option>
                             <option value="onboarding">Onboarding</option>
                             <option value="payment_pending">Pag. Pendente</option>
+                            <option value="overdue">Em Atraso</option>
+                            <option value="banned">Banido</option>
                             <option value="inactive">Inativo</option>
                         </select>
                     </div>
@@ -228,8 +205,7 @@
                         <label for="filterAffiliate">Afiliado</label>
                         <select id="filterAffiliate">
                             <option value="">Todos os Afiliados</option>
-                            <!-- Afiliados carregados via JS -->
-                        </select>
+                            </select>
                     </div>
                 </div>
 
@@ -246,13 +222,11 @@
                             </tr>
                         </thead>
                         <tbody id="usersTableBody">
-                            <!-- Conteúdo gerado via JS -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Página de Gestão de Planos -->
             <div id="adminPlansPage" class="page-content">
                 <div class="page-header">
                     <h2>Gerenciar Planos</h2>
@@ -265,19 +239,16 @@
                                 <th>Nome do Plano</th>
                                 <th>Preço</th>
                                 <th>Limite de Conversas</th>
-                                <th>Visível no Onboarding</th> <!-- Nova coluna -->
-                                <th>Status</th>
+                                <th>Visível no Onboarding</th> <th>Status</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="plansTableBody">
-                            <!-- Conteúdo gerado via JS -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Página de Gestão de Cupons -->
             <div id="adminCouponsPage" class="page-content">
                 <div class="page-header">
                     <h2>Gerenciar Cupons de Desconto</h2>
@@ -298,13 +269,11 @@
                             </tr>
                         </thead>
                         <tbody id="couponsTableBody">
-                            <!-- Conteúdo gerado via JS -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Página de Gestão de Afiliados -->
             <div id="adminAffiliatesPage" class="page-content">
                  <div class="page-header">
                     <h2>Gerenciar Afiliados</h2>
@@ -313,7 +282,6 @@
                 <div class="table-container">
                     <table class="admin-table">
                         <thead>
-                            <!-- Títulos da tabela de afiliados atualizados -->
                             <tr>
                                 <th>Nome do Afiliado</th>
                                 <th>E-mail de Contato</th>
@@ -326,19 +294,16 @@
                             </tr>
                         </thead>
                         <tbody id="affiliatesTableBody">
-                            <!-- Conteúdo gerado via JS -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Página de Gestão de Documentos Legais -->
             <div id="adminLegalPage" class="page-content">
                 <div class="page-header">
                     <h2>Gerenciar Documentos Legais</h2>
                 </div>
 
-                <!-- Seção para Documentos Gerais -->
                 <form id="legalDocumentsForm">
                     <div class="ia-card">
                         <h3>Documentos Gerais da Plataforma</h3>
@@ -361,7 +326,6 @@
                     </div>
                 </form>
 
-                <!-- Seção para Documentos de Afiliados -->
                 <form id="affiliateLegalDocumentsForm" style="margin-top: 3rem;">
                     <div class="ia-card">
                         <h3>Documentos do Programa de Afiliados</h3>
@@ -386,7 +350,6 @@
         </div>
     </div>
 
-    <!-- Modais -->
     <div class="modal" id="userModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -413,7 +376,6 @@
                     <input type="text" id="userOfficialName">
                 </div>
                 <div class="form-grid">
-                    <!-- ATUALIZAÇÃO: Adicionado ID 'userPlanGroup' para controle de visibilidade -->
                     <div class="input-group" id="userPlanGroup">
                         <label for="userPlan">Plano</label>
                         <select id="userPlan" required></select>
@@ -423,7 +385,19 @@
                         <select id="userAffiliate"></select>
                     </div>
                 </div>
-                 <div class="modal-footer">
+
+                <div class="input-group" id="userStatusGroup" style="display: none;">
+                    <label for="userCompanyStatus">Status da Conta</label>
+                    <select id="userCompanyStatus">
+                        <option value="active">Ativo</option>
+                        <option value="onboarding">Onboarding</option>
+                        <option value="payment_pending">Pag. Pendente</option>
+                        <option value="overdue">Em Atraso</option>
+                        <option value="inactive">Inativo</option>
+                        <option value="banned" style="color: red; font-weight: bold;">BANIDO</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                 </div>
             </form>
@@ -456,7 +430,6 @@
                         <input type="number" id="planChatLimit" placeholder="Deixe em branco para ilimitado">
                     </div>
                 </div>
-                <!-- Toggle para Visibilidade no Onboarding -->
                 <div class="form-group form-group-toggle" style="align-items: center; border-bottom: none; padding-bottom: 0;">
                     <label for="planShowOnOnboarding">Mostrar no Onboarding</label>
                     <div class="toggle-switch" style="margin-top: 0;">
@@ -471,7 +444,6 @@
         </div>
     </div>
 
-    <!-- Modal de Afiliado -->
     <div class="modal" id="affiliateModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -500,7 +472,6 @@
         </div>
     </div>
 
-    <!-- Modal de Cupom -->
     <div class="modal" id="couponModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -559,8 +530,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script type="module" src="js/api.js"></script> <!-- Certifique-se que api.js está antes -->
-    <script type="module" src="js/admin-helpers.js"></script>
+    <script type="module" src="js/api.js"></script> <script type="module" src="js/admin-helpers.js"></script>
     <script type="module" src="js/admin-clientes.js"></script>
     <script type="module" src="js/admin-cupons.js"></script>
     <script type="module" src="js/admin.js"></script>

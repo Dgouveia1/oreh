@@ -4,33 +4,47 @@ import { getSubscriptionStatus, getSubscriptionPaymentUrl } from './asaasService
 
 // Função para verificar e exibir o modal de assinatura em atraso
 async function checkSubscriptionStatus(companyData) {
-    if (!companyData.asaas_subscription_id) return;
+    // [MODIFICADO] Se não houver ID do Asaas E o status local não for 'overdue', não há o que fazer.
+    if (!companyData.asaas_subscription_id && companyData.status !== 'overdue') return;
+
+    let asaasStatus = null;
+    let paymentUrl = null;
 
     try {
-        const subscription = await getSubscriptionStatus(companyData.asaas_subscription_id);
+        // [MODIFICADO] Só tenta buscar na API se tiver um ID
+        if (companyData.asaas_subscription_id) {
+            const subscription = await getSubscriptionStatus(companyData.asaas_subscription_id);
+            if (subscription) {
+                asaasStatus = subscription.status;
+            }
+            // Tenta buscar a URL de pagamento de qualquer forma
+            paymentUrl = await getSubscriptionPaymentUrl(companyData.asaas_subscription_id);
+        }
 
-        // Verifica se o status é de atraso, cancelamento ou pendente
-        if (subscription && (subscription.status === 'OVERDUE' || subscription.status === 'CANCELED' || subscription.status === 'PENDING')) {
+        // [MODIFICADO] Lógica principal do modal
+        // Mostra o modal se o status LOCAL for 'overdue' OU se o status da API (Asaas) for 'OVERDUE'
+        const isOverdue = companyData.status === 'overdue';
+        const isAsaasOverdue = asaasStatus && (asaasStatus === 'OVERDUE' || asaasStatus === 'CANCELED' || asaasStatus === 'PENDING');
+
+        if (isOverdue || isAsaasOverdue) {
             const modal = document.getElementById('overdueSubscriptionModal');
-            const portalBtn = document.getElementById('asaasPortalBtn'); // ID do botão no modal
+            const portalBtn = document.getElementById('asaasPortalBtn');
 
             if (modal) {
-                // 1. Tenta obter o link da última fatura/invoice
-                const paymentUrl = await getSubscriptionPaymentUrl(companyData.asaas_subscription_id);
-
                 if (portalBtn) {
-                     // 2. Se a URL da fatura for encontrada, usa ela. Senão, mantém o link para a página de finanças.
+                    // Se a URL da fatura for encontrada, usa ela. Senão, mantém o link para a página de finanças.
                     if (paymentUrl) {
                         portalBtn.onclick = () => window.open(paymentUrl, '_blank');
                         portalBtn.textContent = 'Pagar Fatura Pendente';
                     } else {
-                        portalBtn.onclick = () => window.location.href='/finances'; // Volta para a página de finanças padrão
+                        // Fallback se não achar URL da fatura (ex: só status local 'overdue')
+                        portalBtn.onclick = () => window.location.href='/finances';
                         portalBtn.textContent = 'Gerir Assinatura';
                     }
                 }
 
                 modal.style.display = 'flex';
-                logEvent('WARNING', `Assinatura em status de risco: ${subscription.status}`);
+                logEvent('WARNING', `Assinatura em status de risco: Local (${companyData.status}), Asaas (${asaasStatus})`);
             }
         }
     } catch (error) {
@@ -69,17 +83,28 @@ async function checkLoginState() {
             updateUserInfo(userProfile.full_name, userProfile.userinitial);
             setupRoleBasedUI(userProfile);
 
-            // ✅ NOVA LÓGICA DE REDIRECIONAMENTO
             const companyStatus = userProfile.companies.status;
             console.log(`[Auth.js] Status da empresa: ${companyStatus}`);
+
+            // [NOVO] Verificação de Conta Banida
+            if (companyStatus === 'banned') {
+                console.warn('[Auth.js] Conta banida. Acesso negado.');
+                showToast('Esta conta foi suspensa. Entre em contato com o suporte.', 'error');
+                logEvent('ERROR', `Tentativa de login bloqueada: Conta banida (Empresa: ${userProfile.companies.id})`);
+                await supabaseClient.auth.signOut(); // Desloga o usuário
+                loginPage.style.display = 'flex';
+                appContainer.style.display = 'none';
+                return; // Impede o acesso
+            }
 
             // Para qualquer outro status ('active', 'payment_pending', etc), permite o acesso.
             console.log('[Auth.js] Acesso permitido. Mostrando a aplicação principal.');
             loginPage.style.display = 'none';
             appContainer.style.display = 'block';
 
-            // ✅ REGRA DE NOTIFICAÇÃO DE ATRASO
-            if (companyStatus === 'active' || companyStatus === 'payment_pending') {
+            // [MODIFICADO] REGRA DE NOTIFICAÇÃO DE ATRASO
+            // Inclui a verificação do status local 'overdue'
+            if (companyStatus === 'active' || companyStatus === 'payment_pending' || companyStatus === 'overdue') {
                  await checkSubscriptionStatus(userProfile.companies);
             }
 
@@ -126,7 +151,7 @@ async function login() {
 
         console.log('[OREH] Início de sessão bem-sucedido!');
         logEvent('INFO', `Login bem-sucedido para: ${emailInput.value}`);
-        await checkLoginState();
+        await checkLoginState(); // checkLoginState agora trata os status 'banned' e 'overdue'
 
     } catch (error) {
         console.error('[OREH] Falha no início de sessão:', error);
