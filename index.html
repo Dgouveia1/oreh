@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -10,7 +8,6 @@
     <meta name="theme-color" content="#FF7F40">
     <link rel="manifest" href="manifest.json">
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Oreh">
@@ -94,17 +91,17 @@
                         </div>
                     </div>
                     <div class="metric-card">
-                        <div class="card-icon icon-ia"><i class="fas fa-robot"></i></div>
+                        <div class="card-icon icon-ia"><i class="fas fa-comments-dollar"></i></div>
                         <div class="card-content">
-                            <span class="metric-value" id="resolvidosIA">0%</span>
-                            <span class="metric-label">Resolvidos pela IA</span>
+                            <span class="metric-value" id="chatUsage">0 / 0</span>
+                            <span class="metric-label">Conversas no Mês vs. Limite</span>
                         </div>
                     </div>
                     <div class="metric-card">
-                        <div class="card-icon icon-leads"><i class="fas fa-user-tie"></i></div>
+                        <div class="card-icon icon-leads"><i class="fas fa-user-plus"></i></div>
                         <div class="card-content">
-                            <span class="metric-value" id="leadsAgendados">0</span>
-                            <span class="metric-label">Leads Qualificados</span>
+                            <span class="metric-value" id="newClientsMonth">0</span>
+                            <span class="metric-label">Novos Clientes (Mês)</span>
                         </div>
                     </div>
                 </div>
@@ -197,7 +194,7 @@
                 <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
                     <h2>Funil de Atendimentos</h2>
                     <button class="btn btn-secondary" id="openSearchFinishedModalBtn" style="padding: 1.2rem 2rem; font-size: 1.5rem;">
-                        <i class="fas fa-search"></i> Buscar Finalizados
+                        <i class="fas fa-search"></i> Buscar Atendimentos
                     </button>
                 </div>
                 <div id="kanbanBoard" class="kanban-board">
@@ -614,25 +611,7 @@
             </form>
         </div>
     </div>
-    <div class="modal" id="chatDetailModal">
-        <div class="modal-content">
-            <button class="close-modal">&times;</button>
-            <div class="modal-header">
-                <h3>Detalhes do Atendimento</h3>
-            </div>
-            <div class="chat-details">
-                <p><i class="fas fa-user"></i> <strong>Cliente:</strong> <span id="chatDetailCustomer"></span></p>
-                <p><i class="fas fa-phone"></i> <strong>Telefone:</strong> <span id="chatDetailPhone"></span></p>
-                <p><i class="fas fa-info-circle"></i> <strong>Status:</strong> <span id="chatDetailStatus" class="status-badge"></span></p>
-                <p><i class="fas fa-calendar-alt"></i> <strong>Início:</strong> <span id="chatDetailCreated"></span></p>
-                <p><i class="fas fa-comment-dots"></i> <strong>Última Mensagem:</strong></p>
-                <p id="chatDetailSummary" class="summary-text"></p>
-            </div>
-            <div class="modal-footer">
-                <button id="descartarLeadBtn" class="btn btn-danger">Descartar Lead</button>
-            </div>
-        </div>
-    </div>
+
     <div class="modal" id="humanAttentionDetailModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -652,6 +631,43 @@
             </div>
         </div>
     </div>
+
+    <div class="modal" id="chatHistoryModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3>Histórico de Conversa</h3>
+                <p id="historyClientPhone" style="font-size: 1.6rem; color: var(--text-color-light); margin-top: 5px;"></p>
+            </div>
+            <div class="chat-history-container" id="chatHistoryMessages">
+                </div>
+        </div>
+    </div>
+    <div class="modal" id="chatDetailModal">
+        <div class="modal-content" style="max-width: 600px;"> 
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3>Detalhes do Atendimento</h3>
+            </div>
+            <div class="chat-details">
+                <p><i class="fas fa-user"></i> <strong>Cliente:</strong> <span id="chatDetailCustomer"></span></p>
+                <p><i class="fas fa-phone"></i> <strong>Telefone:</strong> <span id="chatDetailPhone"></span></p>
+                <p><i class="fas fa-info-circle"></i> <strong>Status:</strong> <span id="chatDetailStatus" class="status-badge"></span></p>
+                <p><i class="fas fa-calendar-alt"></i> <strong>Início:</strong> <span id="chatDetailCreated"></span></p>
+                <p><i class="fas fa-comment-dots"></i> <strong>Última Mensagem:</strong></p>
+                <p id="chatDetailSummary" class="summary-text"></p>
+            </div>
+    
+            <div class="chat-history-container" id="kanbanChatHistoryContainer" style="margin-top: 2rem;">
+                <p class="loading-message" style="padding: 2rem 0;">Carregando histórico...</p>
+            </div>
+            <div class="modal-footer">
+                <button id="kanbanTakeOverBtn" class="btn btn-primary">Assumir Atendimento</button>
+                <button id="descartarLeadBtn" class="btn btn-danger">Descartar Lead</button>
+            </div>
+        </div>
+    </div>
+
     <div class="modal" id="signUpModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>

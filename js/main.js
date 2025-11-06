@@ -4,7 +4,7 @@ import { saveAiSettings } from './ia.js';
 import { disconnectInstance } from './status.js';
 import { saveEvent, changeDay } from './agenda.js';
 // ✅ REQ 4: Importa as novas funções do modal de busca
-import { descartarLead, takeOverChat, openSearchFinishedModal, handleSearchFinished } from './atendimentos.js';
+import { descartarLead, takeOverChat, openSearchFinishedModal, handleSearchFinished, openChatHistoryModal, renderChatHistory} from './atendimentos.js';
 import { uploadFile, deleteFile } from './drive.js';
 // ✅ ATUALIZADO: Importa 'savePasswordSettings' do settings.js
 import { loadSettings, saveUserSettings, saveCompanySettings, savePasswordSettings } from './settings.js';
@@ -12,6 +12,7 @@ import { loadSettings, saveUserSettings, saveCompanySettings, savePasswordSettin
 import { handleProductFormSubmit, openEditModal as openEditProductModal, setupProductEventListeners, confirmDeleteProduct } from './produtos.js';
 import { handleClientFormSubmit, deleteClient, openEditModal as openEditClientModal, setupClientTableListeners } from './clientes.js';
 import './finances.js';
+import { supabaseClient, logEvent } from './api.js';
 
 
 console.log('[OREH] Módulo principal carregado.');
@@ -86,19 +87,30 @@ function setupEventListeners() {
         disconnectBtn.addEventListener('click', disconnectInstance);
     }
 
-    // Atendimentos (Kanban)
     const kanbanBoard = document.getElementById('kanbanBoard');
     if (kanbanBoard) {
-        kanbanBoard.addEventListener('click', (e) => {
+        // ✅ ATUALIZADO: Tornou a função async para buscar o histórico
+        kanbanBoard.addEventListener('click', async (e) => {
             const card = e.target.closest('.chat-card');
             if (!card) return;
 
             const modal = document.getElementById('chatDetailModal');
             if (!modal) return;
 
+            // 1. Limpa o histórico anterior e define como "Carregando"
+            const historyContainer = modal.querySelector('#kanbanChatHistoryContainer'); // <-- ID CORRETO
+            if (historyContainer) {
+                historyContainer.innerHTML = '<p class="loading-message" style="padding: 2rem 0;">Carregando histórico...</p>';
+            }
+
+            // 2. Preenche os dados do cabeçalho (como antes)
             const descartarBtn = modal.querySelector('#descartarLeadBtn');
             if (descartarBtn) {
                 descartarBtn.dataset.chatId = card.dataset.id;
+            }
+            const takeOverBtn = modal.querySelector('#kanbanTakeOverBtn');
+            if (takeOverBtn) {
+                takeOverBtn.dataset.chatId = card.dataset.id;
             }
 
             const setText = (id, text) => {
@@ -109,8 +121,11 @@ function setupEventListeners() {
             const status = (card.dataset.status || 'N/A').replace(/_/g, ' ');
             const statusEl = modal.querySelector('#chatDetailStatus');
 
-            setText('#chatDetailCustomer', card.dataset.customer_name);
-            setText('#chatDetailPhone', card.dataset.customer_phone);
+            const customerName = card.dataset.customer_name;
+            const customerPhone = card.dataset.customer_phone; // O telefone já vem limpo do .js
+
+            setText('#chatDetailCustomer', customerName);
+            setText('#chatDetailPhone', customerPhone);
             setText('#chatDetailCreated', card.dataset.formatted_created_at || new Date(card.dataset.created_at).toLocaleString('pt-BR'));
             setText('#chatDetailSummary', card.dataset.last_message_summary || 'Nenhuma informação.');
 
@@ -120,7 +135,39 @@ function setupEventListeners() {
                 statusEl.dataset.status = card.dataset.status;
             }
 
+            // 3. Mostra o modal
             modal.style.display = 'flex';
+
+            // 4. Busca e renderiza o histórico (nova lógica)
+            try {
+                const { data: { user } } = await supabaseClient.auth.getUser();
+                if (!user) throw new Error("Usuário não autenticado.");
+                
+                const { data: profile } = await supabaseClient
+                    .from('users')
+                    .select('company_id')
+                    .eq('id', user.id)
+                    .single();
+                if (!profile) throw new Error("Perfil do usuário não encontrado.");
+
+                // Chama a RPC
+                const { data: messages, error } = await supabaseClient.rpc('get_chat_history', {
+                    p_company_id: profile.company_id,
+                    p_customer_phone: customerPhone 
+                });
+
+                if (error) throw error;
+
+                // ✅ ATUALIZADO: Renderiza no container correto
+                renderChatHistory(historyContainer, messages, customerName);
+
+            } catch (error) {
+                console.error('Erro ao buscar histórico de chat:', error);
+                if (historyContainer) {
+                    historyContainer.innerHTML = `<p class="loading-message error">Falha ao carregar histórico: ${error.message}</p>`;
+                }
+                logEvent('ERROR', 'Falha ao buscar histórico de chat (Kanban)', { phone: customerPhone, error: error.message });
+            }
         });
     }
 
@@ -181,6 +228,17 @@ function setupEventListeners() {
         });
     }
     
+    const kanbanTakeOverBtn = document.getElementById('kanbanTakeOverBtn');
+    if(kanbanTakeOverBtn) {
+        kanbanTakeOverBtn.addEventListener('click', (e) => {
+            const chatId = e.target.dataset.chatId;
+            if (chatId) {
+                takeOverChat(chatId); // Chama a função importada de atendimentos.js
+                // Fecha o modal atual, já que o card vai sumir do Kanban
+                document.getElementById('chatDetailModal').style.display = 'none';
+            }
+        });
+    }
     // ✅ REQ 4: Listeners para o novo modal de busca
     const openSearchModalBtn = document.getElementById('openSearchFinishedModalBtn');
     if (openSearchModalBtn) {
@@ -190,6 +248,24 @@ function setupEventListeners() {
     const searchFinishedForm = document.getElementById('searchFinishedForm');
     if (searchFinishedForm) {
         searchFinishedForm.addEventListener('submit', handleSearchFinished);
+    }
+
+    const searchResultsContainer = document.getElementById('searchFinishedResultsContainer');
+    if (searchResultsContainer) {
+        searchResultsContainer.addEventListener('click', (e) => {
+            const card = e.target.closest('.chat-card'); // Usa a classe do card renderizado
+            if (!card) return;
+
+            const phone = card.dataset.customer_phone;
+            const name = card.dataset.customer_name;
+
+            if (phone) {
+                // Fecha o modal de busca
+                document.getElementById('searchFinishedModal').style.display = 'none';
+                // Abre o modal de histórico
+                openChatHistoryModal(phone, name);
+            }
+        });
     }
 
     // Agenda

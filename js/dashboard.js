@@ -115,9 +115,9 @@ async function fetchAndRenderDashboard() {
 
         // Atualiza os cards
         updateMetricCard('totalAtendimentos', data.total_atendimentos_mes);
-        updateMetricCard('resolvidosIA', data.resolvidos_ia_percent, '', '%');
-        updateMetricCard('leadsQualificados', data.leads_qualificados);
-
+        const chatLimit = data.chat_limit_plan ? data.chat_limit_plan : 'Ilimitado';
+        updateMetricCard('chatUsage', `${data.chat_count_month} / ${chatLimit}`);
+        updateMetricCard('newClientsMonth', data.new_clients_month);
         // Renderiza os gráficos
         renderFunilChart(data.funil_data); // Ex: { topo: 50, meio: 25, fundo: 10 }
         renderVolumeChart(data.volume_ultimos_7_dias); // Ex: [{ day: '2023-10-27', count: 12 }, ...]

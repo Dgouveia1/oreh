@@ -409,6 +409,100 @@ export function openSearchFinishedModal() {
     }
 }
 
+// -----------------------------------------------------------------
+// A FUNÇÃO DUPLICADA (openChatHistoryModal) QUE ESTAVA AQUI FOI REMOVIDA
+// -----------------------------------------------------------------
+
+
+// (Substitua as funções existentes no final de oreh/js/atendimentos.js)
+
+/**
+ * ✅ ATUALIZADO: Exporta a função e aceita um container como argumento.
+ * Renderiza as mensagens do histórico no modal.
+ * @param {HTMLElement} messagesContainer - O elemento onde as bolhas do chat serão renderizadas.
+ * @param {Array} messages - O array de mensagens vindo da RPC.
+ * @param {string} customerName - O nome do cliente.
+ */
+export function renderChatHistory(messagesContainer, messages, customerName) {
+    if (!messagesContainer) {
+        console.error("Container de histórico não fornecido para renderChatHistory.");
+        return;
+    }
+
+    if (!messages || messages.length === 0) {
+        messagesContainer.innerHTML = '<p class="loading-message">Nenhuma mensagem encontrada para este chat.</p>';
+        return;
+    }
+
+    messagesContainer.innerHTML = ''; // Limpa o loading
+
+    messages.forEach(msg => {
+        const bubble = document.createElement('div');
+        bubble.classList.add('chat-bubble');
+        
+        const senderType = msg.sender.toLowerCase(); // 'humano' ou 'ia'
+
+        if (senderType === 'humano') {
+            bubble.classList.add('human'); // Classe CSS 'human'
+            bubble.dataset.sender = 'Cliente'; // Rótulo "Humano"
+        } else {
+            bubble.classList.add('ai'); // Classe CSS 'ai'
+            bubble.dataset.sender = 'Oreh'; // Rótulo "IA"
+        }
+
+        const messageText = msg.message ? msg.message.replace(/["\\]/g, '') : '(Mensagem vazia)';
+        bubble.textContent = messageText;
+        
+        messagesContainer.appendChild(bubble);
+    });
+
+    // Rola para a mensagem mais recente
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+/**
+ * ✅ ATUALIZADO: Esta função (do modal de BUSCA) agora usa a nova renderChatHistory.
+ * Abre o modal de histórico (da BUSCA) e busca os dados no Supabase.
+ */
+export async function openChatHistoryModal(customerPhone, customerName) {
+    const modal = document.getElementById('chatHistoryModal');
+    const title = document.getElementById('historyClientPhone');
+    const messagesContainer = document.getElementById('chatHistoryMessages'); // <-- Container deste modal
+
+    if (!modal || !title || !messagesContainer) return;
+
+    title.textContent = customerName ? `${customerName} (${customerPhone})` : customerPhone;
+    messagesContainer.innerHTML = '<p class="loading-message">Carregando histórico...</p>';
+    modal.style.display = 'flex';
+
+    try {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        if (!user) throw new Error("Usuário não autenticado.");
+        
+        const { data: profile } = await supabaseClient
+            .from('users')
+            .select('company_id')
+            .eq('id', user.id)
+            .single();
+        if (!profile) throw new Error("Perfil do usuário não encontrado.");
+
+        const { data: messages, error } = await supabaseClient.rpc('get_chat_history', {
+            p_company_id: profile.company_id,
+            p_customer_phone: customerPhone
+        });
+
+        if (error) throw error;
+
+        // Passa o container correto
+        renderChatHistory(messagesContainer, messages, customerName);
+
+    } catch (error) {
+        console.error('Erro ao buscar histórico de chat:', error);
+        messagesContainer.innerHTML = `<p class="loading-message error">Falha ao carregar histórico: ${error.message}</p>`;
+        logEvent('ERROR', 'Falha ao buscar histórico de chat via RPC', { phone: customerPhone, error: error.message });
+    }
+}
+
 export async function handleSearchFinished(event) {
     event.preventDefault();
     const phone = document.getElementById('searchPhone').value;
