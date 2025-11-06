@@ -82,15 +82,17 @@
 .kanban-board {
     display: grid;
     /* ALTERAÇÃO: Mudei de '1fr' (fração) para '30rem' (fixo). */
-    /* Isso impede que as colunas estiquem para preencher o espaço. */
     grid-template-columns: repeat(4, 30rem);
     gap: 2.5rem;
     overflow-x: auto;
     min-height: 0;
     padding-bottom: 1rem;
-    /* NOVO: Impede o container do kanban de esticar horizontalmente */
-    justify-self: start;
-    /* REMOVIDO: "align-items: start;" foi removido para que as colunas estiquem e permitam scroll interno */
+    
+    /* ✅ REQ 2: Adiciona scroll vertical ao board e alinha colunas no topo */
+    overflow-y: auto;
+    align-items: start;
+    
+    /* REMOVIDO: "justify-self: start;" foi removido */
 
     /* --- NOVO: Oculta a barra de rolagem horizontal --- */
     scrollbar-width: none; /* Firefox */
@@ -138,6 +140,14 @@
     gap: 1rem;
 }
 
+/* ✅ REQ 1: Estilo para a contagem de cards */
+.kanban-column-title .card-count {
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--text-color-light);
+    margin-left: 0.5rem;
+}
+
 .kanban-column-title::before {
     content: '';
     width: 1.2rem;
@@ -146,31 +156,30 @@
     background: var(--primary);
 }
 
-.kanban-column[data-temperatura="TOPO DO FUNIL"] .kanban-column-title::before {
-    background: #e74c3c;
+.kanban-column[data-temperatura="Novo"] .kanban-column-title::before {
+    background: #3498db; /* Azul para Novo */
 }
 
-.kanban-column[data-temperatura="MEIO DO FUNIL"] .kanban-column-title::before {
-    background: #f39c12;
+.kanban-column[data-temperatura="Atendimento"] .kanban-column-title::before {
+    background: #f39c12; /* Laranja para Atendimento */
 }
 
-.kanban-column[data-temperatura="FUNDO DO FUNIL"] .kanban-column-title::before {
-    background: #3498db;
+.kanban-column[data-temperatura="Agendado"] .kanban-column-title::before {
+    background: #9b59b6; /* Roxo para Agendado */
 }
 
-.kanban-column[data-temperatura="PÓS-VENDA"] .kanban-column-title::before {
-    background: #27ae60;
+.kanban-column[data-temperatura="Finalizado"] .kanban-column-title::before {
+    background: #27ae60; /* Verde para Finalizado */
 }
 
 .kanban-cards-container {
-    flex-grow: 1;
+    /* ✅ REQ 2: Removido flex-grow, min-height e overflow-y */
     display: flex;
     flex-direction: column;
     gap: 1.8rem;
-    min-height: 12rem;
     
     /* --- NOVO: Habilita o scroll vertical e oculta a barra --- */
-    overflow-y: auto;
+    /* REMOVIDO: overflow-y: auto; */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
 }
@@ -365,5 +374,3 @@ body.dark-mode .kanban-column.drag-over .kanban-cards-container {
     .kanban-board, .human-attention-container { grid-template-columns: 1fr; }
     .kanban-column { min-width: auto; }
 }
-
-

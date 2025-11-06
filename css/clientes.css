@@ -136,7 +136,7 @@
 
 .status-cliente[data-status="Ativo"] { background-color: var(--success); }
 .status-cliente[data-status="Inativo"] { background-color: var(--danger); }
-.status-cliente[data-status="Lead"] { background-color: var(--primary); }
+.status-cliente[data-status="Lead"] { background-color: #3498db; } /* ✅ COR ATUALIZADA */
 
 /* Responsividade da Tabela - CARD LAYOUT */
 @media (max-width: 768px) {

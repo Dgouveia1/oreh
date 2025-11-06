@@ -3,7 +3,8 @@ import { setupNavigation, setupModals, setupUploadModal, setupThemeToggle } from
 import { saveAiSettings } from './ia.js';
 import { disconnectInstance } from './status.js';
 import { saveEvent, changeDay } from './agenda.js';
-import { descartarLead, takeOverChat } from './atendimentos.js';
+// ✅ REQ 4: Importa as novas funções do modal de busca
+import { descartarLead, takeOverChat, openSearchFinishedModal, handleSearchFinished } from './atendimentos.js';
 import { uploadFile, deleteFile } from './drive.js';
 // ✅ ATUALIZADO: Importa 'savePasswordSettings' do settings.js
 import { loadSettings, saveUserSettings, saveCompanySettings, savePasswordSettings } from './settings.js';
@@ -178,6 +179,17 @@ function setupEventListeners() {
                 descartarLead(chatId);
             }
         });
+    }
+    
+    // ✅ REQ 4: Listeners para o novo modal de busca
+    const openSearchModalBtn = document.getElementById('openSearchFinishedModalBtn');
+    if (openSearchModalBtn) {
+        openSearchModalBtn.addEventListener('click', openSearchFinishedModal);
+    }
+
+    const searchFinishedForm = document.getElementById('searchFinishedForm');
+    if (searchFinishedForm) {
+        searchFinishedForm.addEventListener('submit', handleSearchFinished);
     }
 
     // Agenda

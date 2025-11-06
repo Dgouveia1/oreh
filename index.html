@@ -194,8 +194,11 @@
                     <div id="humanAttentionContainer" class="human-attention-container">
                         </div>
                 </div>
-                <div class="page-header">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
                     <h2>Funil de Atendimentos</h2>
+                    <button class="btn btn-secondary" id="openSearchFinishedModalBtn" style="padding: 1.2rem 2rem; font-size: 1.5rem;">
+                        <i class="fas fa-search"></i> Buscar Finalizados
+                    </button>
                 </div>
                 <div id="kanbanBoard" class="kanban-board">
                     <div class="kanban-column" data-temperatura="Novo">
@@ -211,7 +214,7 @@
                         <div class="kanban-cards-container"></div>
                     </div>
                     <div class="kanban-column" data-temperatura="Finalizado">
-                        <h3 class="kanban-column-title">Finalizado</h3>
+                        <h3 class="kanban-column-title">Finalizado (Hoje)</h3>
                         <div class="kanban-cards-container"></div>
                     </div>
                 </div>
@@ -831,6 +834,33 @@
                     <i class="fas fa-times"></i> Cancelar
                 </button>
             </div>
+        </div>
+    </div>
+
+    <div class="modal" id="searchFinishedModal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <div class="modal-header">
+                <h3><i class="fas fa-search"></i> Buscar Atendimentos Finalizados</h3>
+            </div>
+            <form id="searchFinishedForm">
+                <p style="font-size: 1.5rem; color: var(--text-color-light); margin-bottom: 2rem;">Busque por atendimentos finalizados em dias anteriores.</p>
+                <div class="form-grid-columns" style="grid-template-columns: 1.5fr 1fr;">
+                    <div class="input-group">
+                        <label for="searchPhone">Telefone</label>
+                        <input type="tel" id="searchPhone" placeholder="Parte do número, ex: 5511...">
+                    </div>
+                    <div class="input-group">
+                        <label for="searchDate">Data da Finalização</label>
+                        <input type="date" id="searchDate">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+            </form>
+            <div id="searchFinishedResultsContainer" style="margin-top: 2rem; max-height: 40vh; overflow-y: auto; padding-right: 1rem;">
+                </div>
         </div>
     </div>
 

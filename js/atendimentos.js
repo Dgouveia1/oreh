@@ -27,6 +27,9 @@ async function fetchAndRenderAllChats() {
 
     kanbanBoard.querySelectorAll('.kanban-cards-container').forEach(c => c.innerHTML = '<p class="loading-message">Carregando...</p>');
     humanAttentionContainer.innerHTML = '<p class="loading-message">Carregando...</p>';
+    
+    // ✅ REQ 3: Obter a data de hoje para filtrar finalizados
+    const today = new Date().toISOString().split('T')[0];
 
     try {
         const { data: { user } } = await supabaseClient.auth.getUser();
@@ -65,21 +68,29 @@ async function fetchAndRenderAllChats() {
         console.log('[OREH Atendimentos] Chats brutos recebidos do DB:', chats);
 
         // ✅ CORREÇÃO: Mapeia o nome do cliente corretamente.
-        // A lógica agora usa o nome da tabela 'clients' se existir,
-        // senão, usa o 'customer_name' do próprio chat como fallback.
         const formattedChats = chats.map(chat => {
             const cleanCustomerPhone = chat.customer_phone.replace(/\D/g, '');
             const registeredClientName = clientNameMap.get(cleanCustomerPhone);
             return {
                 ...chat,
-                customer_name: registeredClientName || chat.customer_name // Sobrescreve para garantir a exibição correta
+                customer_name: registeredClientName || chat.customer_name 
             };
         });
         
         console.log('[OREH Atendimentos] Chats após formatação de nome:', formattedChats);
         
         const humanAttentionChats = formattedChats.filter(chat => chat.status === 'ATENDIMENTO_HUMANO');
-        const kanbanChats = formattedChats.filter(chat => chat.status !== 'ATENDIMENTO_HUMANO');
+        
+        // ✅ REQ 3: Filtro modificado para incluir apenas finalizados de hoje
+        const kanbanChats = formattedChats.filter(chat => {
+            if (chat.status === 'ATENDIMENTO_HUMANO') return false;
+            if (chat.temperatura === 'Finalizado') {
+                // Compara a data da última atualização com a data de hoje
+                const chatUpdateDate = new Date(chat.updated_at).toISOString().split('T')[0];
+                return chatUpdateDate === today;
+            }
+            return true; // Inclui todos os outros (Novo, Atendimento, Agendado)
+        });
 
         console.log('[OREH Atendimentos] Chats filtrados para o Kanban:', kanbanChats);
         console.log('[OREH Atendimentos] Chats filtrados para Atendimento Humano:', humanAttentionChats);
@@ -131,7 +142,6 @@ export async function descartarLead(chatId) {
     }
 }
 
-// ✅ NOVA FUNÇÃO: Assumir atendimento
 export async function takeOverChat(chatId) {
     console.log(`[OREH] Assumindo o atendimento do chat ${chatId}`);
     try {
@@ -172,7 +182,6 @@ function createChatCard(chat) {
         ? `<div class="lead-value">R$ ${parseFloat(chat.lead_value).toFixed(2).replace('.', ',')}</div>`
         : '';
         
-    // ✅ CORREÇÃO: Simplificado para usar apenas o `customer_name` que já foi tratado.
     const customerName = chat.customer_name || 'Cliente não identificado';
 
     card.innerHTML = `
@@ -235,7 +244,6 @@ function renderKanban(chats) {
         if (novoContainer) {
             novoContainer.innerHTML = '<p class="loading-message">Nenhum atendimento no funil.</p>';
         }
-        return;
     }
 
     chats.forEach(chat => {
@@ -250,8 +258,28 @@ function renderKanban(chats) {
             defaultContainer.appendChild(card);
         }
     });
+
+    // ✅ REQ 1: Atualiza a contagem de cards no título da coluna
+    kanbanBoard.querySelectorAll('.kanban-column').forEach(column => {
+        const count = column.querySelectorAll('.chat-card').length;
+        const titleEl = column.querySelector('.kanban-column-title');
+        
+        // Remove a contagem antiga, se existir
+        const existingCount = titleEl.querySelector('.card-count');
+        if (existingCount) {
+            existingCount.remove();
+        }
+        
+        // Adiciona o novo span de contagem
+        const countSpan = document.createElement('span');
+        countSpan.className = 'card-count';
+        countSpan.textContent = `(${count})`;
+        titleEl.appendChild(countSpan);
+    });
+
     initDragAndDrop();
 }
+
 
 function initDragAndDrop() {
     const cards = document.querySelectorAll('.chat-card');
@@ -368,5 +396,82 @@ async function subscribeToChatChanges() {
     } catch (error) {
         console.error('Falha ao iniciar subscrição de atendimentos:', error);
         logEvent('ERROR', 'Falha ao iniciar subscrição de atendimentos', { error: error });
+    }
+}
+
+// ✅ REQ 4: Funções para o modal de busca de finalizados
+export function openSearchFinishedModal() {
+    const modal = document.getElementById('searchFinishedModal');
+    if (modal) {
+        document.getElementById('searchFinishedForm').reset();
+        document.getElementById('searchFinishedResultsContainer').innerHTML = '';
+        modal.style.display = 'flex';
+    }
+}
+
+export async function handleSearchFinished(event) {
+    event.preventDefault();
+    const phone = document.getElementById('searchPhone').value;
+    const date = document.getElementById('searchDate').value;
+    const resultsContainer = document.getElementById('searchFinishedResultsContainer');
+    const searchBtn = event.target.querySelector('button[type="submit"]');
+
+    if (!phone && !date) {
+        showToast('Por favor, informe um telefone ou uma data.', 'error');
+        return;
+    }
+
+    searchBtn.disabled = true;
+    searchBtn.textContent = 'Buscando...';
+    resultsContainer.innerHTML = '<p class="loading-message">Buscando...</p>';
+
+    try {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        if (!user) throw new Error("Utilizador não autenticado.");
+        const { data: profile } = await supabaseClient.from('users').select('company_id').eq('id', user.id).single();
+        if (!profile) throw new Error("Perfil do utilizador não encontrado.");
+
+        let query = supabaseClient
+            .from('chats')
+            .select('*')
+            .eq('company_id', profile.company_id)
+            .eq('temperatura', 'Finalizado') // Apenas finalizados
+            .order('updated_at', { ascending: false })
+            .limit(50);
+
+        if (phone) {
+            query = query.like('customer_phone', `%${phone.replace(/\D/g, '')}%`);
+        }
+        if (date) {
+            // Busca pela data de ATUALIZAÇÃO (quando foi finalizado)
+            const startDate = new Date(date + 'T00:00:00');
+            const endDate = new Date(date + 'T23:59:59');
+            
+            query = query.gte('updated_at', startDate.toISOString());
+            query = query.lt('updated_at', endDate.toISOString());
+        }
+
+        const { data: chats, error } = await query;
+        if (error) throw error;
+
+        if (!chats || chats.length === 0) {
+            resultsContainer.innerHTML = '<p class="loading-message" style="text-align: center;">Nenhum atendimento finalizado encontrado para esta busca.</p>';
+            return;
+        }
+
+        // Renderiza os resultados
+        resultsContainer.innerHTML = chats.map(chat => {
+            const card = createChatCard(chat);
+            card.draggable = false; // Não pode arrastar resultados da busca
+            return card.outerHTML;
+        }).join('');
+
+    } catch (error) {
+        console.error('Erro ao buscar atendimentos finalizados:', error);
+        resultsContainer.innerHTML = '<p class="loading-message error">Falha ao buscar atendimentos.</p>';
+        logEvent('ERROR', 'Falha na busca de atendimentos finalizados', { phone, date, errorMessage: error.message });
+    } finally {
+        searchBtn.disabled = false;
+        searchBtn.textContent = 'Buscar';
     }
 }
