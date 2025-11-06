@@ -2,35 +2,24 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <!-- Viewport otimizado para mobile, impedindo zoom do usuário -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Oreh - Gestão de Atendimentos com IA</title>
 
-    <!-- Ícone do App -->
     <link rel="icon" type="image/png" href="favicon.png">
 
-    <!-- Meta tags para PWA (Progressive Web App) -->
     <meta name="theme-color" content="#FF7F40">
     <link rel="manifest" href="manifest.json">
 
-    <!-- Meta tags para experiência de App em tela cheia no iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Oreh">
-    <link rel="apple-touch-icon" href="favicon.png"> <!-- Ícone para tela inicial do iOS -->
-
-    <!-- Fontes e Ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="apple-touch-icon" href="favicon.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Folhas de Estilo -->
-    <link rel="stylesheet" href="style.css"> <!-- style.css importa todos os outros -->
-    <link rel="stylesheet" href="responsive-fixes.css"> <!-- Correções responsivas carregadas por último -->
-</head>
+    <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="responsive-fixes.css"> </head>
 <body>
-    <!-- Tela de Splash -->
     <div id="splashScreen" class="splash-screen">
         <div class="logo-text">OREH</div>
         <i class="fas fa-circle-notch fa-spin"></i>
@@ -42,16 +31,13 @@
         <div class="login-card">
             <div class="logo-text">OREH</div>
             <div class="input-group">
-                <label for="username">Usuário (E-mail)</label> <!-- Mudança no label -->
-                <input type="email" id="username" placeholder="Digite seu e-mail" autocomplete="username" aria-label="Usuário"> <!-- Mudança no type e placeholder -->
-            </div>
+                <label for="username">Usuário (E-mail)</label> <input type="email" id="username" placeholder="Digite seu e-mail" autocomplete="username" aria-label="Usuário"> </div>
             <div class="input-group">
                 <label for="password">Senha</label>
                 <input type="password" id="password" placeholder="Digite sua senha" autocomplete="current-password" aria-label="Senha">
             </div>
             <button id="loginBtn" class="btn btn-primary" aria-label="Entrar no sistema">Entrar</button>
-             <!-- Link "Esqueci minha senha" adicionado -->
-            <a href="#" id="forgotPasswordLink" class="forgot-password-link" style="display: block; margin-top: 1rem; color: var(--text-color-light); font-size: 1.4rem;">Esqueci minha senha</a>
+             <a href="#" id="forgotPasswordLink" class="forgot-password-link" style="display: block; margin-top: 1rem; color: var(--text-color-light); font-size: 1.4rem;">Esqueci minha senha</a>
             <p class="signup-link">
                 Não tem uma conta? <a href="onboarding.html">Cadastre-se</a>
             </p>
@@ -59,22 +45,18 @@
     </div>
 
     <div id="appContainer" class="app-container">
-        <!-- O sidebar se transforma em barra de navegação inferior no mobile -->
         <div class="sidebar">
             <div class="sidebar-header">
                 <h1><i class="fas fa-cloud"></i> <span>OREH</span></h1>
             </div>
             <ul class="nav-links">
-                <!-- Itens principais visíveis na barra móvel e no desktop -->
                 <li><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
                 <li><a href="#" class="nav-link" data-page="atendimentos"><i class="fas fa-comments"></i> <span>Atendimentos</span></a></li>
                 <li><a href="#" class="nav-link" data-page="clients"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
                 <li><a href="#" class="nav-link" data-page="agenda"><i class="fas fa-calendar"></i> <span>Agenda</span></a></li>
 
-                <!-- Botão "Mais" que aparece apenas no mobile -->
                 <li class="mobile-only"><a href="#" id="moreMenuBtn" class="nav-link" data-page="more"><i class="fas fa-ellipsis-h"></i> <span>Mais</span></a></li>
 
-                <!-- Itens que aparecem no menu lateral do desktop e dentro do menu "Mais" no mobile -->
                 <li class="desktop-only"><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i> <span>Conexão</span></a></li>
                 <li class="desktop-only"><a href="#" class="nav-link" data-page="produtos"><i class="fas fa-box-open"></i> <span>Produtos</span></a></li>
                 <li class="desktop-only"><a href="#" class="nav-link" data-page="drive"><i class="fas fa-book"></i> <span>Biblioteca</span></a></li>
@@ -102,9 +84,7 @@
                 </div>
             </div>
 
-            <!-- Conteúdo das Páginas -->
-            <!-- O restante do seu HTML das páginas (dashboardPage, statusPage, etc.) continua aqui sem alterações... -->
-             <div id="dashboardPage" class="page-content active">
+            <div id="dashboardPage" class="page-content active">
                 <div class="metrics-grid">
                     <div class="metric-card">
                         <div class="card-icon icon-atendimentos"><i class="fas fa-comment-dots"></i></div>
@@ -212,8 +192,7 @@
                  <div class="human-attention-section">
                     <h3><i class="fas fa-exclamation-triangle"></i> Atendimento Humano Necessário</h3>
                     <div id="humanAttentionContainer" class="human-attention-container">
-                        <!-- Cards de atendimento humano serão inseridos aqui -->
-                    </div>
+                        </div>
                 </div>
                 <div class="page-header">
                     <h2>Funil de Atendimentos</h2>
@@ -445,8 +424,7 @@
                    <div class="ia-card">
                        <h3>Horário de Atendimento</h3>
                        <div class="business-hours-grid" id="businessHoursContainer">
-                           <!-- Linhas de dias da semana serão inseridas via JS -->
-                       </div>
+                           </div>
                    </div>
 
                    <div class="ia-card-footer">
@@ -534,12 +512,30 @@
                             </div>
                         </div>
                     </form>
+
+                    <form id="passwordSettingsForm">
+                        <div class="settings-card">
+                            <h3>Alterar Senha</h3>
+                            <div class="settings-grid">
+                                <div class="form-group">
+                                    <label for="newPassword">Nova Senha</label>
+                                    <input type="password" id="newPassword" placeholder="Digite sua nova senha (mín. 6 caracteres)" required autocomplete="new-password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmNewPassword">Confirmar Nova Senha</label>
+                                    <input type="password" id="confirmNewPassword" placeholder="Confirme sua nova senha" required autocomplete="new-password">
+                                </div>
+                            </div>
+                            <div class="settings-card-footer">
+                                <button id="savePasswordSettingsBtn" type="submit" class="btn btn-primary">Salvar Nova Senha</button>
+                            </div>
+                        </div>
+                    </form>
                     </div>
             </div>
         </div>
     </div>
 
-    <!-- Modais -->
     <div class="modal mobile-only" id="moreMenuModal">
         <div class="modal-content modal-content-bottom">
             <div class="modal-header">
@@ -553,7 +549,6 @@
                 <li><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de IA</span></a></li>
                 <li><a href="#" class="nav-link" data-page="finances"><i class="fas fa-money-bill"></i> <span>Assinatura</span></a></li>
                 <li><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> <span>Configurações</span></a></li>
-                <!-- Botão de Suporte WhatsApp Adicionado -->
                 <li><a href="https://wa.me/5511918752628" target="_blank" class="nav-link"><i class="fab fa-whatsapp"></i> <span>Suporte</span></a></li>
             </ul>
         </div>
@@ -818,7 +813,6 @@
             </form>
         </div>
     </div>
-    <!-- ✅ NOVO MODAL: Confirmação de Exclusão de Produto -->
     <div class="modal" id="deleteProductModal">
         <div class="modal-content" style="max-width: 450px;">
             <button class="close-modal">&times;</button>
@@ -842,8 +836,7 @@
 
     <audio id="notificationSound" src="notification.mp3" preload="auto"></audio>
 
-     <!-- Modal "Esqueci minha senha" -->
-    <div class="modal" id="forgotPasswordModal">
+     <div class="modal" id="forgotPasswordModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
             <div class="modal-header">
@@ -862,30 +855,6 @@
         </div>
     </div>
 
-    <!-- Modal para definir nova senha (após clicar no link do email) -->
-    <div class="modal" id="resetPasswordModal">
-        <div class="modal-content">
-            <button class="close-modal">&times;</button>
-            <div class="modal-header">
-                <h3>Crie sua Nova Senha</h3>
-            </div>
-            <form id="resetPasswordForm">
-                <div class="input-group">
-                    <label for="newPassword">Nova Senha</label>
-                    <input type="password" id="newPassword" required autocomplete="new-password">
-                </div>
-                 <div class="input-group">
-                    <label for="confirmNewPassword">Confirme a Nova Senha</label>
-                    <input type="password" id="confirmNewPassword" required autocomplete="new-password">
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" id="updatePasswordBtn" class="btn btn-primary">Salvar Nova Senha</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Botão Flutuante de Suporte WhatsApp -->
     <a href="https://wa.me/5511918752628" target="_blank" class="whatsapp-fab" aria-label="Suporte via WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>

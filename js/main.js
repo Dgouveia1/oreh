@@ -1,11 +1,12 @@
-import { checkLoginState, login, logout, signUp, showForgotPasswordModal, handleForgotPassword, handlePasswordUpdate } from './auth.js'; // Importa as novas funções
+import { checkLoginState, login, logout, signUp, showForgotPasswordModal, handleForgotPassword } from './auth.js'; // Importa as funções (sem handlePasswordUpdate)
 import { setupNavigation, setupModals, setupUploadModal, setupThemeToggle } from './ui.js';
 import { saveAiSettings } from './ia.js';
 import { disconnectInstance } from './status.js';
 import { saveEvent, changeDay } from './agenda.js';
 import { descartarLead, takeOverChat } from './atendimentos.js';
 import { uploadFile, deleteFile } from './drive.js';
-import { saveUserSettings, saveCompanySettings } from './settings.js';
+// ✅ ATUALIZADO: Importa 'savePasswordSettings' do settings.js
+import { loadSettings, saveUserSettings, saveCompanySettings, savePasswordSettings } from './settings.js';
 // ✅ ATUALIZADO: Importa 'confirmDeleteProduct' e remove 'deleteProduct'
 import { handleProductFormSubmit, openEditModal as openEditProductModal, setupProductEventListeners, confirmDeleteProduct } from './produtos.js';
 import { handleClientFormSubmit, deleteClient, openEditModal as openEditClientModal, setupClientTableListeners } from './clientes.js';
@@ -68,10 +69,7 @@ function setupEventListeners() {
         forgotPasswordForm.addEventListener('submit', handleForgotPassword);
     }
 
-    const resetPasswordForm = document.getElementById('resetPasswordForm');
-    if (resetPasswordForm) {
-        resetPasswordForm.addEventListener('submit', handlePasswordUpdate);
-    }
+    // ✅ REMOVIDO: Listener para 'resetPasswordForm' (modal) foi removido.
      // --- Fim dos Listeners de Redefinição ---
 
 
@@ -264,6 +262,12 @@ function setupEventListeners() {
     const companySettingsForm = document.getElementById('companySettingsForm');
     if (companySettingsForm) companySettingsForm.addEventListener('submit', saveCompanySettings);
 
+    // ✅ NOVO LISTENER: Adiciona listener para o novo formulário de senha
+    const passwordSettingsForm = document.getElementById('passwordSettingsForm');
+    if (passwordSettingsForm) {
+        passwordSettingsForm.addEventListener('submit', savePasswordSettings);
+    }
+
     // Modais de Criação
     const openProductModalBtn = document.getElementById('openProductModalBtn');
     if (openProductModalBtn) {
@@ -312,4 +316,3 @@ document.addEventListener('DOMContentLoaded', async () => {
     // A splash screen é escondida após a verificação de login
     hideSplashScreen();
 });
-

@@ -126,3 +126,24 @@
         padding: 2.5rem;
     }
 }
+
+/* ✅ NOVOS ESTILOS PARA O CARD DE SENHA */
+
+/* Ícone de cadeado para o título */
+#passwordSettingsForm .settings-card h3::before {
+    content: '🔒';
+    font-size: 2.4rem;
+}
+
+/* Ajuste para o grid do card de senha */
+#passwordSettingsForm .settings-grid {
+    /* Força 2 colunas no grid de senha, mesmo em desktop */
+    grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 768px) {
+    /* Mantém 1 coluna em mobile */
+    #passwordSettingsForm .settings-grid {
+        grid-template-columns: 1fr;
+    }
+}

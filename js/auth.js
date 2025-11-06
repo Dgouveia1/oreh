@@ -32,13 +32,14 @@ async function checkSubscriptionStatus(companyData) {
 
             if (modal) {
                 if (portalBtn) {
-                    // Se a URL da fatura for encontrada, usa ela. Senão, mantém o link para a página de finanças.
+                    // Se a URL da fatura for encontrada, usa ela.
                     if (paymentUrl) {
                         portalBtn.onclick = () => window.open(paymentUrl, '_blank');
                         portalBtn.textContent = 'Pagar Fatura Pendente';
                     } else {
-                        // Fallback se não achar URL da fatura (ex: só status local 'overdue')
-                        portalBtn.onclick = () => window.location.href='/finances';
+                        // ✅ CORREÇÃO: Fallback aponta para o portal do cliente Asaas, igual à página de finanças.
+                        const portalLink = `https://www.asaas.com/portal/customers/${companyData.asaas_customer_id}`;
+                        portalBtn.onclick = () => window.open(portalLink, '_blank');
                         portalBtn.textContent = 'Gerir Assinatura';
                     }
                 }
@@ -51,20 +52,6 @@ async function checkSubscriptionStatus(companyData) {
         console.error('[Auth.js] Erro ao verificar status da assinatura no Asaas:', error);
         logEvent('ERROR', 'Falha ao checar status da assinatura', { errorMessage: error.message });
         // Continua o login mesmo com erro na API de pagamento.
-    }
-}
-
-// Função para verificar se o usuário chegou via link de redefinição de senha
-function checkForPasswordReset() {
-    const hash = window.location.hash;
-    if (hash.includes('type=recovery') && hash.includes('access_token=')) {
-        console.log("[Auth.js] Detectado link de redefinição de senha.");
-        const resetModal = document.getElementById('resetPasswordModal');
-        if (resetModal) {
-            resetModal.style.display = 'flex';
-        }
-        // Limpa o hash para não reabrir o modal em reloads
-        window.location.hash = '';
     }
 }
 
@@ -112,21 +99,12 @@ async function checkLoginState() {
 
         } else {
             console.warn('[Auth.js] Usuário logado mas sem empresa associada. Redirecionando para onboarding.');
-            // Se o usuário está logado mas não tem empresa, pode ter vindo de um link de reset
-            // ou outra situação anômala. Verifica o reset ANTES de redirecionar.
-            checkForPasswordReset();
-            // Se não for reset, redireciona para onboarding
-            const resetModal = document.getElementById('resetPasswordModal');
-            if (!resetModal || resetModal.style.display !== 'flex') {
-                 window.location.replace('onboarding.html');
-            }
+            window.location.replace('onboarding.html');
         }
 
     } else {
         loginPage.style.display = 'flex';
         appContainer.style.display = 'none';
-         // Verifica se há um reset pendente mesmo sem sessão (usuário clicou no link mas não está logado)
-        checkForPasswordReset();
     }
 }
 
@@ -259,7 +237,7 @@ async function signUp() {
 
 // --- Funções de Redefinição de Senha ---
 
-// Mostra o modal para inserir o email
+// Mostra o modal para inserir o email (ISSO É MANTIDO)
 function showForgotPasswordModal() {
     const modal = document.getElementById('forgotPasswordModal');
     if (modal) {
@@ -267,7 +245,7 @@ function showForgotPasswordModal() {
     }
 }
 
-// Lida com o envio do link de redefinição
+// Lida com o envio do link de redefinição (ISSO É MANTIDO)
 async function handleForgotPassword(event) {
     event.preventDefault();
     const emailInput = document.getElementById('forgotPasswordEmail');
@@ -307,55 +285,5 @@ async function handleForgotPassword(event) {
     }
 }
 
-// Lida com a atualização da senha (após clicar no link)
-async function handlePasswordUpdate(event) {
-    event.preventDefault();
-    const newPasswordInput = document.getElementById('newPassword');
-    const confirmPasswordInput = document.getElementById('confirmNewPassword');
-    const updateBtn = document.getElementById('updatePasswordBtn');
-    const newPassword = newPasswordInput.value;
-
-    if (newPassword !== confirmPasswordInput.value) {
-        showToast('As novas senhas não coincidem.', 'error');
-        return;
-    }
-    if (newPassword.length < 6) {
-        showToast('A nova senha deve ter pelo menos 6 caracteres.', 'error');
-        return;
-    }
-
-    updateBtn.disabled = true;
-    updateBtn.textContent = 'Salvando...';
-
-    try {
-        // updateUser só funciona se o usuário estiver logado (o que acontece automaticamente
-        // quando ele clica no link de recuperação e é redirecionado para a app com os tokens na URL)
-        const { data, error } = await supabaseClient.auth.updateUser({
-            password: newPassword
-        });
-
-        if (error) throw error;
-
-        showToast('Senha atualizada com sucesso! Você já pode fazer login.', 'success');
-        logEvent('INFO', `Senha redefinida com sucesso para o usuário logado.`);
-        document.getElementById('resetPasswordModal').style.display = 'none';
-        newPasswordInput.value = '';
-        confirmPasswordInput.value = '';
-         // Após redefinir, pode ser útil chamar checkLoginState para garantir que a UI esteja correta
-        await checkLoginState();
-
-    } catch (error) {
-        console.error('[Auth.js] Erro ao atualizar senha:', error);
-        showToast(`Erro ao atualizar senha: ${error.message}`, 'error');
-        logEvent('ERROR', `Falha ao atualizar senha após reset`, { errorMessage: error.message });
-         // Se deu erro (ex: token expirado), fecha o modal de reset e talvez mostre o de login
-        document.getElementById('resetPasswordModal').style.display = 'none';
-        await checkLoginState(); // Verifica o estado novamente
-    } finally {
-        updateBtn.disabled = false;
-        updateBtn.textContent = 'Salvar Nova Senha';
-    }
-}
-
-// Exporta as novas funções e adiciona listeners no main.js
-export { checkLoginState, login, logout, signUp, showForgotPasswordModal, handleForgotPassword, handlePasswordUpdate };
+// Exporta as funções
+export { checkLoginState, login, logout, signUp, showForgotPasswordModal, handleForgotPassword };

@@ -128,7 +128,48 @@ async function saveCompanySettings(event) {
     }
 }
 
+// ✅ NOVA FUNÇÃO: Salvar nova senha (lógica movida de auth.js)
+export async function savePasswordSettings(event) {
+    event.preventDefault();
+    const newPasswordInput = document.getElementById('newPassword');
+    const confirmPasswordInput = document.getElementById('confirmNewPassword');
+    const updateBtn = document.getElementById('savePasswordSettingsBtn');
+    const newPassword = newPasswordInput.value;
 
+    if (newPassword !== confirmPasswordInput.value) {
+        showToast('As novas senhas não coincidem.', 'error');
+        return;
+    }
+    if (newPassword.length < 6) {
+        showToast('A nova senha deve ter pelo menos 6 caracteres.', 'error');
+        return;
+    }
+
+    updateBtn.disabled = true;
+    updateBtn.textContent = 'Salvando...';
+
+    try {
+        // updateUser funciona para o usuário logado (que é o caso aqui)
+        const { data, error } = await supabaseClient.auth.updateUser({
+            password: newPassword
+        });
+
+        if (error) throw error;
+
+        showToast('Senha atualizada com sucesso!', 'success');
+        logEvent('INFO', `Senha redefinida com sucesso pelo usuário.`);
+        newPasswordInput.value = '';
+        confirmPasswordInput.value = '';
+
+    } catch (error) {
+        console.error('[Settings.js] Erro ao atualizar senha:', error);
+        showToast(`Erro ao atualizar senha: ${error.message}`, 'error');
+        logEvent('ERROR', `Falha ao atualizar senha`, { errorMessage: error.message });
+    } finally {
+        updateBtn.disabled = false;
+        updateBtn.textContent = 'Salvar Nova Senha';
+    }
+}
 
 
 export { loadSettings, saveUserSettings, saveCompanySettings };
