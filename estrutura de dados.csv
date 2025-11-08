@@ -222,8 +222,8 @@ categoria,objeto,detalhes
 2. CONSTRAINTS (CHAVES),TABELA: users,CONSTRAINT: users_company_id_fkey1 | TIPO: FOREIGN KEY | COLUNA(S): company_id | REFERENCIA: companies(id)
 2. CONSTRAINTS (CHAVES),TABELA: users,CONSTRAINT: users_email_key1 | TIPO: UNIQUE | COLUNA(S): email
 2. CONSTRAINTS (CHAVES),TABELA: users,null
-3. ÍNDICES,TABELA: admin_users,ÍNDICE: admin_users_email_key | DEFINIÇÃO: CREATE UNIQUE INDEX admin_users_email_key ON public.admin_users USING btree (email)
 3. ÍNDICES,TABELA: admin_users,ÍNDICE: admin_users_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX admin_users_pkey ON public.admin_users USING btree (id)
+3. ÍNDICES,TABELA: admin_users,ÍNDICE: admin_users_email_key | DEFINIÇÃO: CREATE UNIQUE INDEX admin_users_email_key ON public.admin_users USING btree (email)
 3. ÍNDICES,TABELA: affiliate_legal_documents,ÍNDICE: affiliate_legal_documents_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX affiliate_legal_documents_pkey ON public.affiliate_legal_documents USING btree (id)
 3. ÍNDICES,TABELA: affiliates,ÍNDICE: affiliates_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX affiliates_pkey ON public.affiliates USING btree (id)
 3. ÍNDICES,TABELA: ai_token_usage,ÍNDICE: ai_token_usage_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX ai_token_usage_pkey ON public.ai_token_usage USING btree (id)
@@ -237,10 +237,10 @@ categoria,objeto,detalhes
 3. ÍNDICES,TABELA: company_user_details_sync,ÍNDICE: idx_company_details_sync_status | DEFINIÇÃO: CREATE INDEX idx_company_details_sync_status ON public.company_user_details_sync USING btree (company_status)
 3. ÍNDICES,TABELA: company_user_details_sync,ÍNDICE: idx_company_details_sync_affiliate | DEFINIÇÃO: CREATE INDEX idx_company_details_sync_affiliate ON public.company_user_details_sync USING btree (affiliate_id)
 3. ÍNDICES,TABELA: company_user_details_sync,ÍNDICE: company_user_details_sync_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX company_user_details_sync_pkey ON public.company_user_details_sync USING btree (company_id)
-3. ÍNDICES,TABELA: coupons,ÍNDICE: coupons_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX coupons_pkey ON public.coupons USING btree (id)
 3. ÍNDICES,TABELA: coupons,ÍNDICE: coupons_code_key | DEFINIÇÃO: CREATE UNIQUE INDEX coupons_code_key ON public.coupons USING btree (code)
-3. ÍNDICES,TABELA: documents,ÍNDICE: idx_documents_file_path | DEFINIÇÃO: CREATE INDEX idx_documents_file_path ON public.documents USING btree (file_path)
+3. ÍNDICES,TABELA: coupons,ÍNDICE: coupons_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX coupons_pkey ON public.coupons USING btree (id)
 3. ÍNDICES,TABELA: documents,ÍNDICE: documents_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX documents_pkey ON public.documents USING btree (id)
+3. ÍNDICES,TABELA: documents,ÍNDICE: idx_documents_file_path | DEFINIÇÃO: CREATE INDEX idx_documents_file_path ON public.documents USING btree (file_path)
 3. ÍNDICES,TABELA: events,ÍNDICE: events_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX events_pkey ON public.events USING btree (telefone)
 3. ÍNDICES,TABELA: ingestion_queue,ÍNDICE: ingestion_queue_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX ingestion_queue_pkey ON public.ingestion_queue USING btree (id)
 3. ÍNDICES,TABELA: legal_documents,ÍNDICE: legal_documents_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX legal_documents_pkey ON public.legal_documents USING btree (id)
@@ -251,13 +251,7 @@ categoria,objeto,detalhes
 3. ÍNDICES,TABELA: terms_acceptances,ÍNDICE: terms_acceptances_pkey | DEFINIÇÃO: CREATE UNIQUE INDEX terms_acceptances_pkey ON public.terms_acceptances USING btree (id)
 3. ÍNDICES,TABELA: users,ÍNDICE: users_email_key1 | DEFINIÇÃO: CREATE UNIQUE INDEX users_email_key1 ON public.users USING btree (email)
 3. ÍNDICES,TABELA: users,ÍNDICE: users_pkey1 | DEFINIÇÃO: CREATE UNIQUE INDEX users_pkey1 ON public.users USING btree (id)
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(double precision[], integer, boolean)
- RETURNS halfvec
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$array_to_halfvec$function$
-"
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(real[], integer, boolean)
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(numeric[], integer, boolean)
  RETURNS halfvec
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
@@ -269,19 +263,25 @@ AS '$libdir/vector', $function$array_to_halfvec$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_halfvec$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(numeric[], integer, boolean)
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(real[], integer, boolean)
  RETURNS halfvec
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_halfvec$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(double precision[], integer, boolean)
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_halfvec,"CREATE OR REPLACE FUNCTION public.array_to_halfvec(double precision[], integer, boolean)
+ RETURNS halfvec
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$array_to_halfvec$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(numeric[], integer, boolean)
  RETURNS sparsevec
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_sparsevec$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(real[], integer, boolean)
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(double precision[], integer, boolean)
  RETURNS sparsevec
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
@@ -293,19 +293,13 @@ AS '$libdir/vector', $function$array_to_sparsevec$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_sparsevec$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(numeric[], integer, boolean)
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_sparsevec,"CREATE OR REPLACE FUNCTION public.array_to_sparsevec(real[], integer, boolean)
  RETURNS sparsevec
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_sparsevec$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(numeric[], integer, boolean)
- RETURNS vector
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$array_to_vector$function$
-"
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(real[], integer, boolean)
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(double precision[], integer, boolean)
  RETURNS vector
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
@@ -317,7 +311,13 @@ AS '$libdir/vector', $function$array_to_vector$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$array_to_vector$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(double precision[], integer, boolean)
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(real[], integer, boolean)
+ RETURNS vector
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$array_to_vector$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: array_to_vector,"CREATE OR REPLACE FUNCTION public.array_to_vector(numeric[], integer, boolean)
  RETURNS vector
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
@@ -335,11 +335,11 @@ AS '$libdir/vector', $function$binary_quantize$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_binary_quantize$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: cosine_distance,"CREATE OR REPLACE FUNCTION public.cosine_distance(halfvec, halfvec)
+4. FUNÇÕES (RPC),FUNÇÃO: cosine_distance,"CREATE OR REPLACE FUNCTION public.cosine_distance(vector, vector)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$halfvec_cosine_distance$function$
+AS '$libdir/vector', $function$cosine_distance$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: cosine_distance,"CREATE OR REPLACE FUNCTION public.cosine_distance(sparsevec, sparsevec)
  RETURNS double precision
@@ -347,11 +347,11 @@ AS '$libdir/vector', $function$halfvec_cosine_distance$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$sparsevec_cosine_distance$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: cosine_distance,"CREATE OR REPLACE FUNCTION public.cosine_distance(vector, vector)
+4. FUNÇÕES (RPC),FUNÇÃO: cosine_distance,"CREATE OR REPLACE FUNCTION public.cosine_distance(halfvec, halfvec)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$cosine_distance$function$
+AS '$libdir/vector', $function$halfvec_cosine_distance$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: create_ingestion_job,"CREATE OR REPLACE FUNCTION public.create_ingestion_job()
  RETURNS trigger
@@ -630,6 +630,59 @@ BEGIN
 END;
 $function$
 "
+4. FUNÇÕES (RPC),FUNÇÃO: get_chat_history,"CREATE OR REPLACE FUNCTION public.get_chat_history(p_company_id uuid, p_customer_phone text)
+ RETURNS TABLE(message_timestamp timestamp with time zone, sender text, message text)
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$
+DECLARE
+    v_session_id text;
+BEGIN
+    -- Constrói o session_id como no n8n: [company_id]_[telefone_sem_55]
+    v_session_id := p_company_id::text || '_' || p_customer_phone;
+
+    RETURN QUERY
+    SELECT
+        h.created_at AS message_timestamp,
+        
+        -- Define o 'remetente' (IA ou Humano)
+        CASE
+            WHEN (h.message->>'type') = 'human' THEN 'Humano'
+            WHEN (h.message->>'type') = 'ai' THEN 'IA'
+            ELSE 'Sistema'
+        END AS sender,
+
+        -- Extrai e limpa o conteúdo da mensagem
+        CASE
+            -- MENSAGEM HUMANA: Extrai o texto após 'MENSAGEM DO USUÁRIO:'
+            WHEN (h.message->>'type') = 'human' THEN
+                COALESCE(
+                    trim(substring(h.message->>'content' from 'MENSAGEM DO USUÁRIO:(.*)')),
+                    h.message->>'content'
+                )
+            
+            -- MENSAGEM DA IA: Desempacota o JSON escapado
+            WHEN (h.message->>'type') = 'ai' THEN
+                (
+                    SELECT 
+                        string_agg(replace(elem::text, '""', ''), E'\n') 
+                    FROM 
+                        jsonb_array_elements_text( ((h.message->>'content')::jsonb -> 'messages') ) AS elem
+                )
+            
+            -- Fallback para qualquer outro tipo
+            ELSE
+                h.message->>'content'
+        END AS message
+    FROM
+        public.n8n_chat_histories h
+    WHERE
+        h.session_id = v_session_id
+    ORDER BY
+        h.created_at ASC;
+END;
+$function$
+"
 4. FUNÇÕES (RPC),FUNÇÃO: get_clients_details,"CREATE OR REPLACE FUNCTION public.get_clients_details()
  RETURNS TABLE(company_id uuid, contact_name text, company_name text, company_cnpj text, company_phone text, plan_name text, status text, affiliate_name text, plan_id uuid)
  LANGUAGE plpgsql
@@ -663,41 +716,34 @@ $function$
  SECURITY DEFINER
 AS $function$
 DECLARE
-    -- Variáveis para armazenar o resultado final e o ID da empresa do usuário logado
     result json;
     logged_in_company_id uuid;
+    v_chat_count INT;
+    v_chat_limit INT;
 BEGIN
     -- 1. Obter o company_id do usuário autenticado
-    -- Isso garante que a função SÓ retorne dados da empresa do usuário logado.
     SELECT company_id INTO logged_in_company_id
     FROM public.users
     WHERE id = auth.uid();
 
-    -- Se não encontrar uma empresa (ex: usuário recém-criado, admin), retorna um JSON vazio
     IF logged_in_company_id IS NULL THEN
         RETURN '{}'::json;
     END IF;
 
-    -- 2. Construir o JSON com todas as métricas agregadas
+    -- 2. Buscar métricas principais
     WITH 
-    
-    -- CTE 1: Filtra apenas os chats da empresa logada NO MÊS ATUAL
     chats_mes_corrente AS (
         SELECT *
         FROM public.chats
         WHERE company_id = logged_in_company_id
           AND created_at >= date_trunc('month', current_date)
           AND created_at < date_trunc('month', current_date) + interval '1 month'
-          -- Ignora chats descartados
           AND (temperatura <> 'DESCARTE' OR temperatura IS NULL) 
     ),
     
-    -- CTE 2: Calcula o volume de atendimentos nos últimos 7 dias
     volume_diario AS (
         SELECT
-            -- Gera os últimos 7 dias (0 = hoje, 6 = 6 dias atrás)
             (current_date - g.day) AS day,
-            -- Conta os chats para cada dia
             COUNT(c.id) AS count
         FROM generate_series(0, 6) AS g(day)
         LEFT JOIN public.chats c ON 
@@ -705,41 +751,47 @@ BEGIN
             AND c.company_id = logged_in_company_id
             AND (c.temperatura <> 'DESCARTE' OR c.temperatura IS NULL)
         GROUP BY 1
-        ORDER BY 1 -- Ordena do mais antigo para o mais novo
+        ORDER BY 1
+    ),
+
+    -- NOVO: Buscar o limite do plano e a contagem de chats
+    plan_data AS (
+        SELECT 
+            p.monthly_chat_limit,
+            (SELECT COUNT(*) FROM chats_mes_corrente) as chat_count
+        FROM public.companies c
+        LEFT JOIN public.plans p ON c.plan_id = p.id
+        WHERE c.id = logged_in_company_id
     )
 
     -- 3. Monta o objeto JSON final
     SELECT
         json_build_object(
-            -- Métrica 1: Total de Atendimentos no Mês
+            -- Métrica antiga mantida
             'total_atendimentos_mes', (SELECT COUNT(*) FROM chats_mes_corrente),
 
-            -- Métrica 2 (Lógica Alterada): % de atendimentos que NÃO pediram atendimento humano
-            'resolvidos_ia_percent',
-            ROUND(
-                CASE
-                    WHEN (SELECT COUNT(*) FROM chats_mes_corrente) > 0 THEN
-                        ((SELECT COUNT(*) FROM chats_mes_corrente WHERE status <> 'ATENDIMENTO_HUMANO') * 100.0) / (SELECT COUNT(*) FROM chats_mes_corrente)
-                    ELSE 0
-                END
-            ),
+            -- Campos antigos removidos (resolvidos_ia_percent, leads_qualificados)
+            
+            -- NOVOS CAMPOS ADICIONADOS
+            'chat_count_month', (SELECT chat_count FROM plan_data),
+            'chat_limit_plan', (SELECT monthly_chat_limit FROM plan_data),
 
-            -- Métrica 3 (Lógica Alterada): Quantidade de leads que chegaram até 'Agendado'
-            'leads_agendados', (SELECT COUNT(*) FROM chats_mes_corrente WHERE temperatura = 'Agendado'), -- LÓGICA ALTERADA
-
-            -- Gráfico Funil (mantém a lógica anterior)
+            -- Gráficos (mantidos)
             'funil_data', json_build_object(
                 'topo', (SELECT COUNT(*) FROM chats_mes_corrente WHERE temperatura = 'Novo'),
                 'meio', (SELECT COUNT(*) FROM chats_mes_corrente WHERE temperatura = 'Atendimento'),
                 'fundo', (SELECT COUNT(*) FROM chats_mes_corrente WHERE temperatura = 'Agendado')
             ),
-
-            -- Gráfico: Dados para o Volume de Atendimentos
-            'volume_ultimos_7_dias', (SELECT json_agg(vd) FROM volume_diario vd)
+            'volume_ultimos_7_dias', (SELECT json_agg(vd) FROM volume_diario vd),
+            'new_clients_month', (
+                SELECT COUNT(*) 
+                FROM public.clients 
+                WHERE company_id = logged_in_company_id 
+                  AND created_at >= date_trunc('month', current_date)
+            )
         )
-    INTO result; -- Armazena o JSON na variável 'result'
+    INTO result;
 
-    -- 4. Retornar o objeto JSON completo
     RETURN result;
 END;
 $function$
@@ -1192,17 +1244,17 @@ $function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$sparsevec_inner_product$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: inner_product,"CREATE OR REPLACE FUNCTION public.inner_product(vector, vector)
- RETURNS double precision
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$inner_product$function$
-"
 4. FUNÇÕES (RPC),FUNÇÃO: inner_product,"CREATE OR REPLACE FUNCTION public.inner_product(halfvec, halfvec)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_inner_product$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: inner_product,"CREATE OR REPLACE FUNCTION public.inner_product(vector, vector)
+ RETURNS double precision
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$inner_product$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: ivfflat_bit_support,"CREATE OR REPLACE FUNCTION public.ivfflat_bit_support(internal)
  RETURNS internal
@@ -1225,12 +1277,6 @@ AS '$libdir/vector', $function$ivfflathandler$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$jaccard_distance$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: l1_distance,"CREATE OR REPLACE FUNCTION public.l1_distance(sparsevec, sparsevec)
- RETURNS double precision
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$sparsevec_l1_distance$function$
-"
 4. FUNÇÕES (RPC),FUNÇÃO: l1_distance,"CREATE OR REPLACE FUNCTION public.l1_distance(vector, vector)
  RETURNS double precision
  LANGUAGE c
@@ -1243,23 +1289,29 @@ AS '$libdir/vector', $function$l1_distance$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_l1_distance$function$
 "
+4. FUNÇÕES (RPC),FUNÇÃO: l1_distance,"CREATE OR REPLACE FUNCTION public.l1_distance(sparsevec, sparsevec)
+ RETURNS double precision
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$sparsevec_l1_distance$function$
+"
 4. FUNÇÕES (RPC),FUNÇÃO: l2_distance,"CREATE OR REPLACE FUNCTION public.l2_distance(halfvec, halfvec)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_l2_distance$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: l2_distance,"CREATE OR REPLACE FUNCTION public.l2_distance(sparsevec, sparsevec)
- RETURNS double precision
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$sparsevec_l2_distance$function$
-"
 4. FUNÇÕES (RPC),FUNÇÃO: l2_distance,"CREATE OR REPLACE FUNCTION public.l2_distance(vector, vector)
  RETURNS double precision
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$l2_distance$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: l2_distance,"CREATE OR REPLACE FUNCTION public.l2_distance(sparsevec, sparsevec)
+ RETURNS double precision
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$sparsevec_l2_distance$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: l2_norm,"CREATE OR REPLACE FUNCTION public.l2_norm(sparsevec)
  RETURNS double precision
@@ -1273,12 +1325,6 @@ AS '$libdir/vector', $function$sparsevec_l2_norm$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_l2_norm$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: l2_normalize,"CREATE OR REPLACE FUNCTION public.l2_normalize(sparsevec)
- RETURNS sparsevec
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$sparsevec_l2_normalize$function$
-"
 4. FUNÇÕES (RPC),FUNÇÃO: l2_normalize,"CREATE OR REPLACE FUNCTION public.l2_normalize(vector)
  RETURNS vector
  LANGUAGE c
@@ -1290,6 +1336,12 @@ AS '$libdir/vector', $function$l2_normalize$function$
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_l2_normalize$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: l2_normalize,"CREATE OR REPLACE FUNCTION public.l2_normalize(sparsevec)
+ RETURNS sparsevec
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$sparsevec_l2_normalize$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: login,"CREATE OR REPLACE FUNCTION public.login(email_param text, password_param text)
  RETURNS json
@@ -1467,17 +1519,17 @@ AS '$libdir/vector', $function$sparsevec_to_vector$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$sparsevec_typmod_in$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: subvector,"CREATE OR REPLACE FUNCTION public.subvector(halfvec, integer, integer)
- RETURNS halfvec
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$halfvec_subvector$function$
-"
 4. FUNÇÕES (RPC),FUNÇÃO: subvector,"CREATE OR REPLACE FUNCTION public.subvector(vector, integer, integer)
  RETURNS vector
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$subvector$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: subvector,"CREATE OR REPLACE FUNCTION public.subvector(halfvec, integer, integer)
+ RETURNS halfvec
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$halfvec_subvector$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: sync_company_user_details,"CREATE OR REPLACE FUNCTION public.sync_company_user_details()
  RETURNS trigger
@@ -1688,17 +1740,17 @@ AS '$libdir/vector', $function$vector_combine$function$
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$vector_concat$function$
 "
-4. FUNÇÕES (RPC),FUNÇÃO: vector_dims,"CREATE OR REPLACE FUNCTION public.vector_dims(vector)
- RETURNS integer
- LANGUAGE c
- IMMUTABLE PARALLEL SAFE STRICT
-AS '$libdir/vector', $function$vector_dims$function$
-"
 4. FUNÇÕES (RPC),FUNÇÃO: vector_dims,"CREATE OR REPLACE FUNCTION public.vector_dims(halfvec)
  RETURNS integer
  LANGUAGE c
  IMMUTABLE PARALLEL SAFE STRICT
 AS '$libdir/vector', $function$halfvec_vector_dims$function$
+"
+4. FUNÇÕES (RPC),FUNÇÃO: vector_dims,"CREATE OR REPLACE FUNCTION public.vector_dims(vector)
+ RETURNS integer
+ LANGUAGE c
+ IMMUTABLE PARALLEL SAFE STRICT
+AS '$libdir/vector', $function$vector_dims$function$
 "
 4. FUNÇÕES (RPC),FUNÇÃO: vector_eq,"CREATE OR REPLACE FUNCTION public.vector_eq(vector, vector)
  RETURNS boolean
@@ -1834,9 +1886,17 @@ AS '$libdir/vector', $function$vector_typmod_in$function$
    FROM users
   WHERE (users.id = auth.uid())) = 'super_admin'::text)"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliate_legal_documents,POLÍTICA: Allow public read access for affiliates | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): true | VERIFICANDO (WITH CHECK): N/A
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow super_admins to update affiliates | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): (( SELECT users.role
+   FROM users
+  WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): (( SELECT users.role
+   FROM users
+  WHERE (users.id = auth.uid())) = 'super_admin'::text)"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow admins to read affiliates | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = ANY (ARRAY['super_admin'::text, 'admin'::text])) | VERIFICANDO (WITH CHECK): N/A"
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow super_admins to insert affiliates | COMANDO: INSERT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): N/A | VERIFICANDO (WITH CHECK): (( SELECT users.role
+   FROM users
+  WHERE (users.id = auth.uid())) = 'super_admin'::text)"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow super_admins to delete affiliates | COMANDO: DELETE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): N/A"
@@ -1848,14 +1908,6 @@ AS '$libdir/vector', $function$vector_typmod_in$function$
    FROM users
   WHERE (users.id = auth.uid())) = ANY (ARRAY['admin'::text, 'super_admin'::text])) | VERIFICANDO (WITH CHECK): N/A"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,POLÍTICA: Allow new users to create their own affiliate profile | COMANDO: INSERT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): N/A | VERIFICANDO (WITH CHECK): (auth.uid() = id)
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow super_admins to update affiliates | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): (( SELECT users.role
-   FROM users
-  WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): (( SELECT users.role
-   FROM users
-  WHERE (users.id = auth.uid())) = 'super_admin'::text)"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: affiliates,"POLÍTICA: Allow super_admins to insert affiliates | COMANDO: INSERT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): N/A | VERIFICANDO (WITH CHECK): (( SELECT users.role
-   FROM users
-  WHERE (users.id = auth.uid())) = 'super_admin'::text)"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: ai_token_usage,POLÍTICA: Usuários podem ver e criar logs de uso da sua própria empresa | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = get_my_company_id()) | VERIFICANDO (WITH CHECK): N/A
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: app_logs,"POLÍTICA: Allow users to read their own company logs | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): (( SELECT users.company_id
    FROM users
@@ -1867,11 +1919,6 @@ AS '$libdir/vector', $function$vector_typmod_in$function$
   WHERE (users.id = auth.uid()))) | VERIFICANDO (WITH CHECK): (company_id = ( SELECT users.company_id
    FROM users
   WHERE (users.id = auth.uid())))"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: companies,"POLÍTICA: Affiliates can only see their own clients | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): ((( SELECT admin_users.role
-   FROM admin_users
-  WHERE (admin_users.id = auth.uid())) = 'super_admin'::text) OR (affiliate_id = ( SELECT admin_users.affiliate_id
-   FROM admin_users
-  WHERE (admin_users.id = auth.uid())))) | VERIFICANDO (WITH CHECK): N/A"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: companies,"POLÍTICA: Authenticated users can view their own company | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): (id = ( SELECT users.company_id
    FROM users
   WHERE (users.id = auth.uid()))) | VERIFICANDO (WITH CHECK): N/A"
@@ -1879,15 +1926,20 @@ AS '$libdir/vector', $function$vector_typmod_in$function$
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: companies,"POLÍTICA: Allow users to update their own company | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.company_id
    FROM users
   WHERE (users.id = auth.uid())) = id) | VERIFICANDO (WITH CHECK): N/A"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: company_secrets,POLÍTICA: Usuários só podem aceder aos segredos da sua própria empresa | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = get_my_company_id()) | VERIFICANDO (WITH CHECK): N/A
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: companies,"POLÍTICA: Affiliates can only see their own clients | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): ((( SELECT admin_users.role
+   FROM admin_users
+  WHERE (admin_users.id = auth.uid())) = 'super_admin'::text) OR (affiliate_id = ( SELECT admin_users.affiliate_id
+   FROM admin_users
+  WHERE (admin_users.id = auth.uid())))) | VERIFICANDO (WITH CHECK): N/A"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: company_secrets,POLÍTICA: Allow company members to access their own secrets | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = app_auth.get_current_company_id()) | VERIFICANDO (WITH CHECK): (company_id = app_auth.get_current_company_id())
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: company_secrets,POLÍTICA: Usuários só podem acessar os segredos da sua própria empresa | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = get_my_company_id()) | VERIFICANDO (WITH CHECK): N/A
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: company_user_details_sync,"POLÍTICA: Allow super_admins full access SYNC | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
-   FROM users
-  WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): N/A"
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: company_secrets,POLÍTICA: Usuários só podem aceder aos segredos da sua própria empresa | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = get_my_company_id()) | VERIFICANDO (WITH CHECK): N/A
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: company_user_details_sync,"POLÍTICA: Allow admins view affiliated SYNC | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): ((( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = 'admin'::text) AND (affiliate_id = auth.uid())) | VERIFICANDO (WITH CHECK): N/A"
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: company_user_details_sync,"POLÍTICA: Allow super_admins full access SYNC | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
+   FROM users
+  WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): N/A"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: coupons,"POLÍTICA: Permitir acesso total de superadmins aos cupons | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): (( SELECT users.role
@@ -1911,16 +1963,16 @@ AS '$libdir/vector', $function$vector_typmod_in$function$
    FROM users
   WHERE (users.id = auth.uid())) = 'super_admin'::text)"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: legal_documents,POLÍTICA: Allow public read access | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): true | VERIFICANDO (WITH CHECK): N/A
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: plans,POLÍTICA: Allow authenticated users to read plans | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): true | VERIFICANDO (WITH CHECK): N/A
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: plans,"POLÍTICA: Allow admins and super_admins full access to plans | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = ANY (ARRAY['admin'::text, 'super_admin'::text])) | VERIFICANDO (WITH CHECK): (( SELECT users.role
    FROM users
   WHERE (users.id = auth.uid())) = ANY (ARRAY['admin'::text, 'super_admin'::text]))"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: plans,POLÍTICA: Allow authenticated users to read plans | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): true | VERIFICANDO (WITH CHECK): N/A
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow insert for own company products | COMANDO: INSERT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): N/A | VERIFICANDO (WITH CHECK): (company_id = ( SELECT users.company_id
-   FROM users
-  WHERE (users.id = auth.uid())))"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow read access to own company products | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = ( SELECT users.company_id
+   FROM users
+  WHERE (users.id = auth.uid()))) | VERIFICANDO (WITH CHECK): N/A"
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow update for own company products | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = ( SELECT users.company_id
    FROM users
   WHERE (users.id = auth.uid()))) | VERIFICANDO (WITH CHECK): N/A"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Users can manage their own company's products | COMANDO: ALL | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = ( SELECT users.company_id
@@ -1928,10 +1980,10 @@ AS '$libdir/vector', $function$vector_typmod_in$function$
   WHERE (users.id = auth.uid()))) | VERIFICANDO (WITH CHECK): (company_id = ( SELECT users.company_id
    FROM users
   WHERE (users.id = auth.uid())))"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow delete for own company products | COMANDO: DELETE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = ( SELECT users.company_id
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow insert for own company products | COMANDO: INSERT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): N/A | VERIFICANDO (WITH CHECK): (company_id = ( SELECT users.company_id
    FROM users
-  WHERE (users.id = auth.uid()))) | VERIFICANDO (WITH CHECK): N/A"
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow update for own company products | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = ( SELECT users.company_id
+  WHERE (users.id = auth.uid())))"
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: products,"POLÍTICA: Allow delete for own company products | COMANDO: DELETE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (company_id = ( SELECT users.company_id
    FROM users
   WHERE (users.id = auth.uid()))) | VERIFICANDO (WITH CHECK): N/A"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: terms_acceptances,"POLÍTICA: Allow super_admins to read all acceptances | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (( SELECT users.role
@@ -1939,6 +1991,5 @@ AS '$libdir/vector', $function$vector_typmod_in$function$
   WHERE (users.id = auth.uid())) = 'super_admin'::text) | VERIFICANDO (WITH CHECK): N/A"
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: terms_acceptances,POLÍTICA: Allow users to insert their own acceptance | COMANDO: INSERT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): N/A | VERIFICANDO (WITH CHECK): (auth.uid() = user_id)
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: terms_acceptances,POLÍTICA: Allow users to read their own acceptance | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (auth.uid() = user_id) | VERIFICANDO (WITH CHECK): N/A
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: users,POLÍTICA: Permitir ao usuário atualizar seus próprios dados | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (auth.uid() = id) | VERIFICANDO (WITH CHECK): N/A
-6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: users,POLÍTICA: Allow authenticated users to read public users | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: authenticated | USANDO (USING): true | VERIFICANDO (WITH CHECK): N/A
 6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: users,POLÍTICA: Permitir ao usuário ler seus próprios dados | COMANDO: SELECT | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (auth.uid() = id) | VERIFICANDO (WITH CHECK): N/A
+6. POLÍTICAS DE SEGURANÇA (RLS),TABELA: users,POLÍTICA: Permitir ao usuário atualizar seus próprios dados | COMANDO: UPDATE | PERMISSÃO: PERMISSIVE | PARA: public | USANDO (USING): (auth.uid() = id) | VERIFICANDO (WITH CHECK): N/A

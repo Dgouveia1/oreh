@@ -442,16 +442,36 @@ export function renderChatHistory(messagesContainer, messages, customerName) {
         
         const senderType = msg.sender.toLowerCase(); // 'humano' ou 'ia'
 
+        let finalMessageText = ''; // Variável para o texto final
+
         if (senderType === 'humano') {
             bubble.classList.add('human'); // Classe CSS 'human'
-            bubble.dataset.sender = 'Cliente'; // Rótulo "Humano"
-        } else {
+            bubble.dataset.sender = 'Cliente'; // Rótulo
+            
+            // Limpa o texto (remove aspas e barras extras que o SQL pode ter deixado)
+            const rawText = msg.message ? msg.message.replace(/["\\]/g, '') : '';
+            
+            // Tenta encontrar o marcador "MENSAGEM DO USUÁRIO:"
+            const splitMarker = 'Mensagem do usuario:';
+            const parts = rawText.split(splitMarker);
+            
+            if (parts.length > 1) {
+                // Se encontrou, pega a parte 2 (índice 1) e remove espaços
+                finalMessageText = parts[1].trim(); 
+            } else {
+                // Se não encontrou o marcador (talvez o SQL RPC já limpou ou é um formato antigo)
+                finalMessageText = rawText;
+            }
+            
+        } else { // Para 'ia' ou 'sistema'
             bubble.classList.add('ai'); // Classe CSS 'ai'
             bubble.dataset.sender = 'Oreh'; // Rótulo "IA"
+            // Mensagens da IA (retornadas pela RPC) já vêm limpas
+            finalMessageText = msg.message ? msg.message.replace(/["\\]/g, '') : '';
         }
-
-        const messageText = msg.message ? msg.message.replace(/["\\]/g, '') : '(Mensagem vazia)';
-        bubble.textContent = messageText;
+        
+        // Define o texto final
+        bubble.textContent = finalMessageText || '(Mensagem vazia)';
         
         messagesContainer.appendChild(bubble);
     });
@@ -459,7 +479,6 @@ export function renderChatHistory(messagesContainer, messages, customerName) {
     // Rola para a mensagem mais recente
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
-
 /**
  * ✅ ATUALIZADO: Esta função (do modal de BUSCA) agora usa a nova renderChatHistory.
  * Abre o modal de histórico (da BUSCA) e busca os dados no Supabase.
