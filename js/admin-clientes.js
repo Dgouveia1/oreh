@@ -278,7 +278,6 @@ export async function handleUserFormSubmit(event, userRole, currentAffiliateId) 
             affiliate_id: newAffiliateId || null
         };
 
-        // [MODIFICADO] Adiciona o plan_id E o status APENAS se for super_admin
         if (userRole === 'super_admin') {
             const newPlanId = document.getElementById('userPlan').value;
             companyUpdateData.plan_id = newPlanId || null;
@@ -287,25 +286,51 @@ export async function handleUserFormSubmit(event, userRole, currentAffiliateId) 
             companyUpdateData.status = newStatus;
         }
         
-        // Log para verificar o que está sendo enviado
+        // Log para verificar o que está sendo enviado (igual ao seu log)
         console.log('[Admin-Clientes] Dados da atualização da empresa:', companyUpdateData);
 
-        const { error: companyUpdateError } = await supabaseClient
+        // ====================================================================
+        // INÍCIO DA MODIFICAÇÃO DE DEBUG
+        // ====================================================================
+        
+        // Adicionamos .select() para forçar o Supabase a retornar os dados
+        const { data: updatedCompanyData, error: companyUpdateError } = await supabaseClient
             .from('companies')
-            .update(companyUpdateData) // Envia o objeto de atualização construído
-            .eq('id', companyId);
+            .update(companyUpdateData) 
+            .eq('id', companyId)
+            .select(); // <-- ADIÇÃO CRUCIAL PARA DEBUG
 
-        if (companyUpdateError) throw companyUpdateError;
+        // Novo Log Detalhado da Resposta
+        console.log('[Admin-Clientes DEBUG] Resposta da atualização da EMPRESA:', {
+            data: updatedCompanyData,
+            error: companyUpdateError
+        });
+        
+        // ====================================================================
+        // FIM DA MODIFICAÇÃO DE DEBUG
+        // ====================================================================
 
-        console.log(`[Admin-Clientes] Empresa ${companyId} atualizada. Triggers devem atualizar a tabela sync.`);
-        showToast('Dados do cliente atualizados! A tabela será atualizada em breve.', 'success'); // Informa que a atualização pode levar um instante (trigger)
+        if (companyUpdateError) {
+            // Se houver um erro explícito (ex: violação de política), ele será capturado aqui
+            console.error('[Admin-Clientes DEBUG] Erro explícito do Supabase:', companyUpdateError.message);
+            throw companyUpdateError;
+        }
+
+        // NOVO LOG: Verificar se a RLS falhou silenciosamente
+        if (!updatedCompanyData || updatedCompanyData.length === 0) {
+            console.warn('[Admin-Clientes DEBUG] A atualização foi executada SEM ERROS, mas NENHUMA LINHA foi retornada. Isso indica que a política de RLS (cláusula USING) não encontrou a linha para atualizar.');
+            showToast('A atualização falhou (0 linhas afetadas). Verifique as políticas de RLS.', 'error');
+        } else {
+            console.log(`[Admin-Clientes DEBUG] Sucesso! Dados retornados após atualização:`, updatedCompanyData[0]);
+        }
+
+        console.log(`[Admin-Clientes] Empresa ${companyId} atualizada (ou tentativa concluída). Triggers devem atualizar a tabela sync.`);
+        showToast('Dados do cliente atualizados! A tabela será atualizada em breve.', 'success');
         document.getElementById('userModal').style.display = 'none';
         form.reset();
         
-        // Limpa o cache para forçar a busca de dados frescos na próxima renderização
         isDataFetched = false;
         
-        // Recarrega a tabela com um pequeno delay para esperar o trigger
         setTimeout(() => {
             const filters = {
                 search: document.getElementById('clientSearchInput').value,
@@ -314,7 +339,7 @@ export async function handleUserFormSubmit(event, userRole, currentAffiliateId) 
                 affiliateId: document.getElementById('filterAffiliate').value
             };
             renderUsersTable(userRole, currentAffiliateId, filters);
-        }, 1500); // Aumenta o delay para garantir a propagação do trigger
+        }, 1500); 
 
     } catch (error) {
         console.error('Erro ao atualizar dados do cliente:', error);
