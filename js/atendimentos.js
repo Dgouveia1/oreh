@@ -2,7 +2,7 @@ import { supabaseClient, logEvent } from './api.js';
 import { showToast } from './ui.js';
 
 let atendimentosSubscription = null;
-let lastHumanAttentionCount = 0; // ✅ Variável para contar atendimentos humanos
+let lastHumanAttentionCount = 0; 
 
 // --- LÓGICA DE DADOS (SUPABASE) ---
 
@@ -28,7 +28,6 @@ async function fetchAndRenderAllChats() {
     kanbanBoard.querySelectorAll('.kanban-cards-container').forEach(c => c.innerHTML = '<p class="loading-message">Carregando...</p>');
     humanAttentionContainer.innerHTML = '<p class="loading-message">Carregando...</p>';
     
-    // ✅ REQ 3: Obter a data de hoje para filtrar finalizados
     const today = new Date().toISOString().split('T')[0];
 
     try {
@@ -40,7 +39,6 @@ async function fetchAndRenderAllChats() {
 
         console.log(`[OREH Atendimentos] Buscando dados para a empresa: ${profile.company_id}`);
 
-        // Passo 1: Buscar todos os clientes da empresa e criar um mapa.
         const { data: clients, error: clientsError } = await supabaseClient
             .from('clients')
             .select('name, phone')
@@ -50,12 +48,10 @@ async function fetchAndRenderAllChats() {
 
         const clientNameMap = new Map();
         clients.forEach(client => {
-            // Garante que o telefone esteja em um formato consistente para o mapa
             const cleanPhone = client.phone.replace(/\D/g, '');
             clientNameMap.set(cleanPhone, client.name);
         });
 
-        // Passo 2: Buscar os chats da empresa.
         const { data: chats, error: chatsError } = await supabaseClient
             .from('chats')
             .select('*')
@@ -67,7 +63,6 @@ async function fetchAndRenderAllChats() {
 
         console.log('[OREH Atendimentos] Chats brutos recebidos do DB:', chats);
 
-        // ✅ CORREÇÃO: Mapeia o nome do cliente corretamente.
         const formattedChats = chats.map(chat => {
             const cleanCustomerPhone = chat.customer_phone.replace(/\D/g, '');
             const registeredClientName = clientNameMap.get(cleanCustomerPhone);
@@ -81,15 +76,13 @@ async function fetchAndRenderAllChats() {
         
         const humanAttentionChats = formattedChats.filter(chat => chat.status === 'ATENDIMENTO_HUMANO');
         
-        // ✅ REQ 3: Filtro modificado para incluir apenas finalizados de hoje
         const kanbanChats = formattedChats.filter(chat => {
             if (chat.status === 'ATENDIMENTO_HUMANO') return false;
             if (chat.temperatura === 'Finalizado') {
-                // Compara a data da última atualização com a data de hoje
                 const chatUpdateDate = new Date(chat.updated_at).toISOString().split('T')[0];
                 return chatUpdateDate === today;
             }
-            return true; // Inclui todos os outros (Novo, Atendimento, Agendado)
+            return true; 
         });
 
         console.log('[OREH Atendimentos] Chats filtrados para o Kanban:', kanbanChats);
@@ -124,7 +117,6 @@ async function updateChat(chatId, updates) {
 }
 
 export async function descartarLead(chatId) {
-    // A confirmação deve ser feita na UI antes de chamar esta função.
     console.log(`[OREH] A descartar o chat ${chatId}`);
     try {
         const { error } = await supabaseClient
@@ -157,7 +149,6 @@ export async function takeOverChat(chatId) {
         showToast('Atendimento assumido!', 'success');
         logEvent('INFO', `Atendimento ${chatId} assumido.`);
         document.getElementById('humanAttentionDetailModal').style.display = 'none';
-        // A subscrição em tempo real cuidará de recarregar a lista
     } catch (error) {
         console.error('Erro ao assumir atendimento:', error);
         showToast('Falha ao assumir o atendimento.', 'error');
@@ -203,7 +194,6 @@ function createChatCard(chat) {
         if(value !== null) card.dataset[key] = typeof value === 'object' ? JSON.stringify(value) : value;
     });
 
-    // Garante que o nome correto vá para o modal.
     card.dataset.customer_name = customerName; 
 
     return card;
@@ -214,11 +204,10 @@ function renderHumanAttention(chats) {
     container.innerHTML = '';
     if (!chats || chats.length === 0) {
         container.innerHTML = '<p class="loading-message">Nenhum atendimento requerendo atenção.</p>';
-        lastHumanAttentionCount = 0; // Reseta a contagem
+        lastHumanAttentionCount = 0; 
         return;
     }
 
-    // ✅ Lógica de notificação sonora
     if (chats.length > lastHumanAttentionCount) {
         const audio = document.getElementById('notificationSound');
         if (audio) {
@@ -235,11 +224,9 @@ function renderHumanAttention(chats) {
 
 function renderKanban(chats) {
     const kanbanBoard = document.getElementById('kanbanBoard');
-    // Limpa todas as colunas primeiro
     kanbanBoard.querySelectorAll('.kanban-cards-container').forEach(c => c.innerHTML = '');
 
     if (!chats || chats.length === 0) {
-        // Adiciona a mensagem apenas à coluna "Novo", deixando as outras vazias mas visíveis
         const novoContainer = kanbanBoard.querySelector('.kanban-column[data-temperatura="Novo"] .kanban-cards-container');
         if (novoContainer) {
             novoContainer.innerHTML = '<p class="loading-message">Nenhum atendimento no funil.</p>';
@@ -253,24 +240,20 @@ function renderKanban(chats) {
             const container = column.querySelector('.kanban-cards-container');
             container.appendChild(card);
         } else {
-            // Fallback para a coluna "Novo" se a temperatura não for encontrada
             const defaultContainer = kanbanBoard.querySelector('.kanban-column[data-temperatura="Novo"] .kanban-cards-container');
             defaultContainer.appendChild(card);
         }
     });
 
-    // ✅ REQ 1: Atualiza a contagem de cards no título da coluna
     kanbanBoard.querySelectorAll('.kanban-column').forEach(column => {
         const count = column.querySelectorAll('.chat-card').length;
         const titleEl = column.querySelector('.kanban-column-title');
         
-        // Remove a contagem antiga, se existir
         const existingCount = titleEl.querySelector('.card-count');
         if (existingCount) {
             existingCount.remove();
         }
         
-        // Adiciona o novo span de contagem
         const countSpan = document.createElement('span');
         countSpan.className = 'card-count';
         countSpan.textContent = `(${count})`;
@@ -349,30 +332,29 @@ function initDragAndDrop() {
 
 
 async function subscribeToChatChanges() {
-    // Garante que não haja subscrições duplicadas
     if (atendimentosSubscription) {
         return;
     }
 
     try {
         const { data: { user } } = await supabaseClient.auth.getUser();
-        if (!user) return; // Não está logado, não pode subscrever
+        if (!user) return; 
 
         const { data: profile } = await supabaseClient.from('users').select('company_id').eq('id', user.id).single();
-        if (!profile || !profile.company_id) return; // Sem empresa, não pode subscrever a um canal filtrado
+        if (!profile || !profile.company_id) return; 
 
         const companyId = profile.company_id;
         console.log(`[OREH Atendimentos] Subscrevendo ao canal de chats para a empresa: ${companyId}`);
 
         atendimentosSubscription = supabaseClient
-            .channel(`public:chats:company_id=eq.${companyId}`) // Nome de canal mais específico e único
+            .channel(`public:chats:company_id=eq.${companyId}`) 
             .on(
                 'postgres_changes',
                 {
                     event: '*',
                     schema: 'public',
                     table: 'chats',
-                    filter: `company_id=eq.${companyId}` // Filtro explícito para segurança e eficiência
+                    filter: `company_id=eq.${companyId}` 
                 },
                 (payload) => {
                     console.log('Mudança nos atendimentos recebida via subscrição:', payload);
@@ -399,7 +381,6 @@ async function subscribeToChatChanges() {
     }
 }
 
-// ✅ REQ 4: Funções para o modal de busca de finalizados
 export function openSearchFinishedModal() {
     const modal = document.getElementById('searchFinishedModal');
     if (modal) {
@@ -409,18 +390,15 @@ export function openSearchFinishedModal() {
     }
 }
 
-// -----------------------------------------------------------------
-// A FUNÇÃO DUPLICADA (openChatHistoryModal) QUE ESTAVA AQUI FOI REMOVIDA
-// -----------------------------------------------------------------
 
-
-// (Substitua as funções existentes no final de oreh/js/atendimentos.js)
+// =========================================================================
+// ✅ INÍCIO DA ATUALIZAÇÃO: Funções de histórico de chat
+// =========================================================================
 
 /**
- * ✅ ATUALIZADO: Exporta a função e aceita um container como argumento.
- * Renderiza as mensagens do histórico no modal.
+ * ✅ ATUALIZADO: Renderiza o histórico de chat lendo da tabela 'chat_history_treated'.
  * @param {HTMLElement} messagesContainer - O elemento onde as bolhas do chat serão renderizadas.
- * @param {Array} messages - O array de mensagens vindo da RPC.
+ * @param {Array} messages - O array de mensagens vindo da tabela 'chat_history_treated'.
  * @param {string} customerName - O nome do cliente.
  */
 export function renderChatHistory(messagesContainer, messages, customerName) {
@@ -440,38 +418,21 @@ export function renderChatHistory(messagesContainer, messages, customerName) {
         const bubble = document.createElement('div');
         bubble.classList.add('chat-bubble');
         
-        const senderType = msg.sender.toLowerCase(); // 'humano' ou 'ia'
+        // ✅ CORREÇÃO: Lendo das novas colunas (sender_name, sender_type, message_content)
+        const senderType = msg.sender_type || 'system'; // 'human', 'IA', 'system'
+        const senderName = msg.sender_name || 'Sistema'; // 'Davi', 'Oreh', 'Sistema'
+        const finalMessageText = msg.message_content || '(Mensagem vazia)'; 
 
-        let finalMessageText = ''; // Variável para o texto final
-
-        if (senderType === 'humano') {
-            bubble.classList.add('human'); // Classe CSS 'human'
-            bubble.dataset.sender = 'Cliente'; // Rótulo
-            
-            // Limpa o texto (remove aspas e barras extras que o SQL pode ter deixado)
-            const rawText = msg.message ? msg.message.replace(/["\\]/g, '') : '';
-            
-            // Tenta encontrar o marcador "MENSAGEM DO USUÁRIO:"
-            const splitMarker = 'Mensagem do usuario:';
-            const parts = rawText.split(splitMarker);
-            
-            if (parts.length > 1) {
-                // Se encontrou, pega a parte 2 (índice 1) e remove espaços
-                finalMessageText = parts[1].trim(); 
-            } else {
-                // Se não encontrou o marcador (talvez o SQL RPC já limpou ou é um formato antigo)
-                finalMessageText = rawText;
-            }
-            
-        } else { // Para 'ia' ou 'sistema'
-            bubble.classList.add('ai'); // Classe CSS 'ai'
-            bubble.dataset.sender = 'Oreh'; // Rótulo "IA"
-            // Mensagens da IA (retornadas pela RPC) já vêm limpas
-            finalMessageText = msg.message ? msg.message.replace(/["\\]/g, '') : '';
+        // ✅ CORREÇÃO: Lógica de alinhamento baseada no SENDER_TYPE
+        if (senderType.toLowerCase() === 'human') {
+            bubble.classList.add('human'); // Classe CSS 'human' (alinha à esquerda)
+        } else { 
+            bubble.classList.add('ai'); // Classe CSS 'ai' (alinha à direita)
         }
         
-        // Define o texto final
-        bubble.textContent = finalMessageText || '(Mensagem vazia)';
+        // Define o rótulo do balão (ex: "Davi" ou "Oreh")
+        bubble.dataset.sender = senderName; 
+        bubble.textContent = finalMessageText;
         
         messagesContainer.appendChild(bubble);
     });
@@ -479,8 +440,9 @@ export function renderChatHistory(messagesContainer, messages, customerName) {
     // Rola para a mensagem mais recente
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
+
 /**
- * ✅ ATUALIZADO: Esta função (do modal de BUSCA) agora usa a nova renderChatHistory.
+ * ✅ ATUALIZADO: Esta função (do modal de BUSCA) agora consulta a tabela 'chat_history_treated'.
  * Abre o modal de histórico (da BUSCA) e busca os dados no Supabase.
  */
 export async function openChatHistoryModal(customerPhone, customerName) {
@@ -505,10 +467,13 @@ export async function openChatHistoryModal(customerPhone, customerName) {
             .single();
         if (!profile) throw new Error("Perfil do usuário não encontrado.");
 
-        const { data: messages, error } = await supabaseClient.rpc('get_chat_history', {
-            p_company_id: profile.company_id,
-            p_customer_phone: customerPhone
-        });
+        // ✅ CORREÇÃO: Trocada a chamada RPC pela query direta na nova tabela
+        const { data: messages, error } = await supabaseClient
+            .from('chat_history_treated') // ⬅️ 1. Tabela nova
+            .select('sender_name, sender_type, message_content, created_at') // ⬅️ 2. Colunas novas (incluindo sender_type)
+            .eq('company_id', profile.company_id)
+            .eq('customer_phone', customerPhone) // ⬅️ 3. Filtrando pelo telefone
+            .order('created_at', { ascending: true });
 
         if (error) throw error;
 
@@ -518,9 +483,14 @@ export async function openChatHistoryModal(customerPhone, customerName) {
     } catch (error) {
         console.error('Erro ao buscar histórico de chat:', error);
         messagesContainer.innerHTML = `<p class="loading-message error">Falha ao carregar histórico: ${error.message}</p>`;
-        logEvent('ERROR', 'Falha ao buscar histórico de chat via RPC', { phone: customerPhone, error: error.message });
+        logEvent('ERROR', 'Falha ao buscar histórico de chat (Tabela Tratada)', { phone: customerPhone, error: error.message });
     }
 }
+
+// =========================================================================
+// ✅ FIM DA ATUALIZAÇÃO
+// =========================================================================
+
 
 export async function handleSearchFinished(event) {
     event.preventDefault();
@@ -556,7 +526,6 @@ export async function handleSearchFinished(event) {
             query = query.like('customer_phone', `%${phone.replace(/\D/g, '')}%`);
         }
         if (date) {
-            // Busca pela data de ATUALIZAÇÃO (quando foi finalizado)
             const startDate = new Date(date + 'T00:00:00');
             const endDate = new Date(date + 'T23:59:59');
             
@@ -572,10 +541,9 @@ export async function handleSearchFinished(event) {
             return;
         }
 
-        // Renderiza os resultados
         resultsContainer.innerHTML = chats.map(chat => {
             const card = createChatCard(chat);
-            card.draggable = false; // Não pode arrastar resultados da busca
+            card.draggable = false; 
             return card.outerHTML;
         }).join('');
 
