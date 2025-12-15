@@ -1,9 +1,9 @@
-import { checkLoginState, login, logout, signUp, showForgotPasswordModal, handleForgotPassword } from './auth.js'; 
+import { checkLoginState, login, logout, signUp, showForgotPasswordModal, handleForgotPassword } from './auth.js';
 import { setupNavigation, setupModals, setupUploadModal, setupThemeToggle } from './ui.js';
 import { saveAiSettings } from './ia.js';
 import { disconnectInstance } from './status.js';
-import { saveEvent, changeDay } from './agenda.js';
-import { descartarLead, takeOverChat, openSearchFinishedModal, handleSearchFinished, openChatHistoryModal, renderChatHistory} from './atendimentos.js';
+import { saveEvent, navigateAgenda, deleteEvent, goToToday, switchView } from './agenda.js';
+import { descartarLead, takeOverChat, openSearchFinishedModal, handleSearchFinished, openChatHistoryModal, renderChatHistory } from './atendimentos.js';
 import { uploadFile, deleteFile } from './drive.js';
 import { loadSettings, saveUserSettings, saveCompanySettings, savePasswordSettings } from './settings.js';
 import { handleProductFormSubmit, openEditModal as openEditProductModal, setupProductEventListeners, confirmDeleteProduct } from './produtos.js';
@@ -92,7 +92,7 @@ function setupEventListeners() {
             const modal = document.getElementById('chatDetailModal');
             if (!modal) return;
 
-            const historyContainer = modal.querySelector('#kanbanChatHistoryContainer'); 
+            const historyContainer = modal.querySelector('#kanbanChatHistoryContainer');
             if (historyContainer) {
                 historyContainer.innerHTML = '<p class="loading-message" style="padding: 2rem 0;">Carregando histórico...</p>';
             }
@@ -115,7 +115,7 @@ function setupEventListeners() {
             const statusEl = modal.querySelector('#chatDetailStatus');
 
             const customerName = card.dataset.customer_name;
-            const customerPhone = card.dataset.customer_phone; 
+            const customerPhone = card.dataset.customer_phone;
 
             setText('#chatDetailCustomer', customerName);
             setText('#chatDetailPhone', customerPhone);
@@ -133,7 +133,7 @@ function setupEventListeners() {
             try {
                 const { data: { user } } = await supabaseClient.auth.getUser();
                 if (!user) throw new Error("Usuário não autenticado.");
-                
+
                 const { data: profile } = await supabaseClient
                     .from('users')
                     .select('company_id')
@@ -143,10 +143,10 @@ function setupEventListeners() {
 
                 // ✅ CORREÇÃO: Adicionado 'sender_type' ao select
                 const { data: messages, error } = await supabaseClient
-                    .from('chat_history_treated') 
+                    .from('chat_history_treated')
                     .select('sender_name, sender_type, message_content, created_at') // ⬅️ COLUNA ADICIONADA
                     .eq('company_id', profile.company_id)
-                    .eq('customer_phone', customerPhone) 
+                    .eq('customer_phone', customerPhone)
                     .order('created_at', { ascending: true });
 
                 if (error) throw error;
@@ -205,7 +205,7 @@ function setupEventListeners() {
     }
 
     const takeOverBtn = document.getElementById('takeOverBtn');
-    if(takeOverBtn) {
+    if (takeOverBtn) {
         takeOverBtn.addEventListener('click', (e) => {
             const chatId = e.target.dataset.chatId;
             if (chatId) {
@@ -223,13 +223,13 @@ function setupEventListeners() {
             }
         });
     }
-    
+
     const kanbanTakeOverBtn = document.getElementById('kanbanTakeOverBtn');
-    if(kanbanTakeOverBtn) {
+    if (kanbanTakeOverBtn) {
         kanbanTakeOverBtn.addEventListener('click', (e) => {
             const chatId = e.target.dataset.chatId;
             if (chatId) {
-                takeOverChat(chatId); 
+                takeOverChat(chatId);
                 document.getElementById('chatDetailModal').style.display = 'none';
             }
         });
@@ -248,7 +248,7 @@ function setupEventListeners() {
     const searchResultsContainer = document.getElementById('searchFinishedResultsContainer');
     if (searchResultsContainer) {
         searchResultsContainer.addEventListener('click', (e) => {
-            const card = e.target.closest('.chat-card'); 
+            const card = e.target.closest('.chat-card');
             if (!card) return;
 
             const phone = card.dataset.customer_phone;
@@ -261,11 +261,12 @@ function setupEventListeners() {
         });
     }
 
-    // Agenda
-    const agendaBody = document.getElementById('agendaBody');
+    // Agenda - Listeners
+    const agendaBody = document.querySelector('.agenda-wrapper'); // Alterado para wrapper porque o body pode ser recriado
     if (agendaBody) {
         agendaBody.addEventListener('click', (e) => {
-            const card = e.target.closest('.event-card');
+            // Verifica se clicou num evento (normal ou dot do mês)
+            const card = e.target.closest('.event-card') || e.target.closest('.month-event-dot');
             if (!card) return;
 
             const modal = document.getElementById('eventDetailModal');
@@ -276,6 +277,7 @@ function setupEventListeners() {
                 if (el) el.textContent = text || 'N/A';
             }
 
+            // Popula os detalhes do modal
             setText('#eventDetailAssunto', card.dataset.assunto);
             setText('#eventDetailData', card.dataset.formatted_date);
             setText('#eventDetailHorario', `${card.dataset.hora_inicio} - ${card.dataset.hora_fim}`);
@@ -283,7 +285,24 @@ function setupEventListeners() {
             setText('#eventDetailTelefone', card.dataset.telefone);
             setText('#eventDetailLocal', card.dataset.local);
 
+            // Armazena o ID do evento no botão de exclusão
+            const deleteBtn = document.getElementById('deleteEventBtn');
+            if (deleteBtn) {
+                deleteBtn.dataset.eventId = card.dataset.id;
+            }
+
             modal.style.display = 'flex';
+        });
+    }
+
+    // Botão de Excluir Evento
+    const deleteEventBtn = document.getElementById('deleteEventBtn');
+    if (deleteEventBtn) {
+        deleteEventBtn.addEventListener('click', () => {
+            const eventId = deleteEventBtn.dataset.eventId;
+            if (eventId) {
+                deleteEvent(eventId);
+            }
         });
     }
 
@@ -300,10 +319,24 @@ function setupEventListeners() {
     }
 
     const prevDayBtn = document.getElementById('prevDayBtn');
-    if (prevDayBtn) prevDayBtn.addEventListener('click', () => changeDay(-7));
+    if (prevDayBtn) prevDayBtn.addEventListener('click', () => navigateAgenda(-1));
 
     const nextDayBtn = document.getElementById('nextDayBtn');
-    if (nextDayBtn) nextDayBtn.addEventListener('click', () => changeDay(7));
+    if (nextDayBtn) nextDayBtn.addEventListener('click', () => navigateAgenda(1));
+
+    // Botão "Hoje"
+    const todayBtn = document.getElementById('todayBtn');
+    if (todayBtn) todayBtn.addEventListener('click', goToToday);
+
+    // View Switchers
+    const viewDayBtn = document.getElementById('viewDayBtn');
+    if (viewDayBtn) viewDayBtn.addEventListener('click', () => switchView('day'));
+
+    const viewWeekBtn = document.getElementById('viewWeekBtn');
+    if (viewWeekBtn) viewWeekBtn.addEventListener('click', () => switchView('week'));
+
+    const viewMonthBtn = document.getElementById('viewMonthBtn');
+    if (viewMonthBtn) viewMonthBtn.addEventListener('click', () => switchView('month'));
 
     // Drive
     const uploadForm = document.getElementById('uploadForm');
@@ -325,7 +358,7 @@ function setupEventListeners() {
     }
 
     // Produtos
-    setupProductEventListeners(); 
+    setupProductEventListeners();
 
     // Clientes
     setupClientTableListeners();
@@ -373,7 +406,7 @@ function setupEventListeners() {
             document.getElementById('isPersonal').checked = false;
         });
     }
-    
+
     const confirmDeleteProductBtn = document.getElementById('confirmDeleteProductBtn');
     if (confirmDeleteProductBtn) {
         confirmDeleteProductBtn.addEventListener('click', confirmDeleteProduct);
@@ -389,8 +422,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupNavigation();
     setupModals();
     setupUploadModal();
-    setupEventListeners(); 
+    setupEventListeners();
     setupThemeToggle();
-    await checkLoginState(); 
+    await checkLoginState();
     hideSplashScreen();
 });

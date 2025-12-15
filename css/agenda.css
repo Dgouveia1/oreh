@@ -4,8 +4,10 @@
 #agendaPage.active {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 14rem); /* Ajusta a altura para preencher a tela */
+    /* height: calc(100vh - 14rem); REMOVED: Allow full height */
+    min-height: calc(100vh - 14rem);
     gap: 2rem;
+    padding-bottom: 2rem;
 }
 
 .agenda-controls {
@@ -20,35 +22,142 @@
     border: 1px solid var(--border-color);
 }
 
+/* 3. Responsividade: Ajustes para mobile */
+@media (max-width: 768px) {
+    .agenda-controls {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .date-navigation {
+        order: 2;
+        /* Change order to make it flow better on mobile */
+        justify-content: space-between;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .date-navigation h3 {
+        min-width: unset;
+        font-size: 1.4rem;
+        flex-grow: 1;
+        order: 2;
+        /* Put date in middle */
+    }
+
+    .date-navigation #prevDayBtn {
+        order: 1;
+    }
+
+    .date-navigation #nextDayBtn {
+        order: 3;
+    }
+
+    .date-navigation #todayBtn {
+        display: none;
+    }
+
+    /* Hide text "Hoje" on tiny screens if needed, or move it */
+
+    .agenda-view-switcher {
+        order: 1;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    #openEventModalBtn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        border-radius: 50%;
+        width: 5rem;
+        height: 5rem;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-lg);
+        z-index: 100;
+    }
+
+    #openEventModalBtn span {
+        display: none;
+    }
+}
+
 .date-navigation {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .date-navigation h3 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     color: var(--text-color);
     font-weight: 600;
-    min-width: 25rem;
+    min-width: 20rem;
     text-align: center;
+}
+
+.agenda-view-switcher {
+    display: flex;
+    background-color: var(--bg-color);
+    border-radius: 0.8rem;
+    padding: 0.3rem;
+    gap: 0.3rem;
+}
+
+.agenda-view-switcher .btn {
+    border: none;
+    background: transparent;
+    color: var(--text-color-light);
+    box-shadow: none;
+    padding: 0.5rem 1.5rem;
+    font-size: 1.2rem;
+}
+
+.agenda-view-switcher .btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--text-color);
+}
+
+.agenda-view-switcher .btn.active {
+    background-color: var(--card-bg);
+    color: var(--primary);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    font-weight: 600;
 }
 
 .agenda-wrapper {
     flex-grow: 1;
-    display: grid;
-    grid-template-columns: 8rem 1fr; /* Coluna para a timeline e o restante para a grade */
-    overflow: hidden;
+    display: flex;
+    /* Changed from grid to flex to handle month view differently if needed */
+    flex-direction: column;
     position: relative;
     border: 1px solid var(--border-color);
     border-radius: 1.6rem;
     background-color: var(--card-bg);
+    /* Removed overflow: hidden to allow full height */
+}
+
+/* DAY & WEEK VIEW SPECIFIC */
+/* DAY & WEEK VIEW SPECIFIC */
+.agenda-view-container {
+    --agenda-header-height: 8.5rem;
+    /* Altura fixa garantida para o cabeçalho */
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    /* Timeline width fixed */
+    /* Removed fixed height and overflow */
 }
 
 .agenda-timeline {
-    padding-top: 5rem; /* Espaço para o cabeçalho dos dias */
-    overflow: hidden;
-    position: relative;
+    padding-top: var(--agenda-header-height);
+    /* Alinhamento exato */
+    /* Header space matching agenda-header approx height. */
+    /* Removed overflow hidden */
     border-right: 1px solid var(--border-color);
     background-color: var(--bg-color);
 }
@@ -59,126 +168,265 @@
     align-items: flex-start;
     justify-content: center;
     border-bottom: 1px solid var(--border-color);
-    padding-top: 0.5rem;
+    padding-top: 0.8rem;
+    /* Espaço do topo */
     color: var(--text-color-light);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     position: relative;
+    box-sizing: border-box;
 }
 
-.time-slot:last-child {
-    border-bottom: none;
+.time-slot::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 0.5rem;
+    top: -1px;
+    border-top: 1px solid var(--border-color);
 }
 
-.agenda-grid-container {
-    overflow: auto;
+.agenda-grid-scroll-area {
+    /* overflow-y: auto; REMOVED to prevent inner scroll */
+    overflow-x: auto;
+    /* Keep horizontal scroll for small screens */
     position: relative;
+    scrollbar-width: thin;
+}
+
+.agenda-header {
+    height: var(--agenda-header-height);
+    /* Grid columns set via JS or specific classes based on view */
+    background-color: var(--card-bg);
+    position: sticky;
+    display: grid;
+    /* Mantém o grid definido pelo JS */
+    /* Keep sticky */
+    top: 0;
+    /* Sticks to top of viewport/page container */
+    z-index: 20;
+    border-bottom: 1px solid var(--border-color);
+    min-width: 100%;
+}
+
+.day-header {
+    height: 100%;
+    /* Ocupa toda altura do header */
+    padding: 0;
+    /* Remove padding global, usa flex para centralizar */
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.agenda-grid-scroll-area {
+    /* overflow-y: auto; REMOVED to prevent inner scroll */
+    overflow-x: auto;
+    /* Keep horizontal scroll for small screens */
+    position: relative;
+    scrollbar-width: thin;
 }
 
 .agenda-header {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    /* Grid columns set via JS or specific classes based on view */
     background-color: var(--card-bg);
     position: sticky;
+    /* Keep sticky */
     top: 0;
-    z-index: 2;
+    /* Sticks to top of viewport/page container */
+    z-index: 20;
     border-bottom: 1px solid var(--border-color);
+    min-width: 100%;
 }
 
 .day-header {
     text-align: center;
-    padding: 1.5rem 0;
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: var(--text-color);
+    padding: 1rem 0;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--text-color-light);
     border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .day-header strong {
-    display: block;
-    font-size: 1.8rem;
+    font-size: 2rem;
+    color: var(--text-color);
+    width: 3.5rem;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
     margin-top: 0.2rem;
-    color: var(--primary);
 }
 
-.day-header:last-child {
-    border-right: none;
+.day-header.today strong {
+    background-color: var(--primary);
+    color: white;
+}
+
+.day-header.today {
+    color: var(--primary);
 }
 
 .agenda-body {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    /* Grid columns set via JS or specific classes based on view */
     position: relative;
-    background-image: 
-        repeating-linear-gradient(var(--border-color) 0 1px, transparent 1px 100%),
-        repeating-linear-gradient(90deg, var(--border-color) 0 1px, transparent 1px 100%);
-    background-size: calc(100% / 7) var(--agenda-hour-height);
+    background-image:
+        repeating-linear-gradient(var(--border-color) 0 1px, transparent 1px 100%);
+    background-size: 100% var(--agenda-hour-height);
+    /* Horizontal lines */
+    min-width: 100%;
 }
 
 .day-column {
     position: relative;
-    min-height: calc(var(--agenda-hour-height) * (var(--agenda-end-hour) - var(--agenda-start-hour) + 1));
+    border-right: 1px solid var(--border-color);
+    /* 6am to 24h = 18 hours. Agenda hour height needs to be consistent. */
+    height: calc(var(--agenda-hour-height) * 18);
 }
 
+/* MONTH VIEW SCROLL */
+.month-view-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.month-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+}
+
+.month-header-cell {
+    padding: 0.8rem;
+    text-align: center;
+    font-weight: 600;
+    color: var(--text-color-light);
+    font-size: 1.2rem;
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 1fr;
+    /* Distribute height evenly */
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.month-day {
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.5rem;
+    min-height: 8rem;
+    /* Mobile */
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.month-day:hover {
+    background-color: var(--bg-color-hover);
+}
+
+.month-day-number {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.month-day.today .month-day-number {
+    background-color: var(--primary);
+    color: white;
+}
+
+.month-day.other-month {
+    background-color: rgba(0, 0, 0, 0.02);
+    color: var(--text-color-light);
+}
+
+.month-event-dot {
+    font-size: 1rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.4rem;
+    background-color: var(--primary-light, #ffd8c4);
+    color: var(--primary-dark, #a34200);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.1rem;
+}
+
+/* 3. Responsividade: Melhor tratamento de eventos sobrepostos */
 .event-card {
     position: absolute;
-    left: 0.5rem;
-    right: 0.5rem;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    left: 4%;
+    right: 4%;
+    background: var(--primary);
     color: white;
-    padding: 1rem;
-    border-radius: 0.8rem;
-    box-shadow: var(--shadow);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.4rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     cursor: pointer;
-    transition: var(--transition);
-    z-index: 1;
+    transition: all 0.2s ease;
+    z-index: 10;
+    font-size: 1.1rem;
+    border-left: 3px solid rgba(255, 255, 255, 0.3);
+    line-height: 1.2;
 }
 
 .event-card:hover {
     transform: scale(1.02);
-    box-shadow: var(--shadow-lg);
-    z-index: 3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    z-index: 50 !important;
+    height: auto !important;
+    min-height: fit-content;
 }
 
 .event-card strong {
-    font-size: 1.4rem;
     display: block;
-    margin-bottom: 0.5rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.event-card small {
-    font-size: 1.2rem;
-    opacity: 0.8;
-}
-
-.modal-content .event-details p {
-    font-size: 1.6rem;
-    color: var(--text-color);
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-}
-
-.modal-content .event-details i {
-    color: var(--primary);
-    width: 2rem;
-    text-align: center;
+    font-weight: 600;
 }
 
 @media (max-width: 768px) {
-    .agenda-wrapper {
-        grid-template-columns: 6rem 1fr;
+    .agenda-view-container {
+        grid-template-columns: 4rem 1fr;
+        /* Narrower timeline */
     }
-    .date-navigation h3 {
-        min-width: auto;
-        font-size: 1.6rem;
+
+    .month-grid {
+        grid-template-columns: repeat(7, minmax(6rem, 1fr));
+        /* Force horizontal scroll if needed */
+        overflow-x: auto;
     }
-    .agenda-controls {
-        flex-direction: column;
-        gap: 1.5rem;
+
+    .month-day {
+        min-height: 6rem;
+    }
+
+    .month-event-dot {
+        font-size: 0.9rem;
+        padding: 0.1rem 0.3rem;
     }
 }

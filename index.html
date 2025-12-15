@@ -11,11 +11,15 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Oreh">
-    <link rel="apple-touch-icon" href="favicon.png"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <link rel="stylesheet" href="style.css"> <link rel="stylesheet" href="responsive-fixes.css"> </head>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="responsive-fixes.css">
+</head>
+
 <body>
     <div id="splashScreen" class="splash-screen">
         <div class="logo-text">OREH</div>
@@ -28,13 +32,18 @@
         <div class="login-card">
             <div class="logo-text">OREH</div>
             <div class="input-group">
-                <label for="username">Usuário (E-mail)</label> <input type="email" id="username" placeholder="Digite seu e-mail" autocomplete="username" aria-label="Usuário"> </div>
+                <label for="username">Usuário (E-mail)</label> <input type="email" id="username"
+                    placeholder="Digite seu e-mail" autocomplete="username" aria-label="Usuário">
+            </div>
             <div class="input-group">
                 <label for="password">Senha</label>
-                <input type="password" id="password" placeholder="Digite sua senha" autocomplete="current-password" aria-label="Senha">
+                <input type="password" id="password" placeholder="Digite sua senha" autocomplete="current-password"
+                    aria-label="Senha">
             </div>
             <button id="loginBtn" class="btn btn-primary" aria-label="Entrar no sistema">Entrar</button>
-             <a href="#" id="forgotPasswordLink" class="forgot-password-link" style="display: block; margin-top: 1rem; color: var(--text-color-light); font-size: 1.4rem;">Esqueci minha senha</a>
+            <a href="#" id="forgotPasswordLink" class="forgot-password-link"
+                style="display: block; margin-top: 1rem; color: var(--text-color-light); font-size: 1.4rem;">Esqueci
+                minha senha</a>
             <p class="signup-link">
                 Não tem uma conta? <a href="onboarding.html">Cadastre-se</a>
             </p>
@@ -47,19 +56,30 @@
                 <h1><i class="fas fa-cloud"></i> <span>OREH</span></h1>
             </div>
             <ul class="nav-links">
-                <li><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
-                <li><a href="#" class="nav-link" data-page="atendimentos"><i class="fas fa-comments"></i> <span>Atendimentos</span></a></li>
-                <li><a href="#" class="nav-link" data-page="clients"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
-                <li><a href="#" class="nav-link" data-page="agenda"><i class="fas fa-calendar"></i> <span>Agenda</span></a></li>
+                <li><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-home"></i>
+                        <span>Dashboard</span></a></li>
+                <li><a href="#" class="nav-link" data-page="atendimentos"><i class="fas fa-comments"></i>
+                        <span>Atendimentos</span></a></li>
+                <li><a href="#" class="nav-link" data-page="clients"><i class="fas fa-users"></i>
+                        <span>Clientes</span></a></li>
+                <li><a href="#" class="nav-link" data-page="agenda"><i class="fas fa-calendar"></i>
+                        <span>Agenda</span></a></li>
 
-                <li class="mobile-only"><a href="#" id="moreMenuBtn" class="nav-link" data-page="more"><i class="fas fa-ellipsis-h"></i> <span>Mais</span></a></li>
+                <li class="mobile-only"><a href="#" id="moreMenuBtn" class="nav-link" data-page="more"><i
+                            class="fas fa-ellipsis-h"></i> <span>Mais</span></a></li>
 
-                <li class="desktop-only"><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i> <span>Conexão</span></a></li>
-                <li class="desktop-only"><a href="#" class="nav-link" data-page="produtos"><i class="fas fa-box-open"></i> <span>Produtos</span></a></li>
-                <li class="desktop-only"><a href="#" class="nav-link" data-page="drive"><i class="fas fa-book"></i> <span>Biblioteca</span></a></li>
-                <li class="desktop-only"><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de IA</span></a></li>
-                <li class="desktop-only"><a href="#" class="nav-link" data-page="finances"><i class="fas fa-money-bill"></i> <span>Assinatura</span></a></li>
-                <li class="desktop-only"><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> <span>Config.</span></a></li>
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i>
+                        <span>Conexão</span></a></li>
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="produtos"><i
+                            class="fas fa-box-open"></i> <span>Produtos</span></a></li>
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="drive"><i class="fas fa-book"></i>
+                        <span>Biblioteca</span></a></li>
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i>
+                        <span>Gestão de IA</span></a></li>
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="finances"><i
+                            class="fas fa-money-bill"></i> <span>Assinatura</span></a></li>
+                <li class="desktop-only"><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i>
+                        <span>Config.</span></a></li>
             </ul>
         </div>
 
@@ -81,6 +101,7 @@
                 </div>
             </div>
 
+            <!-- Páginas existentes (dashboard, status, etc) permanecem iguais, apenas a agenda mudou o botão -->
             <div id="dashboardPage" class="page-content active">
                 <div class="metrics-grid">
                     <div class="metric-card">
@@ -114,7 +135,7 @@
                     </div>
                     <div class="chart-card">
                         <h3>Volume de Atendimentos (Últimos 7 dias)</h3>
-                         <div class="chart-container">
+                        <div class="chart-container">
                             <canvas id="volumeAtendimentosChart"></canvas>
                         </div>
                     </div>
@@ -126,7 +147,8 @@
                     <div class="status-card">
                         <h3>Minha Instância</h3>
                         <div class="status" id="connectionStatus"></div>
-                        <button id="disconnectBtn" class="btn btn-danger" style="display: none; margin-top: 15px;">Desconectar</button>
+                        <button id="disconnectBtn" class="btn btn-danger"
+                            style="display: none; margin-top: 15px;">Desconectar</button>
                     </div>
                     <div class="qrcode-container">
                         <div class="qrcode-placeholder" id="qrcode-output"></div>
@@ -140,7 +162,8 @@
                         <div class="modal-header">
                             <h3>Primeira Conexão</h3>
                         </div>
-                        <p style="margin-bottom: 20px; text-align: left; color: var(--gray);">Para começar, precisamos configurar sua instância. Por favor, informe o número de telefone que será conectado.</p>
+                        <p style="margin-bottom: 20px; text-align: left; color: var(--gray);">Para começar, precisamos
+                            configurar sua instância. Por favor, informe o número de telefone que será conectado.</p>
                         <form id="firstConnectionForm">
                             <div class="form-grid-columns">
                                 <div class="input-group">
@@ -160,21 +183,32 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" id="createConnectionBtn" class="btn btn-primary">Criar Conexão</button>
+                                <button type="submit" id="createConnectionBtn" class="btn btn-primary">Criar
+                                    Conexão</button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
 
+            <!-- MODIFICAÇÃO: Botão Hoje adicionado -->
             <div id="agendaPage" class="page-content">
                 <div class="agenda-controls">
                     <div class="date-navigation">
-                        <button class="btn btn-secondary btn-small" id="prevDayBtn"><i class="fas fa-chevron-left"></i></button>
+                        <button class="btn btn-secondary btn-small" id="prevDayBtn"><i
+                                class="fas fa-chevron-left"></i></button>
+                        <button class="btn btn-secondary btn-small" id="todayBtn">Hoje</button>
+                        <button class="btn btn-secondary btn-small" id="nextDayBtn"><i
+                                class="fas fa-chevron-right"></i></button>
                         <h3 id="currentDateDisplay"></h3>
-                        <button class="btn btn-secondary btn-small" id="nextDayBtn"><i class="fas fa-chevron-right"></i></button>
                     </div>
-                    <button class="btn btn-primary" id="openEventModalBtn"><i class="fas fa-plus"></i> Criar Evento</button>
+                    <div class="agenda-view-switcher">
+                        <button class="btn btn-secondary btn-small" id="viewDayBtn" data-view="day">Dia</button>
+                        <button class="btn btn-secondary btn-small active" id="viewWeekBtn"
+                            data-view="week">Semana</button>
+                        <button class="btn btn-secondary btn-small" id="viewMonthBtn" data-view="month">Mês</button>
+                    </div>
+                    <button class="btn btn-primary" id="openEventModalBtn"><i class="fas fa-plus"></i></button>
                 </div>
                 <div class="agenda-wrapper">
                     <div class="agenda-timeline" id="agendaTimeline"></div>
@@ -186,14 +220,15 @@
             </div>
 
             <div id="atendimentosPage" class="page-content">
-                 <div class="human-attention-section">
+                <div class="human-attention-section">
                     <h3><i class="fas fa-exclamation-triangle"></i> Atendimento Humano Necessário</h3>
                     <div id="humanAttentionContainer" class="human-attention-container">
-                        </div>
+                    </div>
                 </div>
                 <div class="page-header" style="display: flex; justify-content: space-between; align-items: center;">
                     <h2>Funil de Atendimentos</h2>
-                    <button class="btn btn-secondary" id="openSearchFinishedModalBtn" style="padding: 1.2rem 2rem; font-size: 1.5rem;">
+                    <button class="btn btn-secondary" id="openSearchFinishedModalBtn"
+                        style="padding: 1.2rem 2rem; font-size: 1.5rem;">
                         <i class="fas fa-search"></i> Buscar Atendimentos
                     </button>
                 </div>
@@ -221,25 +256,26 @@
             <div id="clientsPage" class="page-content">
                 <div class="page-header">
                     <h2>Clientes</h2>
-                    <button class="btn btn-primary" id="openClientModalBtn"><i class="fas fa-plus"></i> Novo Cliente</button>
+                    <button class="btn btn-primary" id="openClientModalBtn"><i class="fas fa-plus"></i> Novo
+                        Cliente</button>
                 </div>
-                 <div class="metrics-grid">
+                <div class="metrics-grid">
                     <div class="metric-card">
-                         <div class="card-icon icon-atendimentos"><i class="fas fa-user-plus"></i></div>
+                        <div class="card-icon icon-atendimentos"><i class="fas fa-user-plus"></i></div>
                         <div class="card-content">
                             <span class="metric-value" id="totalClients">0</span>
                             <span class="metric-label">Total de Clientes</span>
                         </div>
                     </div>
                     <div class="metric-card">
-                         <div class="card-icon icon-leads"><i class="fas fa-check-circle"></i></div>
+                        <div class="card-icon icon-leads"><i class="fas fa-check-circle"></i></div>
                         <div class="card-content">
                             <span class="metric-value" id="activeClients">0</span>
                             <span class="metric-label">Clientes Ativos</span>
                         </div>
                     </div>
                     <div class="metric-card">
-                         <div class="card-icon icon-valor"><i class="fas fa-phone-square-alt"></i></div>
+                        <div class="card-icon icon-valor"><i class="fas fa-phone-square-alt"></i></div>
                         <div class="card-content">
                             <span class="metric-value" id="whatsappClients">0</span>
                             <span class="metric-label">Clientes via WhatsApp</span>
@@ -255,8 +291,8 @@
                 </div>
                 <div class="search-bar-container">
                     <div class="input-group search-input">
-                         <i class="fas fa-search"></i>
-                         <input type="text" id="clientSearchInput" placeholder="Buscar por nome, email ou telefone...">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="clientSearchInput" placeholder="Buscar por nome, email ou telefone...">
                     </div>
                 </div>
                 <h3>Lista de Clientes</h3>
@@ -298,7 +334,8 @@
             <div id="produtosPage" class="page-content">
                 <div class="page-header">
                     <h2>Gestão de Produtos</h2>
-                    <button class="btn btn-primary" id="openProductModalBtn"><i class="fas fa-plus"></i> Adicionar Produto</button>
+                    <button class="btn btn-primary" id="openProductModalBtn"><i class="fas fa-plus"></i> Adicionar
+                        Produto</button>
                 </div>
                 <div class="table-container" id="productTableContainer">
                     <table class="product-table">
@@ -320,118 +357,124 @@
                 <div class="drive-header">
                     <div>
                         <h2>Biblioteca de Conhecimento</h2>
-                        <p>Os arquivos adicionados aqui serão usados como base de conhecimento pela Inteligência Artificial.</p>
+                        <p>Os arquivos adicionados aqui serão usados como base de conhecimento pela Inteligência
+                            Artificial.</p>
                     </div>
-                    <button class="btn btn-primary" id="openUploadModalBtn"><i class="fas fa-plus"></i> Adicionar Arquivo</button>
+                    <button class="btn btn-primary" id="openUploadModalBtn"><i class="fas fa-plus"></i> Adicionar
+                        Arquivo</button>
                 </div>
                 <div id="fileGrid" class="file-grid"></div>
             </div>
 
             <div id="iaPage" class="page-content">
-               <div class="ia-management-container">
-                   <div class="ia-card">
-                       <h3>Controle Geral</h3>
-                       <div class="form-group form-group-toggle">
-                           <label for="aiActiveToggle">Respostas da IA Ativadas</label>
-                           <div class="toggle-switch">
-                               <input type="checkbox" id="aiActiveToggle" class="toggle-input">
-                               <label for="aiActiveToggle" class="toggle-label"></label>
-                           </div>
-                       </div>
-                   </div>
+                <div class="ia-management-container">
+                    <div class="ia-card">
+                        <h3>Controle Geral</h3>
+                        <div class="form-group form-group-toggle">
+                            <label for="aiActiveToggle">Respostas da IA Ativadas</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="aiActiveToggle" class="toggle-input">
+                                <label for="aiActiveToggle" class="toggle-label"></label>
+                            </div>
+                        </div>
+                    </div>
 
-                   <div class="ia-card">
-                       <h3>Informações do Negócio</h3>
-                       <p class="description">Forneça detalhes sobre sua empresa para que a IA possa dar respostas mais precisas sobre localização, redes sociais e horários.</p>
-                       <div class="settings-grid">
-                           <div class="form-group" style="grid-column: 1 / -1;">
-                               <label for="companyAddress">Endereço da Empresa</label>
-                               <input type="text" id="companyAddress" placeholder="Ex: Av. Brasil, 123, São Paulo - SP">
-                           </div>
-                           <div class="form-group">
-                               <label for="socialInstagram">Instagram</label>
-                               <input type="text" id="socialInstagram" placeholder="@seuinstagram">
-                           </div>
-                           <div class="form-group">
-                               <label for="socialFacebook">Facebook</label>
-                               <input type="text" id="socialFacebook" placeholder="/suapagina">
-                           </div>
-                           <div class="form-group">
-                               <label for="socialSite">Site</label>
-                               <input type="text" id="socialSite" placeholder="https://seusite.com.br">
-                           </div>
+                    <div class="ia-card">
+                        <h3>Informações do Negócio</h3>
+                        <p class="description">Forneça detalhes sobre sua empresa para que a IA possa dar respostas mais
+                            precisas sobre localização, redes sociais e horários.</p>
+                        <div class="settings-grid">
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label for="companyAddress">Endereço da Empresa</label>
+                                <input type="text" id="companyAddress"
+                                    placeholder="Ex: Av. Brasil, 123, São Paulo - SP">
+                            </div>
+                            <div class="form-group">
+                                <label for="socialInstagram">Instagram</label>
+                                <input type="text" id="socialInstagram" placeholder="@seuinstagram">
+                            </div>
+                            <div class="form-group">
+                                <label for="socialFacebook">Facebook</label>
+                                <input type="text" id="socialFacebook" placeholder="/suapagina">
+                            </div>
+                            <div class="form-group">
+                                <label for="socialSite">Site</label>
+                                <input type="text" id="socialSite" placeholder="https://seusite.com.br">
+                            </div>
                             <div class="form-group form-group-toggle" style="grid-column: 1 / -1;">
-                               <label for="hasPhysicalAttendance">Possui Atendimento Presencial</label>
-                               <div class="toggle-switch">
-                                   <input type="checkbox" id="hasPhysicalAttendance" class="toggle-input">
-                                   <label for="hasPhysicalAttendance" class="toggle-label"></label>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
+                                <label for="hasPhysicalAttendance">Possui Atendimento Presencial</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="hasPhysicalAttendance" class="toggle-input">
+                                    <label for="hasPhysicalAttendance" class="toggle-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                   <div class="ia-card">
-                       <h3>Orientações para sua IA</h3>
-                       <p class="description">Estas serão as orientações principais que definem o comportamento geral do seu agente. As configurações abaixo ajudarão a refinar este comportamento.</p>
-                       <div class="form-group">
-                           <label for="basePrompt">Instruções Base</label>
-                           <textarea id="basePrompt" rows="8" placeholder="Ex: Você é um assistente virtual da empresa X..."></textarea>
-                       </div>
-                   </div>
+                    <div class="ia-card">
+                        <h3>Orientações para sua IA</h3>
+                        <p class="description">Estas serão as orientações principais que definem o comportamento geral
+                            do seu agente. As configurações abaixo ajudarão a refinar este comportamento.</p>
+                        <div class="form-group">
+                            <label for="basePrompt">Instruções Base</label>
+                            <textarea id="basePrompt" rows="8"
+                                placeholder="Ex: Você é um assistente virtual da empresa X..."></textarea>
+                        </div>
+                    </div>
 
-                   <div class="ia-grid">
-                       <div class="ia-card">
-                           <h3>1. Personalidade</h3>
-                           <div class="form-group">
-                               <label for="personalityStyle">Estilo de Comportamento</label>
-                               <input type="text" id="personalityStyle" placeholder="Ex: Amigável, Profissional">
-                           </div>
-                           <div class="form-group">
-                               <label for="dominantTraits">Traços Dominantes</label>
-                               <input type="text" id="dominantTraits" placeholder="Ex: Curioso, Empático">
-                           </div>
-                       </div>
-                       <div class="ia-card">
-                           <h3>2. Tom de Voz</h3>
-                           <div class="form-group">
-                               <label for="toneFormality">Formalidade</label>
-                               <input type="text" id="toneFormality" placeholder="Ex: Casual, Técnico">
-                           </div>
+                    <div class="ia-grid">
+                        <div class="ia-card">
+                            <h3>1. Personalidade</h3>
+                            <div class="form-group">
+                                <label for="personalityStyle">Estilo de Comportamento</label>
+                                <input type="text" id="personalityStyle" placeholder="Ex: Amigável, Profissional">
+                            </div>
+                            <div class="form-group">
+                                <label for="dominantTraits">Traços Dominantes</label>
+                                <input type="text" id="dominantTraits" placeholder="Ex: Curioso, Empático">
+                            </div>
+                        </div>
+                        <div class="ia-card">
+                            <h3>2. Tom de Voz</h3>
+                            <div class="form-group">
+                                <label for="toneFormality">Formalidade</label>
+                                <input type="text" id="toneFormality" placeholder="Ex: Casual, Técnico">
+                            </div>
                             <div class="form-group form-group-toggle">
-                               <label for="toneAdaptability">Adaptabilidade de Tom</label>
-                               <div class="toggle-switch">
-                                   <input type="checkbox" id="toneAdaptability" class="toggle-input">
-                                   <label for="toneAdaptability" class="toggle-label"></label>
-                               </div>
-                           </div>
-                       </div>
-                       <div class="ia-card">
-                           <h3>3. Linguagem e Estilo</h3>
+                                <label for="toneAdaptability">Adaptabilidade de Tom</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="toneAdaptability" class="toggle-input">
+                                    <label for="toneAdaptability" class="toggle-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ia-card">
+                            <h3>3. Linguagem e Estilo</h3>
                             <div class="form-group">
-                               <label for="languageComplexity">Nível de Complexidade</label>
-                               <input type="text" id="languageComplexity" placeholder="Ex: Simples, Técnico">
-                           </div>
-                       </div>
-                       <div class="ia-card">
-                           <h3>4. Função Principal do Agente</h3>
+                                <label for="languageComplexity">Nível de Complexidade</label>
+                                <input type="text" id="languageComplexity" placeholder="Ex: Simples, Técnico">
+                            </div>
+                        </div>
+                        <div class="ia-card">
+                            <h3>4. Função Principal do Agente</h3>
                             <div class="form-group">
-                               <label for="agentFunction">Função</label>
-                               <input type="text" id="agentFunction" placeholder="Ex: Vendedor, Suporte">
-                           </div>
-                       </div>
-                   </div>
+                                <label for="agentFunction">Função</label>
+                                <input type="text" id="agentFunction" placeholder="Ex: Vendedor, Suporte">
+                            </div>
+                        </div>
+                    </div>
 
-                   <div class="ia-card">
-                       <h3>Horário de Atendimento</h3>
-                       <div class="business-hours-grid" id="businessHoursContainer">
-                           </div>
-                   </div>
+                    <div class="ia-card">
+                        <h3>Horário de Atendimento</h3>
+                        <div class="business-hours-grid" id="businessHoursContainer">
+                        </div>
+                    </div>
 
-                   <div class="ia-card-footer">
-                       <button id="saveAiSettingsBtn" class="btn btn-primary">Salvar Configurações de IA</button>
-                   </div>
-               </div>
-           </div>
+                    <div class="ia-card-footer">
+                        <button id="saveAiSettingsBtn" class="btn btn-primary">Salvar Configurações de IA</button>
+                    </div>
+                </div>
+            </div>
 
             <div id="financesPage" class="page-content">
                 <div class="subscription-container">
@@ -445,7 +488,7 @@
                     <div class="settings-card" id="plansCard">
                         <h3>Planos Disponíveis</h3>
                         <div class="plans-grid" id="plansGrid">
-                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -508,7 +551,8 @@
                                 </div>
                             </div>
                             <div class="settings-card-footer">
-                                <button id="saveCompanySettingsBtn" type="submit" class="btn btn-primary">Salvar</button>
+                                <button id="saveCompanySettingsBtn" type="submit"
+                                    class="btn btn-primary">Salvar</button>
                             </div>
                         </div>
                     </form>
@@ -519,19 +563,23 @@
                             <div class="settings-grid">
                                 <div class="form-group">
                                     <label for="newPassword">Nova Senha</label>
-                                    <input type="password" id="newPassword" placeholder="Digite sua nova senha (mín. 6 caracteres)" required autocomplete="new-password">
+                                    <input type="password" id="newPassword"
+                                        placeholder="Digite sua nova senha (mín. 6 caracteres)" required
+                                        autocomplete="new-password">
                                 </div>
                                 <div class="form-group">
                                     <label for="confirmNewPassword">Confirmar Nova Senha</label>
-                                    <input type="password" id="confirmNewPassword" placeholder="Confirme sua nova senha" required autocomplete="new-password">
+                                    <input type="password" id="confirmNewPassword" placeholder="Confirme sua nova senha"
+                                        required autocomplete="new-password">
                                 </div>
                             </div>
                             <div class="settings-card-footer">
-                                <button id="savePasswordSettingsBtn" type="submit" class="btn btn-primary">Salvar Nova Senha</button>
+                                <button id="savePasswordSettingsBtn" type="submit" class="btn btn-primary">Salvar Nova
+                                    Senha</button>
                             </div>
                         </div>
                     </form>
-                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -543,16 +591,25 @@
                 <button class="close-modal">&times;</button>
             </div>
             <ul class="more-menu-links">
-                <li><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i> <span>Conexão</span></a></li>
-                <li><a href="#" class="nav-link" data-page="produtos"><i class="fas fa-box-open"></i> <span>Produtos</span></a></li>
-                <li><a href="#" class="nav-link" data-page="drive"><i class="fas fa-book"></i> <span>Biblioteca</span></a></li>
-                <li><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de IA</span></a></li>
-                <li><a href="#" class="nav-link" data-page="finances"><i class="fas fa-money-bill"></i> <span>Assinatura</span></a></li>
-                <li><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> <span>Configurações</span></a></li>
-                <li><a href="https://wa.me/5511918752628" target="_blank" class="nav-link"><i class="fab fa-whatsapp"></i> <span>Suporte</span></a></li>
+                <li><a href="#" class="nav-link" data-page="status"><i class="fas fa-plug"></i> <span>Conexão</span></a>
+                </li>
+                <li><a href="#" class="nav-link" data-page="produtos"><i class="fas fa-box-open"></i>
+                        <span>Produtos</span></a></li>
+                <li><a href="#" class="nav-link" data-page="drive"><i class="fas fa-book"></i>
+                        <span>Biblioteca</span></a></li>
+                <li><a href="#" class="nav-link" data-page="ia"><i class="fas fa-brain"></i> <span>Gestão de
+                            IA</span></a></li>
+                <li><a href="#" class="nav-link" data-page="finances"><i class="fas fa-money-bill"></i>
+                        <span>Assinatura</span></a></li>
+                <li><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i>
+                        <span>Configurações</span></a></li>
+                <li><a href="https://wa.me/5511918752628" target="_blank" class="nav-link"><i
+                            class="fab fa-whatsapp"></i> <span>Suporte</span></a></li>
             </ul>
         </div>
     </div>
+
+    <!-- MODIFICAÇÃO: Botão de excluir adicionado ao modal -->
     <div class="modal" id="eventDetailModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
@@ -563,8 +620,13 @@
                 <p><i class="fas fa-calendar-alt"></i> <strong>Data:</strong> <strong id="eventDetailData"></strong></p>
                 <p><i class="fas fa-clock"></i> <strong>Horário:</strong> <strong id="eventDetailHorario"></strong></p>
                 <p><i class="fas fa-user"></i> <strong>Cliente:</strong> <strong id="eventDetailCliente"></strong></p>
-                <p><i class="fas fa-phone"></i> <strong>Telefone:</strong> <strong id="eventDetailTelefone"></strong></p>
-                <p><i class="fas fa-map-marker-alt"></i> <strong>Local:</strong> <strong id="eventDetailLocal"></strong></p>
+                <p><i class="fas fa-phone"></i> <strong>Telefone:</strong> <strong id="eventDetailTelefone"></strong>
+                </p>
+                <p><i class="fas fa-map-marker-alt"></i> <strong>Local:</strong> <strong id="eventDetailLocal"></strong>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button id="deleteEventBtn" class="btn btn-danger"><i class="fas fa-trash"></i> Excluir Evento</button>
             </div>
         </div>
     </div>
@@ -621,8 +683,10 @@
             <div class="chat-details">
                 <p><i class="fas fa-user"></i> <strong>Cliente:</strong> <span id="humanAttentionCustomer"></span></p>
                 <p><i class="fas fa-phone"></i> <strong>Telefone:</strong> <span id="humanAttentionPhone"></span></p>
-                <p><i class="fas fa-info-circle"></i> <strong>Status:</strong> <span id="humanAttentionStatus" class="status-badge"></span></p>
-                <p><i class="fas fa-calendar-alt"></i> <strong>Início:</strong> <span id="humanAttentionCreated"></span></p>
+                <p><i class="fas fa-info-circle"></i> <strong>Status:</strong> <span id="humanAttentionStatus"
+                        class="status-badge"></span></p>
+                <p><i class="fas fa-calendar-alt"></i> <strong>Início:</strong> <span id="humanAttentionCreated"></span>
+                </p>
                 <p><i class="fas fa-comment-dots"></i> <strong>Última Mensagem:</strong></p>
                 <p id="humanAttentionSummary" class="summary-text"></p>
             </div>
@@ -637,14 +701,15 @@
             <button class="close-modal">&times;</button>
             <div class="modal-header">
                 <h3>Histórico de Conversa</h3>
-                <p id="historyClientPhone" style="font-size: 1.6rem; color: var(--text-color-light); margin-top: 5px;"></p>
+                <p id="historyClientPhone" style="font-size: 1.6rem; color: var(--text-color-light); margin-top: 5px;">
+                </p>
             </div>
             <div class="chat-history-container" id="chatHistoryMessages">
-                </div>
+            </div>
         </div>
     </div>
     <div class="modal" id="chatDetailModal">
-        <div class="modal-content" style="max-width: 600px;"> 
+        <div class="modal-content" style="max-width: 600px;">
             <button class="close-modal">&times;</button>
             <div class="modal-header">
                 <h3>Detalhes do Atendimento</h3>
@@ -652,12 +717,13 @@
             <div class="chat-details">
                 <p><i class="fas fa-user"></i> <strong>Cliente:</strong> <span id="chatDetailCustomer"></span></p>
                 <p><i class="fas fa-phone"></i> <strong>Telefone:</strong> <span id="chatDetailPhone"></span></p>
-                <p><i class="fas fa-info-circle"></i> <strong>Status:</strong> <span id="chatDetailStatus" class="status-badge"></span></p>
+                <p><i class="fas fa-info-circle"></i> <strong>Status:</strong> <span id="chatDetailStatus"
+                        class="status-badge"></span></p>
                 <p><i class="fas fa-calendar-alt"></i> <strong>Início:</strong> <span id="chatDetailCreated"></span></p>
                 <p><i class="fas fa-comment-dots"></i> <strong>Última Mensagem:</strong></p>
                 <p id="chatDetailSummary" class="summary-text"></p>
             </div>
-    
+
             <div class="chat-history-container" id="kanbanChatHistoryContainer" style="margin-top: 2rem;">
                 <p class="loading-message" style="padding: 2rem 0;">Carregando histórico...</p>
             </div>
@@ -721,7 +787,7 @@
                     <label for="productValue">Valor (R$)</label>
                     <input type="number" id="productValue" required step="0.01">
                 </div>
-                 <div class="input-group">
+                <div class="input-group">
                     <label for="productPurchaseLink">Link de Compra</label>
                     <input type="url" id="productPurchaseLink" placeholder="https://seusite.com/produto">
                 </div>
@@ -775,7 +841,8 @@
                             <option value="Inativo">Inativo</option>
                         </select>
                     </div>
-                    <div class="form-group form-group-toggle" style="align-self: end; border-bottom: none; padding-bottom: 0;">
+                    <div class="form-group form-group-toggle"
+                        style="align-self: end; border-bottom: none; padding-bottom: 0;">
                         <label for="isPersonal">Pessoal (IA Ignora)</label>
                         <div class="toggle-switch" style="margin-top: 10px;">
                             <input type="checkbox" id="isPersonal" class="toggle-input">
@@ -783,7 +850,7 @@
                         </div>
                     </div>
                 </div>
-                 <div class="input-group">
+                <div class="input-group">
                     <label for="clientNotes">Notas</label>
                     <textarea id="clientNotes" rows="3" placeholder="Informações adicionais..."></textarea>
                 </div>
@@ -797,7 +864,8 @@
         <div class="modal-content" style="max-width: 450px;">
             <button class="close-modal">&times;</button>
             <div class="modal-header" style="border-bottom: none; padding-bottom: 0;">
-                <h3 style="color: var(--danger); font-size: 26px;"><i class="fas fa-exclamation-triangle"></i> Assinatura em Atraso</h3>
+                <h3 style="color: var(--danger); font-size: 26px;"><i class="fas fa-exclamation-triangle"></i>
+                    Assinatura em Atraso</h3>
             </div>
             <p style="margin-top: 15px; color: var(--text-color); font-weight: 500;">
                 Detectamos que o pagamento da sua assinatura está pendente.
@@ -860,7 +928,8 @@
                 <h3><i class="fas fa-search"></i> Buscar Atendimentos Finalizados</h3>
             </div>
             <form id="searchFinishedForm">
-                <p style="font-size: 1.5rem; color: var(--text-color-light); margin-bottom: 2rem;">Busque por atendimentos finalizados em dias anteriores.</p>
+                <p style="font-size: 1.5rem; color: var(--text-color-light); margin-bottom: 2rem;">Busque por
+                    atendimentos finalizados em dias anteriores.</p>
                 <div class="form-grid-columns" style="grid-template-columns: 1.5fr 1fr;">
                     <div class="input-group">
                         <label for="searchPhone">Telefone</label>
@@ -875,20 +944,22 @@
                     <button type="submit" class="btn btn-primary">Buscar</button>
                 </div>
             </form>
-            <div id="searchFinishedResultsContainer" style="margin-top: 2rem; max-height: 40vh; overflow-y: auto; padding-right: 1rem;">
-                </div>
+            <div id="searchFinishedResultsContainer"
+                style="margin-top: 2rem; max-height: 40vh; overflow-y: auto; padding-right: 1rem;">
+            </div>
         </div>
     </div>
 
     <audio id="notificationSound" src="notification.mp3" preload="auto"></audio>
 
-     <div class="modal" id="forgotPasswordModal">
+    <div class="modal" id="forgotPasswordModal">
         <div class="modal-content">
             <button class="close-modal">&times;</button>
             <div class="modal-header">
                 <h3>Redefinir Senha</h3>
             </div>
-            <p style="margin-bottom: 20px; text-align: left; color: var(--gray);">Digite seu e-mail abaixo. Enviaremos um link para você criar uma nova senha.</p>
+            <p style="margin-bottom: 20px; text-align: left; color: var(--gray);">Digite seu e-mail abaixo. Enviaremos
+                um link para você criar uma nova senha.</p>
             <form id="forgotPasswordForm">
                 <div class="input-group">
                     <label for="forgotPasswordEmail">E-mail</label>
@@ -908,4 +979,5 @@
     <script type="module" src="js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </body>
+
 </html>
